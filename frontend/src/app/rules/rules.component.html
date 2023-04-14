@@ -1,0 +1,70 @@
+<h1>Tablut Rules</h1>
+<h2>Setup</h2>
+<ul>
+  <li>The game is played on a 9×9 board.</li>
+  <li>The 16 attackers play against the 8 defenders and the king.</li>
+  <li>The king starts on the central square known as the castle.</li>
+</ul>
+
+<h2>Moving</h2>
+<ul>
+  <li>
+    Any piece can move any number of squares in a straight line. Like a rook in
+    chess.
+  </li>
+  <li>No piece may ever pass over another piece in its path.</li>
+  <li>Only the king may enter or move through the castle.</li>
+  <li>
+    A piece may be moved in between two enemy pieces without being captured.
+  </li>
+</ul>
+
+<h2>Capturing</h2>
+<ul>
+  <li>
+    To capture an enemy piece, it needs to be surrounded on opposing sides, but
+    not diagonally.
+  </li>
+  <li>The empty castle counts as a hostile piece for both colors.</li>
+  <li>Captured pieces are removed from the board.</li>
+</ul>
+
+<h2>Winning</h2>
+<ul>
+  <li>The white defenders win if the king moves to the edge of the board.</li>
+  <li>The black attackers win if they capture the king.</li>
+  <li>
+    Capturing the king inside the castle requires it to be surrounded on all
+    four sides.
+  </li>
+  <li>
+    Capturing the king next to the castle requires it to be surrounded on all
+    three remaining sides.
+  </li>
+  <li>
+    Capturing the king outside of the castle requires it to be surrounded on two
+    opposite sides like any other piece.
+  </li>
+</ul>
+
+<h2>Examples</h2>
+<ul>
+  <li>White moves a piece from A1 to E1 (Notation A1E).</li>
+  <div>
+    <h3>Before</h3>
+    <app-board [board]="board1a"></app-board>
+  </div>
+  <div>
+    <h3>After</h3>
+    <app-board [board]="board1b"></app-board>
+  </div>
+  <li>Black captures the white piece on B2 by moving A12.</li>
+  <div>
+    <h3>Before</h3>
+    <app-board [board]="board2a"></app-board>
+  </div>
+  <div>
+    <h3>After</h3>
+    <app-board [board]="board2b"></app-board>
+  </div>
+</ul>

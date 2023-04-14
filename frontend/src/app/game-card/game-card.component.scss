@@ -1,0 +1,57 @@
+mat-card {
+  width: 100%;
+}
+
+mat-card-title.black,
+mat-card-title.white {
+  margin: 0 0 10px 0;
+}
+
+button {
+  margin: 4px;
+}
+
+.board {
+  width: 60%;
+  margin-top: 25px;
+  margin-bottom: 5px;
+  max-width: 200px;
+}
+
+.board div {
+  position: absolute;
+  top: 85px;
+  right: 0;
+  width: 38%;
+  height: calc(100% - 135px);
+  overflow-y: hidden;
+}
+
+.black {
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  float: left;
+  padding: 0 2px;
+}
+
+.white {
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin-left: 5px;
+  float: left;
+  padding: 0 2px;
+}
+
+p {
+  margin: 0;
+}
+
+.move {
+  margin: 1px 0 1px 5px;
+}
+
+.moveCount {
+  float: left;
+  clear: both;
+}
