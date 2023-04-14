@@ -64,6 +64,6 @@ public class BoardTest {
         Field expected = new Field(new Coordinates(x, y), state);
         var board = Board.createInitialBoard();
 
-        assertThat(board.fields()[x][y]).isEqualToComparingFieldByField(expected);
+        assertThat(board.fields()[x][y]).usingRecursiveComparison().isEqualTo(expected);
     }
 }

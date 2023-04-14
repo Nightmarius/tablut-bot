@@ -2,7 +2,7 @@ package ch.zuehlke.challenge.bot.brain;
 
 import ch.zuehlke.challenge.bot.client.GameClient;
 import ch.zuehlke.challenge.bot.service.GameService;
-import ch.zuehlke.challenge.bot.service.ShutDownService;
+import ch.zuehlke.challenge.bot.util.ApplicationProperties;
 import ch.zuehlke.common.*;
 import ch.zuehlke.common.Board;
 import ch.zuehlke.common.Coordinates;
@@ -18,26 +18,21 @@ import static org.mockito.Mockito.*;
 class GameServiceTest {
 
     private GameService gameService;
-
     private GameClient gameClientMock;
-
     private Brain brainMock;
-
-    private ShutDownService shutDownServiceMock;
 
     @BeforeEach
     void setUp() {
         gameClientMock = mock(GameClient.class);
         brainMock = mock(Brain.class);
-        shutDownServiceMock = mock(ShutDownService.class);
-        gameService = new GameService(brainMock, gameClientMock, shutDownServiceMock);
+        gameService = new GameService(brainMock, gameClientMock, mock(ApplicationProperties.class));
     }
 
     @Test
     void joinGame_callGameClient_successfully() {
         PlayerId expectedPlayerId = new PlayerId();
         when(gameClientMock.join()).thenReturn(expectedPlayerId);
-        gameService.joinGame();
+        gameService.joinTournamentOrGame();
 
         assertThat(gameService.getPlayerId()).isEqualTo(expectedPlayerId);
         verify(gameClientMock, times(1)).join();
@@ -84,7 +79,6 @@ class GameServiceTest {
 
         verify(brainMock, times(0)).decide(anyBoolean(), any(), any());
         verify(gameClientMock, times(0)).play(any());
-        verify(shutDownServiceMock, times(1)).shutDown();
     }
 
     @Test
