@@ -257,7 +257,6 @@ public class InternalGameStateTest {
         assertThat(gameState.hasDefenderWon()).isTrue();
     }
 
-    // TODO: add simple capture tests for all 4 sides
     @Test
     void attackerCaptures_toTheLeft() {
         var gameState = new InternalGameState();
@@ -271,6 +270,51 @@ public class InternalGameStateTest {
         gameState.playAction(new GameAction(3, 0, 2, 0));
 
         assertThat(gameState.board().getFieldForCoordinate(new Coordinates(1, 0)).state())
+                .isEqualTo(FieldState.EMPTY);
+    }
+
+    @Test
+    void attackerCaptures_toTheRight() {
+        var gameState = new InternalGameState();
+        gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.DEFENDER));
+        gameState.board().updateField(new Field(new Coordinates(2, 0), FieldState.ATTACKER));
+        gameState.playAction(new GameAction(0, 3, 0, 0));
+        assertThat(gameState.board().getFieldForCoordinate(new Coordinates(1, 0)).state())
+                .isEqualTo(FieldState.EMPTY);
+    }
+    @Test
+    void attackerCaptures_toTheTop() {
+        var gameState = new InternalGameState();
+        gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.ATTACKER));
+        gameState.board().updateField(new Field(new Coordinates(0, 1), FieldState.DEFENDER));
+        gameState.playAction(new GameAction(0, 3, 0, 2));
+        assertThat(gameState.board().getFieldForCoordinate(new Coordinates(0, 1)).state())
+                .isEqualTo(FieldState.EMPTY);
+    }
+    @Test
+    void attackerCaptures_toTheBottom() {
+        var gameState = new InternalGameState();
+        gameState.board().updateField(new Field(new Coordinates(0, 1), FieldState.DEFENDER));
+        gameState.board().updateField(new Field(new Coordinates(0, 2), FieldState.ATTACKER));
+        gameState.playAction(new GameAction(3, 0, 0, 0));
+        assertThat(gameState.board().getFieldForCoordinate(new Coordinates(0, 1)).state())
+                .isEqualTo(FieldState.EMPTY);
+    }
+    @Test
+    void attackerCaptures_toTheLeftAndRight() {
+        var gameState = new InternalGameState();
+
+        gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.ATTACKER));
+        gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.DEFENDER));
+        gameState.board().updateField(new Field(new Coordinates(2, 3), FieldState.ATTACKER));
+        gameState.board().updateField(new Field(new Coordinates(3, 0), FieldState.DEFENDER));
+        gameState.board().updateField(new Field(new Coordinates(4, 0), FieldState.ATTACKER));
+
+        gameState.playAction(new GameAction(2, 3, 2, 0));
+
+        assertThat(gameState.board().getFieldForCoordinate(new Coordinates(1, 0)).state())
+                .isEqualTo(FieldState.EMPTY);
+        assertThat(gameState.board().getFieldForCoordinate(new Coordinates(3, 0)).state())
                 .isEqualTo(FieldState.EMPTY);
     }
 
