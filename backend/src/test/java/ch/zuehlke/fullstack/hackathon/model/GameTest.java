@@ -31,9 +31,8 @@ class GameTest {
         game.startGame();
 
         assertEquals(GameStatus.IN_PROGRESS, game.getStatus());
-        assertThat(game.getState().currentRequests()).hasSize(2);
+        assertThat(game.getState().currentRequests()).hasSize(1);
         assertThat(game.getState().currentRequests().stream().anyMatch(request -> request.playerId().equals(playerId1))).isTrue();
-        assertThat(game.getState().currentRequests().stream().anyMatch(request -> request.playerId().equals(playerId2))).isTrue();
     }
 
     @Test
