@@ -48,6 +48,17 @@ You should be able to open the Swagger endpoint documentation at `http://localho
 Now you should see the following screen:
 ![setup-complete-with-example-component.png](doc/setup-complete-frontend.png)
 
+### Start react frontend
+
+1. Start the react frontend either by
+   1. By selecting the "React Frontend" and running it
+      ![runconfig-react.png](doc/runconfig-react.png)
+   2. Or by executing `cd react-frontend` followed by `npm run dev` \
+2. You should now be able to open `http://localhost:5173` in your favorite browser to access the frontend.
+
+Now you should see the following screen:
+![vite-startup.png](doc/vite-startup.png)
+
 ### Start bots
 
 This module contains the logic of how bots should connect to the backend game server and play "Rock, Paper, Scissors".
