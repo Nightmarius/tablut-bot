@@ -1,1 +1,9 @@
+:root {
+    font-family: 'ZuehlkeFont', sans-serif !important;
+}
 
+@font-face {
+    font-family: "ZuehlkeFont";
+    src: local("ZuehlkeFont"),
+    url("./assets/AAZuehlke.ttf") format("truetype");
+}
