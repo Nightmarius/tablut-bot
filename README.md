@@ -19,7 +19,7 @@ If your setup already has some of the required tools installed, please adjust ac
 5. Clone the master branch with `git clone https://github.com/Cyberdog52/hackathon.git`
 6. Open the project with IntelliJ and let gradle build the project
 7. If prompted, install java (17.0.5)
-7. Install the npm dependencies with `cd frontend` followed by `npm install`
+7. Install the npm dependencies with `cd angular-frontend` followed by `npm install`
 
 During the hackathon your team can decide to use a custom branch on this GitHub repository or to fork it to your own
 private repository.
@@ -36,12 +36,12 @@ private repository.
 You should be able to open the Swagger endpoint documentation at `http://localhost:8080/swagger-ui/index.html`.
 ![swagger.png](doc/swagger.png)
 
-### Start frontend
+### Start angular frontend
 
-1. Start the frontend either by
-    1. By selecting the "Frontend" and running it
+1. Start the angular frontend either by
+    1. By selecting the "Angular Frontend" and running it
        ![runconfig-npm.png](doc/runconfig-npm.png)
-    2. Or by executing `cd frontend` followed by `npm start` \
+    2. Or by executing `cd angular-frontend` followed by `npm start` \
 2. You should now be able to open `http://localhost:4200` in your favorite browser to access the frontend.
 3. Create a new game by clicking the button "Create new game"
 
