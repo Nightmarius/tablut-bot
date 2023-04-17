@@ -1,5 +1,21 @@
 :root {
     font-family: 'ZuehlkeFont', sans-serif !important;
+    color: var(--primary);
+    --secondary: rgb(131, 79, 135);
+    --primary: rgb(38, 38, 38);
+    --tertiary: rgb(255,130,10);
+}
+
+a, h2, h3, h4, h5 {
+    color: var(--primary);
+}
+
+h1 {
+    color: var(--secondary);
+}
+
+a:hover{
+    color: var(--secondary);;
 }
 
 @font-face {
