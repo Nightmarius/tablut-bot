@@ -1,6 +1,6 @@
 rootProject.name = 'Hackathon'
 include 'backend'
-include 'frontend'
+include 'angular-frontend'
 include 'bot'
 include 'common'
 

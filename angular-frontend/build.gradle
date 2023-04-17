@@ -8,20 +8,20 @@ node {
 }
 
 task test(type: NpmTask) {
-    group "Frontend"
+    group "Angular-Frontend"
     description "Executes the Angular Unit Tests in a headless chrome"
 
     args = ['run', 'ci-test']
 }
 
 task e2e(type: NpmTask) {
-    group "Frontend"
+    group "Angular-Frontend"
     description "Executes the E2E Test with the backend profile 'ci' in headless chrome"
 
     args = ['run', 'ci-e2e']
 }
 
 task lint(dependsOn: npm_run_lint) {
-    group "Frontend"
-    description "Executes linting of the frontend code"
+    group "Angular-Frontend"
+    description "Executes linting of the angular frontend code"
 }
