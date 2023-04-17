@@ -8,35 +8,35 @@ import RulesPage from "./rules/RulesPage";
 import LobbyPage from "./lobby/LobbyPage";
 import GamePage from "./game/GamePage";
 import TournamentPage from "./tournament/TournamentPage";
-import Header from "./header/HeaderPage";
+import Header from "./header/Header";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <InfoPage />,
-        errorElement: <ErrorPage />,
+        element: <InfoPage/>,
+        errorElement: <ErrorPage/>,
     },
     {
         path: "/rules",
-        element: <RulesPage />,
+        element: <RulesPage/>,
     },
     {
         path: "/lobby",
-        element: <LobbyPage />,
+        element: <LobbyPage/>,
     },
     {
         path: "/tournament",
-        element: <TournamentPage />,
+        element: <TournamentPage/>,
     },
     {
         path: "/game/:gameId",
-        element: <GamePage />,
+        element: <GamePage/>,
     },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-      <Header />
-      <RouterProvider router={router} />
-  </React.StrictMode>,
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <Header/>
+        <RouterProvider router={router}/>
+    </React.StrictMode>,
 )
