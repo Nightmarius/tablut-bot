@@ -1,6 +1,6 @@
-import axios from "axios";
 import {useState} from "react";
 import remoteService from "../services/RemoteService";
+import {useNavigate} from "react-router";
 
 export function AdminPage() {
 
@@ -34,8 +34,17 @@ export interface GameListProps {
 
 export function GameList({gameIds}: GameListProps) {
 
+    const navigate = useNavigate();
+
     const gameIdListElements = gameIds
-        .map((gameId: number) => <li key={gameId}>Game created with ID: {gameId}</li>);
+        .map((gameId: number) =>
+
+            <a key={gameId} onClick={() => navigate(`/game/${gameId}`)}>
+                <li>Game created with ID:
+                    {gameId}
+                </li>
+            </a>
+        );
 
     return (
         <ul>{gameIdListElements}</ul>
