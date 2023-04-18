@@ -1,9 +1,12 @@
-interface Props {
-    rules: string[];
-    title: string;
-}
+import Example from "./Example";
 
-function Chapter({rules, title}: Props) {
+function Chapter({rules, title, exampleText}: Props) {
+
+    const examples = () => {
+        if (exampleText !== undefined) {
+            return <Example exampleText={exampleText}/>
+        }
+    }
 
     return (
         <div>
@@ -13,8 +16,15 @@ function Chapter({rules, title}: Props) {
                     <li key={rule}>{rule}</li>
                 ))}
             </ul>
+            {examples()}
         </div>
     );
+}
+
+interface Props {
+    rules: string[];
+    title: string;
+    exampleText?: string;
 }
 
 export default Chapter;
