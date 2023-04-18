@@ -9,6 +9,7 @@ import LobbyPage from "./lobby/LobbyPage";
 import GamePage from "./game/GamePage";
 import TournamentPage from "./tournament/TournamentPage";
 import Header from "./header/Header";
+import { AdminPage } from "./admin/AdminPage";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
     {
         path: "/tournament",
         element: <TournamentPage/>,
+    },
+    {
+        path: "/admin",
+        element: <AdminPage/>,
     },
     {
         path: "/game/:gameId",
