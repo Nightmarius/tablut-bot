@@ -1,30 +1,65 @@
 import styled from "styled-components";
+import Button from "../shared/button/Button";
 
-const Box = styled.div`
+const Box = styled.div<ImageProps>`
+  background-image: url(${props => props.imageUrl});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 4vw 4vw 4vw 4vw;
+  flex-direction: ${({ placement }) =>
+          Placement.Left === placement && "row" ||
+          "row-reverse"};
+  align-items: flex-start;
+  margin-left: auto;
   width: 100%;
-  max-width: 1200px;
-  box-shadow: 4px 4px 20px var(--quinary);
+  margin-top: 1rem;
 `;
 
-export default function InfoBox({ title, subtitle, paragraph, linkTarget }: Props) {
+const Description = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 10%;
+  min-width: 50%;
+  background: linear-gradient(125deg, rgba(131, 79, 135, 0.8), rgba(88, 160, 190, 0.8));
+  padding-bottom: 4%;
+  padding-right: 4%;
+`;
+
+export interface ImageProps {
+    imageUrl: string;
+    placement: Placement;
+}
+
+const Title = styled.h3`
+  font-size: 4rem;
+  margin-bottom: 0;
+  color: white;
+  padding-bottom: 4%;
+`;
+
+export default function InfoBox({ title, buttonText, linkTarget, imagePlacement, imageName }: Props) {
 
     return (
-        <Box>
-            <h3>{title}</h3>
-            <h4>{subtitle}</h4>
-            <p>{paragraph}</p>
-            <a href={linkTarget}>Link</a>
+        <Box imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
+            <Description>
+                <Title>{title}</Title>
+                <Button text={buttonText} linkTarget={linkTarget}/>
+            </Description>
         </Box>
     )
 }
 
+export enum Placement {
+    Left,
+    Right,
+}
+
 interface Props {
     title: string;
-    subtitle: string;
-    paragraph: string;
+    buttonText: string;
     linkTarget: string;
+    imagePlacement: Placement;
+    imageName: string;
 }
