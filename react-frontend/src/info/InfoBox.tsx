@@ -16,19 +16,28 @@ const Box = styled.div<ImageProps>`
   margin-top: 1rem;
 `;
 
-const Description = styled.div`
+const Description = styled.div<DescriptionProps>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding-left: 10%;
   min-width: 50%;
-  background: linear-gradient(125deg, rgba(131, 79, 135, 0.8), rgba(88, 160, 190, 0.8));
+
+  background: linear-gradient(125deg, ${({ placement }) =>
+          Placement.Left === placement && "rgba(131, 79, 135, 0.8)" ||
+          "rgba(88, 160, 190, 0.8)"}, ${({ placement }) =>
+          Placement.Left !== placement && "rgba(131, 79, 135, 0.8)" ||
+          "rgba(88, 160, 190, 0.8)"});
   padding-bottom: 4%;
   padding-right: 4%;
 `;
 
 export interface ImageProps {
     imageUrl: string;
+    placement: Placement;
+}
+
+export interface DescriptionProps {
     placement: Placement;
 }
 
@@ -43,7 +52,7 @@ export default function InfoBox({ title, buttonText, linkTarget, imagePlacement,
 
     return (
         <Box imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
-            <Description>
+            <Description placement={imagePlacement}>
                 <Title>{title}</Title>
                 <Button text={buttonText} linkTarget={linkTarget}/>
             </Description>
