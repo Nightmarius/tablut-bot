@@ -25,7 +25,13 @@ export default function Button({ text, linkTarget }: Props) {
     const navigate = useNavigate();
 
     function handleClick() {
-        navigate(linkTarget);
+        if (linkTarget.startsWith("http") || linkTarget.startsWith("www") || linkTarget.startsWith("https")) {
+            window.open(linkTarget, "_blank");
+            return;
+        } else {
+            // navigate internally
+            navigate(linkTarget);
+        }
     }
 
     return (

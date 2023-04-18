@@ -32,6 +32,21 @@ const Description = styled.div<DescriptionProps>`
   padding-right: 4%;
 `;
 
+const Title = styled.h3`
+  font-size: 4rem;
+  margin-bottom: 0;
+  color: white;
+  padding-bottom: 4%;
+`;
+
+const Paragraph = styled.p`
+  font-size: 3rem;
+  margin-bottom: 0;
+  color: white;
+  padding-bottom: 4%;
+  margin-top: 0;
+`;
+
 export interface ImageProps {
     imageUrl: string;
     placement: Placement;
@@ -41,20 +56,14 @@ export interface DescriptionProps {
     placement: Placement;
 }
 
-const Title = styled.h3`
-  font-size: 4rem;
-  margin-bottom: 0;
-  color: white;
-  padding-bottom: 4%;
-`;
-
-export default function InfoBox({ title, buttonText, linkTarget, imagePlacement, imageName }: Props) {
+export default function InfoBox({ title, text, buttonText, linkTarget, imagePlacement, imageName }: Props) {
 
     return (
         <Box imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
             <Description placement={imagePlacement}>
                 <Title>{title}</Title>
-                <Button text={buttonText} linkTarget={linkTarget}/>
+                {text && <Paragraph>{text}</Paragraph>}
+                {buttonText && linkTarget && <Button text={buttonText} linkTarget={linkTarget}/>}
             </Description>
         </Box>
     )
@@ -67,8 +76,9 @@ export enum Placement {
 
 interface Props {
     title: string;
-    buttonText: string;
-    linkTarget: string;
+    text?: string;
+    buttonText?: string;
+    linkTarget?: string;
     imagePlacement: Placement;
     imageName: string;
 }
