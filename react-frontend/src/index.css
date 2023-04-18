@@ -27,7 +27,7 @@ h1 {
     color: var(--secondary);
 }
 
-a:hover {
+a:hover{
     color: var(--secondary);;
 }
 
