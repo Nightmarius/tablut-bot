@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router";
 
 const StyledButton = styled.button`
   background-color: white;
@@ -21,25 +20,14 @@ const StyledButton = styled.button`
 `;
 
 
-export default function Button({ text, linkTarget }: Props) {
-    const navigate = useNavigate();
-
-    function handleClick() {
-        if (linkTarget.startsWith("http") || linkTarget.startsWith("www") || linkTarget.startsWith("https")) {
-            window.open(linkTarget, "_blank");
-            return;
-        } else {
-            // navigate internally
-            navigate(linkTarget);
-        }
-    }
+export default function Button({ text, onClick }: Props) {
 
     return (
-        <StyledButton onClick={handleClick}>{text}</StyledButton>
+        <StyledButton onClick={onClick}>{text}</StyledButton>
     )
 }
 
 interface Props {
     text: string;
-    linkTarget: string;
+    onClick: () => void;
 }
