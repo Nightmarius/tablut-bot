@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-export default function slide(elementRefs: React.MutableRefObject<Array<HTMLElement>>, querySelector: string, direction: Direction) {
+export default function useSlideAnimationOnIntersection(querySelector: string, direction: Direction) {
+    const elements = useRef<Array<HTMLElement>>([]);
+
     useEffect(() => {
-        elementRefs.current = Array.from(document.querySelectorAll(querySelector));
+        elements.current = Array.from(document.querySelectorAll(querySelector));
 
-        elementRefs.current.forEach((heading) => {
+        elements.current.forEach((element) => {
             const observer = new IntersectionObserver(
                 ([entry], observer) => {
                     if (entry.isIntersecting) {
@@ -32,7 +34,7 @@ export default function slide(elementRefs: React.MutableRefObject<Array<HTMLElem
                 }
             );
 
-            observer.observe(heading);
+            observer.observe(element);
         });
     }, [querySelector, direction]);
 }
