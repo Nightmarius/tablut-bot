@@ -3,6 +3,12 @@
     color: var(--primary);
     --secondary: rgb(131, 79, 135);
     --primary: rgb(38, 38, 38);
+    --tertiary: rgb(255,130,10);
+    --pieceField: #834f87;
+    --kingField: #169fe9;
+    --emptyField: rgba(131,79,135,0.78);
+    --attacker: #000000;
+    --defender: #ffffff;
     --tertiary: rgb(255, 130, 10);
     --quaternary: rgb(88, 160, 190);
     --quinary: rgb(165, 165, 165);
