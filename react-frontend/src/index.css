@@ -6,6 +6,11 @@
     --tertiary: rgb(255, 130, 10);
     --quaternary: rgb(88, 160, 190);
     --quinary: rgb(165, 165, 165);
+    --pieceField: #834f87;
+    --kingField: #169fe9;
+    --emptyField: rgba(131,79,135,0.78);
+    --attacker: #000000;
+    --defender: #ffffff;
 }
 
 a, h2, h3, h4, h5 {

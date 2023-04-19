@@ -39,24 +39,24 @@ export function Field({fieldValue, isKingField = false}: FieldProps) {
         let figure;
         switch (fieldContent) {
             case FieldType.ATTACKER:
-                color = "#834f87";
-                figure = renderFigure("#000000");
+                color = 'var(--pieceField)';
+                figure = renderFigure('var(--attacker)');
                 break;
             case FieldType.DEFENDER:
-                color = "#834f87";
-                figure = renderFigure("#ffffff");
+                color = 'var(--pieceField)';
+                figure = renderFigure('var(--defender)');
                 break;
             case FieldType.KING:
-                color = "#834f87";
+                color = 'var(--pieceField)';
                 figure = renderCrown();
                 break;
             default:
-                color = "rgba(131,79,135,0.78)";
+                color = 'var(--emptyField)';
         }
         if (isKingField) {
-            color = "#169fe9";
+            color = 'var(--kingField)';
         }
-        return <StyledField color={color} size={window.innerWidth > 600 ? "50px" : "30px"}>{figure}</StyledField>;
+        return <StyledField color={color} size={window.innerWidth > 600 ? "3.125rem" : "1.875rem"}>{figure}</StyledField>;
     };
     return renderField(fieldValue, isKingField);
 }
