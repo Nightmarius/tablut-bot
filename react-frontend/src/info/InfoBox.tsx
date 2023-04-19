@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import Button from "../shared/button/Button";
+import { useRef } from "react";
+import { nanoid } from "nanoid";
+import slide, { Direction } from "../shared/effects/AnimationEffect";
 
 const Box = styled.div<ImageProps>`
   background-image: url(${props => props.imageUrl});
@@ -56,12 +59,19 @@ export interface DescriptionProps {
     placement: Placement;
 }
 
+
 export default function InfoBox({ title, text, buttonText, linkTarget, imagePlacement, imageName }: Props) {
 
+    const elements = useRef<Array<HTMLElement>>([]);
+
+    const id = nanoid();
+
+    slide(elements, `.box-${id} h3, .box-${id} p`, imagePlacement == Placement.Left ? Direction.Left : Direction.Right);
+
     return (
-        <Box imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
+        <Box className={`box-${id}`} imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
             <Description placement={imagePlacement}>
-                <Title>{title}</Title>
+                <Title className="typing">{title}</Title>
                 {text && <Paragraph>{text}</Paragraph>}
                 {buttonText && linkTarget && <Button text={buttonText} linkTarget={linkTarget}/>}
             </Description>
