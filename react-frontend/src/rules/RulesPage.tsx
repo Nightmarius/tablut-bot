@@ -27,7 +27,6 @@ export default function RulesPage() {
 
     return (
         <div>
-            <h2>Rules</h2>
             <Chapter rules={setupRules} title={"Setup"} exampleText={"just an example"}/>
             <Chapter rules={movingRules} title={"Moving"}/>
             <Chapter rules={capturingRules} title={"Capturing"}/>
