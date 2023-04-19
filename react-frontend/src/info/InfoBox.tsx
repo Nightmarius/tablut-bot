@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import Button from "../shared/button/Button";
-import { useRef } from "react";
 import { nanoid } from "nanoid";
-import slide, { Direction } from "../shared/effects/AnimationEffect";
+import useSlideAnimationOnIntersection, { Direction } from "../shared/hooks/SlideAnimationHook";
 
 const Box = styled.div<ImageProps>`
   background-image: url(${props => props.imageUrl});
@@ -62,11 +61,10 @@ export interface DescriptionProps {
 
 export default function InfoBox({ title, text, buttonText, linkTarget, imagePlacement, imageName }: Props) {
 
-    const elements = useRef<Array<HTMLElement>>([]);
-
     const id = nanoid();
 
-    slide(elements, `.box-${id} h3, .box-${id} p`, imagePlacement == Placement.Left ? Direction.Left : Direction.Right);
+    const slideDirection = imagePlacement == Placement.Left ? Direction.Left : Direction.Right;
+    useSlideAnimationOnIntersection(`.box-${id} h3, .box-${id} p`, slideDirection);
 
     return (
         <Box className={`box-${id}`} imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
