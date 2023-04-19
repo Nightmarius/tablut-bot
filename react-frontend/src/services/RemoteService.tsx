@@ -1,4 +1,6 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import {presentErrorToast} from "../common/ToastComponent";
 
 class RemoteService {
     private instance: AxiosInstance;
@@ -15,9 +17,13 @@ class RemoteService {
 
     private handleResponse<T>(response: AxiosResponse<T>): T {
 
-        if (response.status == 200) {
+        if (response.status === 200) {
+
             return response.data;
+
         } else {
+
+            presentErrorToast(`Http error occurred with status ${response.status}!`);
             throw new AxiosError(`Http error occurred with status ${response.status}!`)
         }
     }
