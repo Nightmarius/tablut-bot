@@ -3,7 +3,9 @@
     color: var(--primary);
     --secondary: rgb(131, 79, 135);
     --primary: rgb(38, 38, 38);
-    --tertiary: rgb(255,130,10);
+    --tertiary: rgb(255, 130, 10);
+    --quaternary: rgb(88, 160, 190);
+    --quinary: rgb(165, 165, 165);
 }
 
 a, h2, h3, h4, h5 {
@@ -14,7 +16,7 @@ h1 {
     color: var(--secondary);
 }
 
-a:hover{
+a:hover {
     color: var(--secondary);;
 }
 
