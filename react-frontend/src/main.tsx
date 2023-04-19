@@ -10,6 +10,7 @@ import GamePage from "./game/GamePage";
 import TournamentPage from "./tournament/TournamentPage";
 import Header from "./header/Header";
 import {AdminPage} from "./admin/AdminPage";
+import {ToastContainer} from "react-toastify";
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
+        <ToastContainer/>
         <Header/>
         <RouterProvider router={router}/>
     </React.StrictMode>,
