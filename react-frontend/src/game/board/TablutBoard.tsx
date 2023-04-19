@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Field} from "./Field";
+import {Field, KingField} from "./Field";
 
 type TablutBoardProps = {
     board: number[][];
@@ -54,9 +54,15 @@ export default function TablutBoard({board}: TablutBoardProps) {
                 <TablutRow>
                     <RowIndex>{rowIndex + 1}</RowIndex>
                     <Row key={rowIndex}>
-                        {row.map((field, colIndex) =>
-                            <Field fieldValue={field} key={`${rowIndex}${colIndex}`}/>
-                        )}
+                        {
+                            row.map((field, colIndex) => {
+                                if (rowIndex === 4 && colIndex === 4) {
+                                    return <KingField fieldValue={field} key={`${rowIndex}${colIndex}`}/>
+                                } else {
+                                    return <Field fieldValue={field} key={`${rowIndex}${colIndex}`}/>
+                                }
+                            })
+                        }
                     </Row>
                 </TablutRow>
             ))}
