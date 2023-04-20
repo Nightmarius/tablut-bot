@@ -5,12 +5,12 @@ import "./index.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error/ErrorPage";
 import RulesPage from "./rules/RulesPage";
-import LobbyPage from "./lobby/LobbyPage";
 import GamePage from "./game/GamePage";
-import TournamentPage from "./tournament/TournamentPage";
+import TournamentDetailPage from "./tournament/detail/TournamentDetailPage";
 import Header from "./header/Header";
-import {AdminPage} from "./admin/AdminPage";
-import {ToastContainer} from "react-toastify";
+import { AdminPage } from "./admin/AdminPage";
+import { ToastContainer } from "react-toastify";
+import TournamentOverviewPage from "./tournament/overview/TournamentOverviewPage";
 
 const router = createBrowserRouter([
     {
@@ -23,12 +23,12 @@ const router = createBrowserRouter([
         element: <RulesPage/>,
     },
     {
-        path: "/lobby",
-        element: <LobbyPage/>,
+        path: "/tournament",
+        element: <TournamentOverviewPage/>,
     },
     {
-        path: "/tournament",
-        element: <TournamentPage/>,
+        path: "/tournament/:tournamentId",
+        element: <TournamentDetailPage/>,
     },
     {
         path: "/game/:gameId",

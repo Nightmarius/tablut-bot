@@ -19,11 +19,9 @@ export default function InfoPage() {
                      imagePlacement={Placement.Right} imageName="code-background7.jpg"/>
             <InfoBox title="Tablut tournament" linkTarget="tournament" buttonText="Watch the tournament live"
                      imagePlacement={Placement.Left} imageName="code-background6.jpg"/>
-            <InfoBox title="Lobby during the tournament" linkTarget="lobby" buttonText="Visit the lobby"
-                     imagePlacement={Placement.Right} imageName="code-background1.jpg"/>
             <InfoBox title="Zühlke Careers" text="Your career with Zühlke" buttonText="Explore jobs"
                      linkTarget="https://www.zuehlke.com/en/careers"
-                     imagePlacement={Placement.Left} imageName="code-background8.jpg"/>
+                     imagePlacement={Placement.Right} imageName="code-background8.jpg"/>
         </Section>
 
     )

@@ -56,6 +56,18 @@ public class LobbyController {
         return ResponseEntity.ok(dtos);
     }
 
+    @Operation(summary = "Returns the tournament for a given id",
+            description = "Returns all tournaments, whether they are in progress or not")
+    @ApiResponse(responseCode = "200", description = "Successfully returned the tournament")
+    @ApiResponse(responseCode = "404", description = "Did not find the tournament")
+    @GetMapping("/tournament/{tournamentId}")
+    public ResponseEntity<TournamentDto> getTournaments(@PathVariable int tournamentId) {
+        return tournamentService.getTournament(tournamentId)
+                .map(TournamentMapper::map)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @Operation(summary = "Creates a new game",
             description = "Creates a new game and returns the game id")
     @ApiResponse(responseCode = "200", description = "Successfully created a new game")

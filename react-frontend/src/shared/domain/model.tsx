@@ -81,9 +81,14 @@ export interface TournamentDto {
     id: TournamentId;
     players: Player[];
     status: TournamentStatus;
-    state: GameState;
+    state: TournamentState;
     winner?: PlayerId;
     scores: Score[];
+}
+
+export interface TournamentState {
+    currentRequests: PlayRequest[];
+    games: GameDto[];
 }
 
 export interface Score {
