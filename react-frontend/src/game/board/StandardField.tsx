@@ -1,22 +1,18 @@
 import styled from "styled-components";
 import {Crown, Figure} from "./Figure";
+import {FieldState} from "../../shared/domain/model";
 
 interface FieldProps {
-    fieldValue: FieldType;
+    fieldValue: FieldState;
     isKingField?: boolean;
 }
 
-export enum FieldType {
-    ATTACKER = 1,
-    DEFENDER = 2,
-    KING = 3
+
+export function KingField({fieldValue}: { fieldValue: FieldState }) {
+    return <StandardField fieldValue={fieldValue} isKingField={true}/>;
 }
 
-export function KingField({fieldValue}: { fieldValue: FieldType }) {
-    return <Field fieldValue={fieldValue} isKingField={true}/>;
-}
-
-export function Field({fieldValue, isKingField = false}: FieldProps) {
+export function StandardField({fieldValue, isKingField = false}: FieldProps) {
     const StyledField = styled.div<{ color: string; size: string }>`
     width: ${(props) => props.size};
     height: ${(props) => props.size};
@@ -35,18 +31,18 @@ export function Field({fieldValue, isKingField = false}: FieldProps) {
         return <Crown/>;
     }
     let color;
-    const renderField = (fieldContent: number, isKingField: boolean = false) => {
+    const renderField = (fieldContent: FieldState, isKingField: boolean = false) => {
         let figure;
         switch (fieldContent) {
-            case FieldType.ATTACKER:
+            case FieldState.ATTACKER:
                 color = 'var(--pieceField)';
                 figure = renderFigure('var(--attacker)');
                 break;
-            case FieldType.DEFENDER:
+            case FieldState.DEFENDER:
                 color = 'var(--pieceField)';
                 figure = renderFigure('var(--defender)');
                 break;
-            case FieldType.KING:
+            case FieldState.KING:
                 color = 'var(--pieceField)';
                 figure = renderCrown();
                 break;

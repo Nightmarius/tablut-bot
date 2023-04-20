@@ -1,38 +1,40 @@
 import styled from "styled-components";
-import {Field, KingField} from "./Field";
+import {KingField, StandardField} from "./StandardField";
+import {Board, Field, FieldState} from "../../shared/domain/model";
 
 type TablutBoardProps = {
-    board: number[][];
+    board: Board;
 };
 
-export default function TablutBoard({board}: TablutBoardProps) {
-    const Row = styled.div`
+const Row = styled.div`
       display: flex;
     `;
-    const TablutRow = styled.div`
+const TablutRow = styled.div`
       display: flex;
       margin: 0 auto;
     `;
-    const RowIndex = styled.span`
+const RowIndex = styled.span`
       margin: 0.5em;
       align-self: center;
     `;
-    const ColIndex = styled.span`
+const ColIndex = styled.span`
       margin: 0.5em;
       align-self: center;
     `;
-    const ColumnIndexContainer = styled.div`
+const ColumnIndexContainer = styled.div`
       display: flex;
       flex-direction: row;
       justify-content: space-evenly;
       width: 100%;
       margin-left: 0.5em;
     `;
-    const TablutBoardContainer = styled.div`
+const TablutBoardContainer = styled.div`
       flex-wrap: wrap;
       padding: 10px;
       width: fit-content;
     `;
+
+export default function TablutBoard({board}: TablutBoardProps) {
 
     function columnCoordinateOf(colIndex: number) {
 
@@ -40,26 +42,26 @@ export default function TablutBoard({board}: TablutBoardProps) {
             String.fromCharCode(65 + colIndex)
         );
     }
-
+    console.log(board)
     return (
         <TablutBoardContainer>
             <ColumnIndexContainer>
-                {board[0].map((_, colIndex) => (
+                {board.fields[0].map((_, colIndex) => (
                     <ColIndex>
                         {columnCoordinateOf(colIndex)}
                     </ColIndex>
                 ))}
             </ColumnIndexContainer>
-            {board.map((row, rowIndex) => (
+            {board.fields.map((row, rowIndex) => (
                 <TablutRow>
                     <RowIndex>{rowIndex + 1}</RowIndex>
                     <Row key={rowIndex}>
                         {
                             row.map((field, colIndex) => {
                                 if (rowIndex === 4 && colIndex === 4) {
-                                    return <KingField fieldValue={field} key={`${rowIndex}${colIndex}`}/>
+                                    return <KingField fieldValue={field.state} key={`${rowIndex}${colIndex}`}/>
                                 } else {
-                                    return <Field fieldValue={field} key={`${rowIndex}${colIndex}`}/>
+                                    return <StandardField fieldValue={field.state} key={`${rowIndex}${colIndex}`}/>
                                 }
                             })
                         }
@@ -68,4 +70,16 @@ export default function TablutBoard({board}: TablutBoardProps) {
             ))}
         </TablutBoardContainer>
     );
+}
+
+export function createBoard(b: number[][]): Board {
+    const board: Board = {fields: []};
+    for (let y = 0; y < b.length; y++) {
+        const row: Field[] = [];
+        for (let x = 0; x < b[y].length; x++) {
+            row.push({state: Object.values(FieldState)[b[y][x]]} as Field);
+        }
+        board.fields.push(row);
+    }
+    return board;
 }
