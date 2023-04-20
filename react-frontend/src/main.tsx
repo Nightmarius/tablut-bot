@@ -9,6 +9,7 @@ import LobbyPage from "./lobby/LobbyPage";
 import GamePage from "./game/GamePage";
 import TournamentPage from "./tournament/TournamentPage";
 import Header from "./header/Header";
+import LeaderboardPage from "./tournament/Leaderboard/LeaderboardPage";
 import {AdminPage} from "./admin/AdminPage";
 import {ToastContainer} from "react-toastify";
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
     {
         path: "/game/:gameId",
         element: <GamePage/>,
+    },
+    {
+        path: "/leaderboard",
+        element: <LeaderboardPage/>,
     },
     {
         path: "/admin",
