@@ -3,7 +3,10 @@
     color: var(--primary);
     --secondary: rgb(131, 79, 135);
     --primary: rgb(38, 38, 38);
-    --tertiary: rgb(255,130,10);
+    --tertiary: rgb(255, 130, 10);
+    --gold: rgb(255, 215, 0);
+    --silver: rgb(192, 192, 192);
+    --bronze: rgb(184, 115, 51);
 }
 
 a, h2, h3, h4, h5 {

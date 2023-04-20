@@ -10,6 +10,7 @@ import GamePage from "./game/GamePage";
 import TournamentPage from "./tournament/TournamentPage";
 import Header from "./header/Header";
 import { AdminPage } from "./admin/AdminPage";
+import LeaderboardPage from "./tournament/Leaderboard/LeaderboardPage";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
     {
         path: "/game/:gameId",
         element: <GamePage/>,
+    },
+    {
+        path: "/tournament/:leaderboard",
+        element: <LeaderboardPage/>,
     },
 ]);
 
