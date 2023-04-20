@@ -33,11 +33,12 @@ const Cell = styled.td`
 `;
 
 export default function TournamentTable({ tournament }: Props) {
-
+    
     const getGame = (player1: Player, player2: Player) => {
         return tournament.state.games.find(game => {
-            const player1InGame = game.players.indexOf(player1) === 0;
-            const player2InGame = game.players.indexOf(player2) === 1;
+            if (game.players.length < 2) return false;
+            const player1InGame = game.players.at(0)?.id.value === player1.id.value;
+            const player2InGame = game.players.at(1)?.id.value === player2.id.value;
             return player1InGame && player2InGame;
         });
     }
