@@ -12,10 +12,25 @@ export default function TournamentDetailPage() {
     let [tournament, setTournament] = useState<TournamentDto>();
 
     useEffect(() => {
-        remoteService.get<TournamentDto>("/api/lobby/tournament/" + tournamentId)
-            .then((response: TournamentDto) => {
-                setTournament(response);
-            })
+        const fetchTournament = () => {
+            remoteService.get<TournamentDto>("/api/lobby/tournament/" + tournamentId)
+                .then((response: TournamentDto) => {
+                    setTournament(response);
+                });
+        };
+
+        // Initial fetch
+        fetchTournament();
+
+        // Polling
+        const intervalId = setInterval(() => {
+            fetchTournament();
+        }, 1000);
+
+        // Cleanup
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [tournamentId]);
 
     if (tournament === undefined) {
