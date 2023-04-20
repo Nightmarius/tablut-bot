@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
-import Button from "./Button";
+import Button, { Style } from "./Button";
 
 
-export default function LinkButton({ text, linkTarget }: Props) {
+export default function LinkButton({ text, linkTarget, style }: Props) {
     const navigate = useNavigate();
 
     function handleClick() {
@@ -16,11 +16,12 @@ export default function LinkButton({ text, linkTarget }: Props) {
     }
 
     return (
-        <Button onClick={handleClick} text={text}/>
+        <Button style={style} onClick={handleClick} text={text}/>
     )
 }
 
 interface Props {
     text: string;
     linkTarget: string;
+    style: Style;
 }

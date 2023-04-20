@@ -54,17 +54,17 @@ export interface Field {
 }
 
 export enum FieldState {
-  EMPTY = 'EMPTY',
-  ATTACKER = 'ATTACKER',
-  DEFENDER = 'DEFENDER',
-  KING = 'KING',
+  EMPTY = "EMPTY",
+  ATTACKER = "ATTACKER",
+  DEFENDER = "DEFENDER",
+  KING = "KING",
 }
 
 export enum GameStatus {
-  NOT_STARTED = 'NOT_STARTED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  FINISHED = 'FINISHED',
-  DELETED = 'DELETED',
+  NOT_STARTED = "NOT_STARTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  FINISHED = "FINISHED",
+  DELETED = "DELETED",
 }
 
 export interface GameAction {
@@ -81,9 +81,14 @@ export interface TournamentDto {
   id: TournamentId;
   players: Player[];
   status: TournamentStatus;
-  state: GameState;
+  state: TournamentState;
   winner?: PlayerId;
   scores: Score[];
+}
+
+export interface TournamentState {
+  currentRequests: PlayRequest[];
+  games: GameDto[];
 }
 
 export interface Score {
@@ -96,8 +101,8 @@ export interface TournamentId {
 }
 
 export enum TournamentStatus {
-  NOT_STARTED = 'NOT_STARTED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  FINISHED = 'FINISHED',
-  DELETED = 'DELETED',
+  NOT_STARTED = "NOT_STARTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  FINISHED = "FINISHED",
+  DELETED = "DELETED",
 }
