@@ -17,42 +17,46 @@ class RemoteService {
 
     private handleResponse<T>(response: AxiosResponse<T>): T {
 
-        if (response.status === 200) {
+        return response.data;
+    }
 
-            return response.data;
+    private handleError<T>(error: AxiosError<T>): T {
 
-        } else {
+        presentErrorToast(`Http error occurred with the message: ${error.message}`);
+        throw new AxiosError(`Http error occurred with the message: ${error.message}!`)
 
-            presentErrorToast(`Http error occurred with status ${response.status}!`);
-            throw new AxiosError(`Http error occurred with status ${response.status}!`)
-        }
     }
 
     get<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .get<T>(path, config)
-            .then((response) => this.handleResponse<T>(response));
+            .then((response) => this.handleResponse<T>(response))
+            .catch(error => this.handleError(error));
     }
 
 
     post<T>(path: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .post<T>(path, data, config)
-            .then((response) => this.handleResponse<T>(response));
+            .then((response) => this.handleResponse<T>(response))
+            .catch(error => this.handleError(error));
     }
 
 
     put<T>(path: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .put<T>(path, data, config)
-            .then((response) => this.handleResponse<T>(response));
+            .then((response) => this.handleResponse<T>(response))
+            .catch(error => this.handleError(error));
+
     }
 
 
     delete<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .delete<T>(path, config)
-            .then((response) => this.handleResponse<T>(response));
+            .then((response) => this.handleResponse<T>(response))
+            .catch(error => this.handleError(error));
     }
 }
 
