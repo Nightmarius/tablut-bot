@@ -54,7 +54,7 @@ export default function TournamentOverviewPage() {
             <TournamentContainer>
                 <Title>Tournaments</Title>
                 {tournaments.map((tournament: TournamentDto) =>
-                    <TournamentRow tournament={tournament}/>
+                    <TournamentRow key={tournament.id.value} tournament={tournament}/>
                 )}
             </TournamentContainer>
             <Button style={Style.PURPLE} onClick={createTournament} text="Create a new tournament"></Button>
