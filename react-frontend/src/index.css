@@ -4,9 +4,6 @@
     --secondary: rgb(131, 79, 135);
     --primary: rgb(38, 38, 38);
     --tertiary: rgb(255, 130, 10);
-    --gold: rgb(255, 215, 0);
-    --silver: rgb(192, 192, 192);
-    --bronze: rgb(184, 115, 51);
     --quaternary: rgb(88, 160, 190);
     --quinary: rgb(165, 165, 165);
     --pieceField: rgb(131, 79, 135);
@@ -14,6 +11,9 @@
     --emptyField: rgba(131, 79, 135, 0.78);
     --attacker: rgb(0, 0, 0);
     --defender: rgb(255, 255, 255);
+    --gold: rgb(255, 215, 0);
+    --silver: rgb(192, 192, 192);
+    --bronze: rgb(184, 115, 51);
 
     --animation-primary: rgb(255, 130, 10);
     --animation-secondary: rgb(210, 100, 8);

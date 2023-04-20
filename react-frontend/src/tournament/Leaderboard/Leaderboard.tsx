@@ -5,9 +5,7 @@ const Container = styled.div`
   padding: 2rem 0;
 `;
 
-const Title = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 600;
+const Title = styled.h2`
   margin-bottom: 1rem;
   text-align: center;
 `;
