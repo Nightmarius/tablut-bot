@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import remoteService from "../../services/RemoteService";
 import { useEffect, useState } from "react";
 import LoadingPage from "../../shared/loading/LoadingPage";
+import Lobby from "./Lobby";
 
 export default function TournamentDetailPage() {
 
@@ -43,7 +44,7 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.NOT_STARTED) {
-        return <div>Waiting for players...</div>;
+        return <Lobby players={tournament.players}/>
     }
 
     if (tournament.status === TournamentStatus.DELETED) {
