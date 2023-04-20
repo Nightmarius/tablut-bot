@@ -28,12 +28,21 @@ export default function TournamentOverviewPage() {
 
     let [tournaments, setTournaments] = useState<TournamentDto[] | undefined>(undefined);
 
-    // TODO ZTOPCHA-21: poll tournaments regularly
     useEffect(() => {
-        remoteService.get<TournamentDto[]>("/api/lobby/tournaments")
-            .then((response: TournamentDto[]) => {
-                setTournaments(response);
-            })
+        const fetchTournaments = () => {
+            remoteService.get<TournamentDto[]>("/api/lobby/tournaments")
+                .then((response: TournamentDto[]) => {
+                    setTournaments(response);
+                })
+        }
+
+        fetchTournaments();
+
+        const interval = setInterval(() => {
+            fetchTournaments();
+        }, 1000);
+
+        return () => clearInterval(interval);
     }, []);
 
     function createTournament() {
@@ -63,3 +72,7 @@ export default function TournamentOverviewPage() {
     );
 
 }
+
+
+
+
