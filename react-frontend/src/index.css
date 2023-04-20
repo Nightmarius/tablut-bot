@@ -6,11 +6,11 @@
     --tertiary: rgb(255, 130, 10);
     --quaternary: rgb(88, 160, 190);
     --quinary: rgb(165, 165, 165);
-    --pieceField: #834f87;
-    --kingField: #169fe9;
-    --emptyField: rgba(131,79,135,0.78);
-    --attacker: #000000;
-    --defender: #ffffff;
+    --pieceField: rgb(131, 79, 135);
+    --kingField: rgb(22, 159, 233);
+    --emptyField: rgba(131, 79, 135, 0.78);
+    --attacker: rgb(0, 0, 0);
+    --defender: rgb(255, 255, 255);
 
     --animation-primary: rgb(255, 130, 10);
     --animation-secondary: rgb(210, 100, 8);
@@ -27,7 +27,7 @@ h1 {
     color: var(--secondary);
 }
 
-a:hover{
+a:hover {
     color: var(--secondary);;
 }
 
