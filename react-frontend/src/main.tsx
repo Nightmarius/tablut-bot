@@ -9,8 +9,9 @@ import LobbyPage from "./lobby/LobbyPage";
 import GamePage from "./game/GamePage";
 import TournamentPage from "./tournament/TournamentPage";
 import Header from "./header/Header";
-import { AdminPage } from "./admin/AdminPage";
 import LeaderboardPage from "./tournament/Leaderboard/LeaderboardPage";
+import {AdminPage} from "./admin/AdminPage";
+import {ToastContainer} from "react-toastify";
 
 const router = createBrowserRouter([
     {
@@ -31,10 +32,6 @@ const router = createBrowserRouter([
         element: <TournamentPage/>,
     },
     {
-        path: "/admin",
-        element: <AdminPage/>,
-    },
-    {
         path: "/game/:gameId",
         element: <GamePage/>,
     },
@@ -42,10 +39,15 @@ const router = createBrowserRouter([
         path: "/tournament/:leaderboard",
         element: <LeaderboardPage/>,
     },
+    {
+        path: "/admin",
+        element: <AdminPage/>,
+    },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
+        <ToastContainer/>
         <Header/>
         <RouterProvider router={router}/>
     </React.StrictMode>,
