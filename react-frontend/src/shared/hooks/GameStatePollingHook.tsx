@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import remoteService from "../../services/RemoteService";
 import {GameDto, Player} from "../domain/model";
 import {presentErrorToast} from "../../common/ToastComponent";
@@ -47,8 +47,5 @@ export function useGamePolling(gameIdOfInterest: string, interval: number) {
         return () => clearInterval(intervalId);
     }, [interval]);
 
-    const cachedGame = useMemo(() => game, [game]);
-    const cachedParticipants = useMemo(()=>participants, [participants])
-
-    return {cachedGame, cachedParticipants, isLoading};
+    return {game, participants, isLoading};
 }

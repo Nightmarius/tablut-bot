@@ -29,7 +29,7 @@ const GameContainer = styled.div`
 export default function GamePage() {
 
     let {gameId} = useParams();
-    const {cachedGame, cachedParticipants, isLoading} = useGamePolling(gameId!, 1000);
+    const {game, participants: participants, isLoading} = useGamePolling(gameId!, 1000);
 
     const handleStartGame = (gameId: string) => {
 
@@ -41,7 +41,7 @@ export default function GamePage() {
             });
     }
 
-    if (!isLoading && !cachedGame) {
+    if (!isLoading && !game) {
 
         return <ErrorPage/>
 
@@ -57,12 +57,12 @@ export default function GamePage() {
             <GameContainer>
                 <BoardContainer>
                     <h3> Game ID: {gameId} </h3>
-                    <TablutBoard board={cachedGame?.state.board!}/>
+                    <TablutBoard board={game?.state.board!}/>
                     <Button text={'Start Game'} onClick={() => handleStartGame(gameId!)} style={Style.PURPLE}/>
                 </BoardContainer>
                 <GameStateContainer>
                     <h3>Players</h3>
-                    <PlayerDisplay participants={cachedParticipants}/>
+                    <PlayerDisplay participants={participants}/>
                 </GameStateContainer>
             </GameContainer>
 
