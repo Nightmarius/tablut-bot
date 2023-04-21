@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {KingField, StandardField} from "./StandardField";
-import {Board, Field, FieldState} from "../../shared/domain/model";
+import {Board} from "../../shared/domain/model";
 
 type TablutBoardProps = {
     board: Board;
@@ -42,20 +42,19 @@ export default function TablutBoard({board}: TablutBoardProps) {
             String.fromCharCode(65 + colIndex)
         );
     }
-    console.log(board)
     return (
         <TablutBoardContainer>
             <ColumnIndexContainer>
                 {board.fields[0].map((_, colIndex) => (
-                    <ColIndex>
+                    <ColIndex key={colIndex}>
                         {columnCoordinateOf(colIndex)}
                     </ColIndex>
                 ))}
             </ColumnIndexContainer>
             {board.fields.map((row, rowIndex) => (
-                <TablutRow>
+                <TablutRow key={rowIndex}>
                     <RowIndex>{rowIndex + 1}</RowIndex>
-                    <Row key={rowIndex}>
+                    <Row>
                         {
                             row.map((field, colIndex) => {
                                 if (rowIndex === 4 && colIndex === 4) {
@@ -70,16 +69,4 @@ export default function TablutBoard({board}: TablutBoardProps) {
             ))}
         </TablutBoardContainer>
     );
-}
-
-export function createBoard(b: number[][]): Board {
-    const board: Board = {fields: []};
-    for (let y = 0; y < b.length; y++) {
-        const row: Field[] = [];
-        for (let x = 0; x < b[y].length; x++) {
-            row.push({state: Object.values(FieldState)[b[y][x]]} as Field);
-        }
-        board.fields.push(row);
-    }
-    return board;
 }

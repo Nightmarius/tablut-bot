@@ -1,12 +1,14 @@
 import styled from "styled-components";
-import {Participants} from "../GamePage";
+import {PlayerRoles} from "../GamePage";
 
+interface Props {
+    players: PlayerRoles;
+}
 
-export default function PlayerDisplay({participants}: {participants: Participants}) {
-
+export default function PlayerDisplay({players}: Props) {
     return (
         <>
-            <div><RegisteredPlayers participants={participants}></RegisteredPlayers></div>
+            <div><RegisteredPlayers participants={players}/></div>
         </>
     );
 
@@ -16,7 +18,7 @@ export const RegisteredPlayer = styled.div<{ color: string }>`
   color: ${(props) => props.color}
 `;
 
-export const RegisteredPlayers = ({participants}: { participants: Participants }) => {
+export const RegisteredPlayers = ({participants}: { participants: PlayerRoles }) => {
 
     const attackerDisplayText =
         (participants.attacker)

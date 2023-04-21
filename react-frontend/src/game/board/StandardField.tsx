@@ -11,9 +11,7 @@ interface FieldProps {
 export function KingField({fieldValue}: { fieldValue: FieldState }) {
     return <StandardField fieldValue={fieldValue} isKingField={true}/>;
 }
-
-export function StandardField({fieldValue, isKingField = false}: FieldProps) {
-    const StyledField = styled.div<{ color: string; size: string }>`
+const StyledField = styled.div<{ color: string; size: string }>`
     width: ${(props) => props.size};
     height: ${(props) => props.size};
     background-color: ${(props) => props.color};
@@ -22,7 +20,7 @@ export function StandardField({fieldValue, isKingField = false}: FieldProps) {
     justify-content: center;
     align-items: center;
   `;
-
+export function StandardField({fieldValue, isKingField = false}: FieldProps) {
     const renderFigure = (color: string) => {
         return <Figure color={color}/>;
     };
