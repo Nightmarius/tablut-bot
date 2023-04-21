@@ -52,7 +52,8 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.FINISHED) {
-        return <div>Finished</div>;
+        // TODO ZTOPCHA-29: show the leaderboard
+        return <TournamentTable tournament={tournament}/>;
     }
 
 
