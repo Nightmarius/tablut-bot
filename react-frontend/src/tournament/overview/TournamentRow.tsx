@@ -2,19 +2,23 @@ import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
 import LinkButton from "../../shared/button/LinkButton";
 
 import styled from "styled-components";
-import { Style } from "../../shared/button/Button";
+import Button, { Style } from "../../shared/button/Button";
+import remoteService from "../../services/RemoteService";
 
 const StyledRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  height: 3rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: 4%;
   width: 100%;
   padding-bottom: 4px;
   padding-top: 4px;
   border-bottom: 1px solid var(--quinary);
 `
+
+const Column = styled.div`
+  padding-right: 1px;
+`;
 
 const Text = styled.p`
   font-size: 1.5rem;
@@ -32,16 +36,38 @@ export default function TournamentRow({ tournament }: Props) {
             case TournamentStatus.FINISHED:
                 return "Finished";
             case TournamentStatus.NOT_STARTED:
-                return "Ready to start";
+                return "Waiting for players";
         }
     }
 
+    function startTournament(): void {
+        remoteService.post("/api/lobby/tournament/" + tournament.id.value + "/start", {})
+    }
+    
+    // TODO ZTOPCHA-21: Disable start button if tournament is not ready to start
+    // TODO ZTOPCHA-14: Hide start button if user is not admin
     return (
         <StyledRow>
-            <Text>{tournament.id.value}</Text>
-            <Text>{getStatus(tournament.status)}</Text>
-            <Text>{tournament.players.length} Players</Text>
-            <LinkButton style={Style.PURPLE} text="Spectate" linkTarget={"/tournament/" + tournament.id.value}/>
+            <Column>
+                <Text>{tournament.id.value}</Text>
+            </Column>
+            <Column>
+                <Text>{getStatus(tournament.status)}</Text>
+            </Column>
+            <Column>
+                <Text>{tournament.players.length} Players</Text>
+            </Column>
+            <Column>
+                {
+                    tournament.status === TournamentStatus.NOT_STARTED &&
+                    tournament.players.length > 1 ?
+                        <Button style={Style.PURPLE} text="Start" onClick={startTournament}/> :
+                        <div></div>
+                }
+            </Column>
+            <Column>
+                <LinkButton style={Style.PURPLE} text="Spectate" linkTarget={"/tournament/" + tournament.id.value}/>
+            </Column>
         </StyledRow>
     )
 }
