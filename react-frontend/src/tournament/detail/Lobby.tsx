@@ -31,7 +31,6 @@ const PlayerChip = styled.div`
 `
 
 export default function Lobby({ players }: Props) {
-    console.log(players);
     return (
         <>
             <Title>Waiting for players...</Title>
