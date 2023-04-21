@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { Player, TournamentDto } from "../../shared/domain/model";
 import GameCellContent from "./GameCellContent";
+import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 `;
 
 const Table = styled.table`
@@ -19,11 +19,12 @@ const Row = styled.tr`
 const OuterCell = styled.th`
   /* does not have a border */
   padding: 1rem;
+  font-size: 2rem;
 `;
 
 const Cell = styled.td`
-  width: 4rem;
-  height: 4rem;
+  width: 20rem;
+  height: 10rem;
   border: 1px solid var(--quinary);
   text-align: center;
 
@@ -33,7 +34,7 @@ const Cell = styled.td`
 `;
 
 export default function TournamentTable({ tournament }: Props) {
-    
+
     const getGame = (player1: Player, player2: Player) => {
         return tournament.state.games.find(game => {
             if (game.players.length < 2) return false;
@@ -50,14 +51,16 @@ export default function TournamentTable({ tournament }: Props) {
                 <Row>
                     <OuterCell></OuterCell>
                     {tournament.players.map((player, index) => (
-                        <OuterCell key={index}>{player.name.value}</OuterCell>
+                        <OuterCell key={index}>
+                            <Chip text={player.name.value} style={ChipStyle.WHITE}></Chip>
+                        </OuterCell>
                     ))}
                 </Row>
                 </thead>
                 <tbody>
                 {tournament.players.map((player1, index1) => (
                     <Row key={index1}>
-                        <OuterCell>{player1.name.value}</OuterCell>
+                        <OuterCell><Chip text={player1.name.value} style={ChipStyle.BLACK}></Chip></OuterCell>
                         {tournament.players.map((player2, index2) => (
                             <Cell key={index2}>
                                 <GameCellContent game={getGame(player1, player2)}/>

@@ -51,7 +51,7 @@ public class LobbyController {
     public ResponseEntity<List<TournamentDto>> getTournaments() {
         var tournaments = tournamentService.getTournaments();
         var dtos = tournaments.stream()
-                .map(TournamentMapper::map)
+                .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .toList();
         return ResponseEntity.ok(dtos);
     }
@@ -61,9 +61,9 @@ public class LobbyController {
     @ApiResponse(responseCode = "200", description = "Successfully returned the tournament")
     @ApiResponse(responseCode = "404", description = "Did not find the tournament")
     @GetMapping("/tournament/{tournamentId}")
-    public ResponseEntity<TournamentDto> getTournaments(@PathVariable int tournamentId) {
+    public ResponseEntity<TournamentDto> getTournament(@PathVariable int tournamentId) {
         return tournamentService.getTournament(tournamentId)
-                .map(TournamentMapper::map)
+                .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
