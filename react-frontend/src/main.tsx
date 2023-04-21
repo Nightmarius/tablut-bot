@@ -8,7 +8,6 @@ import RulesPage from "./rules/RulesPage";
 import GamePage from "./game/GamePage";
 import TournamentDetailPage from "./tournament/detail/TournamentDetailPage";
 import Header from "./header/Header";
-import LeaderboardPage from "./tournament/Leaderboard/LeaderboardPage";
 import { AdminPage } from "./admin/AdminPage";
 import { ToastContainer } from "react-toastify";
 import TournamentOverviewPage from "./tournament/overview/TournamentOverviewPage";
@@ -34,10 +33,6 @@ const router = createBrowserRouter([
     {
         path: "/game/:gameId",
         element: <GamePage/>,
-    },
-    {
-        path: "/leaderboard",
-        element: <LeaderboardPage/>,
     },
     {
         path: "/admin",

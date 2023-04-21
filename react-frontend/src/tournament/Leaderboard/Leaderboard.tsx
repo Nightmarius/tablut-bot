@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {PlayerName} from "../../shared/domain/model";
 
 const Container = styled.div`
   padding: 2rem 0;
@@ -76,12 +77,32 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = styled.span<ProgressBarProps>`
-  background-color: ${(props) => props.color};
+  position: relative;
+  display: block;
   height: 0.6rem;
   margin-right: 0.5rem;
   border-radius: 4px;
-  width: ${(props) => props.width};
+  width: ${(props:ProgressBarProps) => props.width};
+  background-color: var(--background);
+  overflow: hidden;
+  
+  &:before {
+    position: absolute;
+    content: '';
+    height: 100%;
+    background-color: ${(props) => props.color};
+    animation: progress 1s ease-in forwards;
+  }
+  @keyframes progress {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
 `;
+
 
 const Points = styled.span`
   width: 10rem;
@@ -89,7 +110,7 @@ const Points = styled.span`
 `;
 
 interface Props {
-    scores: { name: string, points: number }[];
+    scores: { name: PlayerName, points: number }[];
 }
 
 export default function Leaderboard({scores}: Props) {
@@ -124,7 +145,7 @@ export default function Leaderboard({scores}: Props) {
                         <ScoreListItem key={index}>
                             <NamePositionContainer>
                                 <Position>{currentPosition}</Position>
-                                <Name>{score.name}</Name>
+                                <Name>{score.name.value}</Name>
                             </NamePositionContainer>
                             <ProgressBarContainer>
                                 <ProgressBar

@@ -1,9 +1,23 @@
 import TournamentTable from "./TournamentTable";
-import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
-import { useParams } from "react-router";
+import {Player, PlayerId, TournamentDto, TournamentStatus} from "../../shared/domain/model";
+import {useParams} from "react-router";
 import remoteService from "../../services/RemoteService";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import LoadingPage from "../../shared/loading/LoadingPage";
+import Leaderboard from "../Leaderboard/Leaderboard";
+
+function getPlayerName(players: Player[], playerId: PlayerId) {
+    return players.find(player => player.id.value === playerId.value).name;
+}
+
+function mapScores(tournament: TournamentDto) {
+    return tournament.scores.map((score) => {
+        return {
+            name: getPlayerName(tournament.players, score.playerId),
+            points: score.score
+        };
+    });
+}
 
 export default function TournamentDetailPage() {
 
@@ -15,7 +29,7 @@ export default function TournamentDetailPage() {
         remoteService.get<TournamentDto>("/api/lobby/tournament/" + tournamentId)
             .then((response: TournamentDto) => {
                 setTournament(response);
-            })
+            });
     }, [tournamentId]);
 
     if (tournament === undefined) {
@@ -36,9 +50,8 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.FINISHED) {
-        return <div>Finished</div>;
+        return <Leaderboard scores={mapScores(tournament)}/>
     }
-
 
     return <TournamentTable tournament={tournament}/>;
 
