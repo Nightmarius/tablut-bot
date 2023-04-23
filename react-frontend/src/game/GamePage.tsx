@@ -55,8 +55,6 @@ export default function GamePage() {
                         <Button text={"Start Game"} onClick={() => handleStartGame(gameId!)} style={Style.PURPLE}/>}
                 </BoardContainer>
                 <GameStateContainer>
-                    <h3>Players</h3>
-
                 </GameStateContainer>
             </GameContainer>
 
