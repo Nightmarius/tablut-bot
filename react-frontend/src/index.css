@@ -9,8 +9,8 @@
     --pieceField: rgb(131, 79, 135);
     --kingField: rgb(22, 159, 233);
     --emptyField: rgba(131, 79, 135, 0.78);
-    --attacker: rgb(0, 0, 0);
-    --defender: rgb(255, 255, 255);
+    --attacker: var(--primary);
+    --defender: white;
     --gold: rgb(255, 215, 0);
     --silver: rgb(192, 192, 192);
     --bronze: rgb(184, 115, 51);
@@ -20,6 +20,7 @@
     --animation-tertiary: rgb(180, 80, 6);
     --animation-quaternary: rgb(150, 60, 4);
     --animation-quinary: rgb(130, 40, 2);
+
 }
 
 a, h2, h3, h4, h5 {
