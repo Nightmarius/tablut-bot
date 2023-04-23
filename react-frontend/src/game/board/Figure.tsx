@@ -4,7 +4,7 @@ import crown from "../../assets/crown.svg";
 export const Crown = () => {
     return (
         <div>
-            <img src={crown} alt="My SVG Image" />
+            <img src={crown} alt="Crown SVG imgae" />
         </div>
     );
 }
