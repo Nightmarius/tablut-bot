@@ -41,8 +41,8 @@ export default function Header() {
             <Title>Tablut Coding Challenge</Title>
             <Nav>
                 <NavLink href="/">Home</NavLink>
-                <NavLink href="rules">Rules</NavLink>
-                <NavLink href="tournament">Tournament</NavLink>
+                <NavLink href="/rules">Rules</NavLink>
+                <NavLink href="/tournament">Tournament</NavLink>
             </Nav>
         </HeaderSection>
     );
