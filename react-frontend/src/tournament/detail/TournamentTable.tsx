@@ -52,7 +52,7 @@ export default function TournamentTable({ tournament }: Props) {
                     <OuterCell></OuterCell>
                     {tournament.players.map((player, index) => (
                         <OuterCell key={index}>
-                            <Chip style={ChipStyle.BLACK}>{player.name.value}</Chip>
+                            <Chip style={ChipStyle.WHITE}>{player.name.value}</Chip>
                         </OuterCell>
                     ))}
                 </Row>
@@ -60,7 +60,7 @@ export default function TournamentTable({ tournament }: Props) {
                 <tbody>
                 {tournament.players.map((player1, index1) => (
                     <Row key={index1}>
-                        <OuterCell><Chip style={ChipStyle.WHITE}>{player1.name.value}</Chip></OuterCell>
+                        <OuterCell><Chip style={ChipStyle.BLACK}>{player1.name.value}</Chip></OuterCell>
                         {tournament.players.map((player2, index2) => (
                             <Cell key={index2}>
                                 <GameCellContent game={getGame(player1, player2)}/>
