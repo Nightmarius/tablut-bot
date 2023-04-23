@@ -7,7 +7,7 @@ import { useGamePolling } from "../shared/hooks/GameStatePollingHook";
 import PlayerDisplay from "./playerDisplay/PlayerDisplay";
 import { GameStatus, Player } from "../shared/domain/model";
 import LoadingPage from "../shared/ui/loading/LoadingPage";
-import Button, { ButtonStyle } from "../shared/ui/button/Button";
+import Button from "../shared/ui/button/Button";
 
 export interface PlayerRoles {
     attacker: Player | null;
@@ -44,6 +44,7 @@ export default function GamePage() {
         return <h2>Game does not exist :(</h2>
     }
 
+    // TODO ZTOPCHA-14: Hide start game button if user is not admin
     return (
         <>
             <GameContainer>
@@ -52,8 +53,7 @@ export default function GamePage() {
                     <PlayerDisplay players={playerRoles}/>
                     <TablutBoard board={game?.state.board!}/>
                     {game?.status === GameStatus.NOT_STARTED &&
-                        <Button text={"Start Game"} onClick={() => handleStartGame(gameId!)}
-                                style={ButtonStyle.PURPLE}/>}
+                        <Button onClick={() => handleStartGame(gameId!)}>"Start Game"</Button>}
                 </BoardContainer>
                 <GameStateContainer>
                 </GameStateContainer>

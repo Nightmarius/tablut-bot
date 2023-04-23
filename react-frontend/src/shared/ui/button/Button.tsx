@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ReactNode } from "react";
 
 const StyledButton = styled.button<StyleProps>`
   background-color: ${({ buttonBackgroundColor }) => buttonBackgroundColor === ButtonStyle.PURPLE && "var(--secondary)" || "white"};
@@ -25,10 +26,10 @@ export interface StyleProps {
 }
 
 
-export default function Button({ text, onClick, style }: Props) {
+export default function Button({ children, onClick, style = ButtonStyle.PURPLE }: Props) {
 
     return (
-        <StyledButton buttonBackgroundColor={style} onClick={onClick}>{text}</StyledButton>
+        <StyledButton buttonBackgroundColor={style} onClick={onClick}>{children}</StyledButton>
     )
 }
 
@@ -37,7 +38,7 @@ export enum ButtonStyle {
 }
 
 interface Props {
-    text: string;
+    children: ReactNode;
     onClick: () => void;
-    style: ButtonStyle
+    style?: ButtonStyle
 }

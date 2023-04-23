@@ -27,8 +27,8 @@ export const RegisteredPlayers = ({ participants }: { participants: PlayerRoles 
 
     return (
         <ChipContainer>
-            <Chip style={ChipStyle.BLACK} text={participants.attacker?.name.value || "Attacker"}/>
-            <Chip style={ChipStyle.WHITE} text={participants.defender?.name.value || "Attacker"}/>
+            <Chip style={ChipStyle.BLACK}>{participants.attacker?.name.value || "Attacker"}</Chip>
+            <Chip style={ChipStyle.WHITE}>{participants.defender?.name.value || "Attacker"}</Chip>
         </ChipContainer>
     )
 }

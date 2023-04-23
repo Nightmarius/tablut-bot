@@ -2,7 +2,7 @@ import { GameDto, GameStatus, Player } from "../../shared/domain/model";
 import styled from "styled-components";
 import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
 import { getPlayerForNextTurn, getWinner } from "../../shared/domain/helper";
-import Button, { ButtonStyle } from "../../shared/ui/button/Button";
+import Button from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
 import { useNavigate } from "react-router";
 
@@ -51,11 +51,11 @@ export default function GameCellContent({ game }: Props) {
         return player === player1 ? ChipStyle.WHITE : ChipStyle.BLACK;
     }
 
-    function startGame() {
+    function handleStartGame() {
         remoteService.post(`/api/lobby/game/${game?.id.value}/start`, {});
     }
 
-    function navigateToGame() {
+    function handleNavigateToGame() {
         navigate(`/game/${game?.id.value}`)
     }
 
@@ -65,18 +65,18 @@ export default function GameCellContent({ game }: Props) {
             {
                 game && player1 && player2 ? (
                     <GameContainer>
-                        <GameIdTitle onClick={navigateToGame}>Game: {game.id.value}</GameIdTitle>
+                        <GameIdTitle onClick={handleNavigateToGame}>Game: {game.id.value}</GameIdTitle>
 
                         {game.status === GameStatus.NOT_STARTED &&
-                            <Button text="Start game" onClick={startGame} style={ButtonStyle.PURPLE}></Button>
+                            <Button onClick={handleStartGame}>Start game</Button>
                         }
                         {game.status === GameStatus.IN_PROGRESS &&
                             <div>
                                 Turn {game.state.moves.length + 1}
                                 {playerForNextTurn &&
                                     <div> Next turn:
-                                        <Chip text={playerForNextTurn.name.value}
-                                              style={getChipStyleForPlayer(playerForNextTurn)}></Chip>
+                                        <Chip
+                                            style={getChipStyleForPlayer(playerForNextTurn)}>{playerForNextTurn.name.value}</Chip>
                                     </div>
                                 }
                             </div>
@@ -89,8 +89,7 @@ export default function GameCellContent({ game }: Props) {
                                 {game.state.moves.length} moves played
                                 {winner ?
                                     <div> Winner:
-                                        <Chip text={winner.name.value}
-                                              style={getChipStyleForPlayer(winner)}></Chip>
+                                        <Chip style={getChipStyleForPlayer(winner)}>{winner.name.value}</Chip>
                                     </div> :
                                     <div>Draw</div>
                                 }
