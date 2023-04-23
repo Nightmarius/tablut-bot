@@ -2,65 +2,40 @@ import {useParams} from "react-router";
 import TablutBoard from "./board/TablutBoard";
 import styled from "styled-components";
 import remoteService from "../services/RemoteService";
-import Button from "../shared/button/Button";
+import Button, {Style} from "../shared/button/Button";
 import {presentSuccessToast} from "../common/ToastComponent";
 import {useGamePolling} from "../shared/hooks/GameStatePollingHook";
-import ErrorPage from "../error/ErrorPage";
 import PlayerDisplay from "./playerDisplay/PlayerDisplay";
 import {Player} from "../shared/domain/model";
+import LoadingPage from "../shared/loading/LoadingPage";
 
-export interface Participants{
+export interface PlayerRoles {
     attacker: Player | null;
     defender: Player | null;
 }
-export default function GamePage() {
 
-    let {gameId} = useParams();
-    const {cachedGame, cachedParticipants, isLoading} = useGamePolling(gameId!, 1000);
-
-    const startingBoard = [
-        [0, 0, 0, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 2, 0, 0, 0, 0],
-        [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 1, 2, 2, 3, 2, 2, 1, 1],
-        [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [0, 0, 0, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 0, 0, 0],
-    ];
-
-    const GameStateContainer = styled.div`
+const GameStateContainer = styled.div`
       margin-left: 1.0em;
     `;
 
-    const BoardContainer = styled.div`
+const BoardContainer = styled.div`
       margin-left: 0.5em;
     `;
 
-    const GameContainer = styled.div`
+const GameContainer = styled.div`
       margin-left: 0.5em;
       display: flex;
     `;
 
-    const handleStartGame = (gameId: string) => {
+export default function GamePage() {
 
-        remoteService.post(`/api/lobby/game/${gameId}/start`)
-            .then(() => {
+    let {gameId} = useParams();
+    const {game, playerRoles, isLoading} = useGamePolling(gameId!, 1000);
 
-                presentSuccessToast(`Game "${gameId}" has started`)
-
-            });
-    }
-
-    if (!isLoading && !cachedGame) {
-
-        return <ErrorPage/>
-
-    } else if (isLoading) {
-
-        return <></>;
-
+    if (isLoading) {
+        return <LoadingPage/>;
+    } else if (!isLoading && !game){
+        return <h2>Game does not exist :(</h2>
     }
 
     return (
@@ -69,15 +44,25 @@ export default function GamePage() {
             <GameContainer>
                 <BoardContainer>
                     <h3> Game ID: {gameId} </h3>
-                    <TablutBoard board={startingBoard}/>
-                    <Button text={'Start Game'} onClick={() => handleStartGame(gameId!)}/>
+                    <TablutBoard board={game?.state.board!}/>
+                    <Button text={'Start Game'} onClick={() => handleStartGame(gameId!)} style={Style.PURPLE}/>
                 </BoardContainer>
                 <GameStateContainer>
                     <h3>Players</h3>
-                    <PlayerDisplay participants={cachedParticipants}/>
+                    <PlayerDisplay players={playerRoles}/>
                 </GameStateContainer>
             </GameContainer>
 
         </>
     )
+}
+
+const handleStartGame = (gameId: string) => {
+
+    remoteService.post(`/api/lobby/game/${gameId}/start`)
+        .then(() => {
+
+            presentSuccessToast(`Game "${gameId}" has started`)
+
+        });
 }

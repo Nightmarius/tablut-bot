@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import logo from "/src/assets/zuhlke-logo-transparent.png"
 
 const HeaderSection = styled.header`
   display: flex;
@@ -36,7 +37,7 @@ const Title = styled.h1`
 export default function Header() {
     return (
         <HeaderSection>
-            <Logo src="src/assets/zuhlke-logo-transparent.png" alt="Logo"/>
+            <Logo src={logo} alt="Logo"/>
             <Title>Tablut Coding Challenge</Title>
             <Nav>
                 <NavLink href="/">Home</NavLink>

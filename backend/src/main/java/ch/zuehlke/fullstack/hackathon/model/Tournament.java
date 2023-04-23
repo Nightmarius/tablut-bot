@@ -51,9 +51,9 @@ public class Tournament {
         status = TournamentStatus.DELETED;
     }
 
-    public void updateFromGames(List<Game> games) {
-        var gamesBelongingToTournament = games.stream()
-                .filter(g -> state.games().contains(g.getGameId()))
+    public void updateFromGames(List<Game> allGames) {
+        var gamesBelongingToTournament = allGames.stream()
+                .filter(g -> state.games().stream().anyMatch(gameDto -> gameDto.id().equals(g.getGameId())))
                 .toList();
 
         var allGamesFinished = gamesBelongingToTournament.stream()

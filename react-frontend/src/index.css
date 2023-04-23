@@ -6,17 +6,21 @@
     --tertiary: rgb(255, 130, 10);
     --quaternary: rgb(88, 160, 190);
     --quinary: rgb(165, 165, 165);
-    --pieceField: #834f87;
-    --kingField: #169fe9;
-    --emptyField: rgba(131,79,135,0.78);
-    --attacker: #000000;
-    --defender: #ffffff;
+    --pieceField: rgb(131, 79, 135);
+    --kingField: rgb(22, 159, 233);
+    --emptyField: rgba(131, 79, 135, 0.78);
+    --attacker: var(--primary);
+    --defender: white;
+    --gold: rgb(255, 215, 0);
+    --silver: rgb(192, 192, 192);
+    --bronze: rgb(184, 115, 51);
 
     --animation-primary: rgb(255, 130, 10);
     --animation-secondary: rgb(210, 100, 8);
     --animation-tertiary: rgb(180, 80, 6);
     --animation-quaternary: rgb(150, 60, 4);
     --animation-quinary: rgb(130, 40, 2);
+
 }
 
 a, h2, h3, h4, h5 {
