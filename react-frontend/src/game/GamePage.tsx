@@ -2,12 +2,12 @@ import { useParams } from "react-router";
 import TablutBoard from "./board/TablutBoard";
 import styled from "styled-components";
 import remoteService from "../services/RemoteService";
-import Button, { Style } from "../shared/button/Button";
 import { presentSuccessToast } from "../common/ToastComponent";
 import { useGamePolling } from "../shared/hooks/GameStatePollingHook";
 import PlayerDisplay from "./playerDisplay/PlayerDisplay";
 import { GameStatus, Player } from "../shared/domain/model";
-import LoadingPage from "../shared/loading/LoadingPage";
+import LoadingPage from "../shared/ui/loading/LoadingPage";
+import Button, { ButtonStyle } from "../shared/ui/button/Button";
 
 export interface PlayerRoles {
     attacker: Player | null;
@@ -52,7 +52,8 @@ export default function GamePage() {
                     <PlayerDisplay players={playerRoles}/>
                     <TablutBoard board={game?.state.board!}/>
                     {game?.status === GameStatus.NOT_STARTED &&
-                        <Button text={"Start Game"} onClick={() => handleStartGame(gameId!)} style={Style.PURPLE}/>}
+                        <Button text={"Start Game"} onClick={() => handleStartGame(gameId!)}
+                                style={ButtonStyle.PURPLE}/>}
                 </BoardContainer>
                 <GameStateContainer>
                 </GameStateContainer>
