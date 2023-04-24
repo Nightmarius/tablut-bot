@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { TournamentDto } from "../../shared/domain/model";
 import remoteService from "../../services/RemoteService";
-import LoadingPage from "../../shared/loading/LoadingPage";
+import LoadingPage from "../../shared/ui/loading/LoadingPage";
 import NoTournamentsPage from "./NoTournamentsPage";
-import Button, { Style } from "../../shared/button/Button";
+import Button, { ButtonStyle } from "../../shared/ui/button/Button";
 import styled from "styled-components";
 import TournamentRow from "./TournamentRow";
 
@@ -66,7 +66,7 @@ export default function TournamentOverviewPage() {
                     <TournamentRow key={tournament.id.value} tournament={tournament}/>
                 )}
             </TournamentContainer>
-            <Button style={Style.PURPLE} onClick={createTournament} text="Create a new tournament"></Button>
+            <Button style={ButtonStyle.PURPLE} onClick={createTournament} text="Create a new tournament"></Button>
         </>
 
     );

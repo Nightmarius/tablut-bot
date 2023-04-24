@@ -3,7 +3,7 @@ import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
 import { useParams } from "react-router";
 import remoteService from "../../services/RemoteService";
 import { useEffect, useState } from "react";
-import LoadingPage from "../../shared/loading/LoadingPage";
+import LoadingPage from "../../shared/ui/loading/LoadingPage";
 import Lobby from "./Lobby";
 
 export default function TournamentDetailPage() {
@@ -52,7 +52,8 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.FINISHED) {
-        return <div>Finished</div>;
+        // TODO ZTOPCHA-29: show the leaderboard
+        return <TournamentTable tournament={tournament}/>;
     }
 
 

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button, { Style } from "../../shared/button/Button";
+import Button, { ButtonStyle } from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
 
 const Title = styled.h1`
@@ -34,7 +34,7 @@ export default function NoTournamentsPage() {
             <Title>Coming soon!</Title>
             <Description>There are no tournaments at the moment. Come back later at the day of the event!</Description>
             <CenterSpan>
-                <Button style={Style.PURPLE} onClick={createTournament} text="Create a new tournament"></Button>
+                <Button style={ButtonStyle.PURPLE} onClick={createTournament} text="Create a new tournament"></Button>
             </CenterSpan>
         </div>
     )

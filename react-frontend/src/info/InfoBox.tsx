@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { nanoid } from "nanoid";
 import useSlideAnimationOnIntersection, { Direction } from "../shared/hooks/SlideAnimationHook";
-import LinkButton from "../shared/button/LinkButton";
-import { Style } from "../shared/button/Button";
+import LinkButton from "../shared/ui/button/LinkButton";
+import { ButtonStyle } from "../shared/ui/button/Button";
 
 const Box = styled.div<ImageProps>`
   background-image: url(${props => props.imageUrl});
@@ -73,7 +73,7 @@ export default function InfoBox({ title, text, buttonText, linkTarget, imagePlac
                 <Title className="typing">{title}</Title>
                 {text && <Paragraph>{text}</Paragraph>}
                 {buttonText && linkTarget &&
-                    <LinkButton style={Style.WHITE} text={buttonText} linkTarget={linkTarget}/>}
+                    <LinkButton style={ButtonStyle.WHITE} text={buttonText} linkTarget={linkTarget}/>}
             </Description>
         </Box>
     )

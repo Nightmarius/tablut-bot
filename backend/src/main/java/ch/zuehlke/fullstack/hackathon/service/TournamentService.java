@@ -7,7 +7,6 @@ import ch.zuehlke.common.TournamentId;
 import ch.zuehlke.fullstack.hackathon.controller.TournamentJoinResult;
 import ch.zuehlke.fullstack.hackathon.controller.TournamentStartResult;
 import ch.zuehlke.fullstack.hackathon.model.Game;
-import ch.zuehlke.fullstack.hackathon.model.GameMapper;
 import ch.zuehlke.fullstack.hackathon.model.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -88,7 +87,7 @@ public class TournamentService {
                 Game game = gameService.createGame();
                 game.addPlayer(players.get(i));
                 game.addPlayer(players.get(j));
-                getCurrentTournament().ifPresent(t -> t.getState().games().add(GameMapper.map(game)));
+                getCurrentTournament().ifPresent(t -> t.getGameIds().add(game.getGameId()));
             }
         }
         Collections.shuffle(gameService.getGames());

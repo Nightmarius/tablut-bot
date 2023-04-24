@@ -28,7 +28,7 @@ public class NotificationService {
 
     public void notifyTournamentUpdate(TournamentId tournamentId) {
         tournamentService.getTournament(tournamentId.value())
-                .map(TournamentMapper::map)
+                .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .ifPresent(game -> template.convertAndSend("/topic/tournament/" + tournamentId.value(), new TournamentUpdate(game))
                 );
     }

@@ -18,7 +18,7 @@ public class Tournament {
 
     private TournamentStatus status = TournamentStatus.NOT_STARTED;
 
-    private TournamentState state = new TournamentState();
+    private final List<GameId> gameIds = new ArrayList<>();
     private List<Score> scores = new ArrayList<>();
 
     public boolean addPlayer(Player player) {
@@ -47,13 +47,9 @@ public class Tournament {
         status = TournamentStatus.FINISHED;
     }
 
-    public void deleteTournament() {
-        status = TournamentStatus.DELETED;
-    }
-
     public void updateFromGames(List<Game> allGames) {
         var gamesBelongingToTournament = allGames.stream()
-                .filter(g -> state.games().stream().anyMatch(gameDto -> gameDto.id().equals(g.getGameId())))
+                .filter(g -> gameIds.stream().anyMatch(gameId -> gameId.equals(g.getGameId())))
                 .toList();
 
         var allGamesFinished = gamesBelongingToTournament.stream()

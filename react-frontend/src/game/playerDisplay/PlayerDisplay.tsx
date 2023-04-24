@@ -1,11 +1,20 @@
+import { PlayerRoles } from "../GamePage";
+import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
 import styled from "styled-components";
-import {PlayerRoles} from "../GamePage";
+
+const ChipContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-size: 2rem;
+`;
 
 interface Props {
     players: PlayerRoles;
 }
 
-export default function PlayerDisplay({players}: Props) {
+export default function PlayerDisplay({ players }: Props) {
     return (
         <>
             <div><RegisteredPlayers participants={players}/></div>
@@ -14,26 +23,12 @@ export default function PlayerDisplay({players}: Props) {
 
 }
 
-export const RegisteredPlayer = styled.div<{ color: string }>`
-  color: ${(props) => props.color}
-`;
-
-export const RegisteredPlayers = ({participants}: { participants: PlayerRoles }) => {
-
-    const attackerDisplayText =
-        (participants.attacker)
-            ? `Attacker: ${participants.attacker.name.value}`
-            : 'Attacker: -';
-
-    const defenderDisplayText =
-        (participants.defender)
-            ? `Defender: ${participants.defender.name.value}`
-            : 'Defender: -';
+export const RegisteredPlayers = ({ participants }: { participants: PlayerRoles }) => {
 
     return (
-        <>
-            <RegisteredPlayer color={'var(--secondary)'}>{attackerDisplayText}</RegisteredPlayer>
-            <RegisteredPlayer color={'var(--tertiary)'}>{defenderDisplayText}</RegisteredPlayer>
-        </>
+        <ChipContainer>
+            <Chip style={ChipStyle.BLACK} text={participants.attacker?.name.value || "Attacker"}/>
+            <Chip style={ChipStyle.WHITE} text={participants.defender?.name.value || "Attacker"}/>
+        </ChipContainer>
     )
 }

@@ -89,4 +89,13 @@ public class GameService {
 
         return new PlayResult(PlayResultType.SUCCESS);
     }
+
+    public List<Game> getGames(List<GameId> gameIds) {
+        List<Game> games = new ArrayList<>();
+        for (GameId gameId : gameIds) {
+            Optional<Game> game = getGame(gameId.value());
+            game.ifPresent(games::add);
+        }
+        return games;
+    }
 }

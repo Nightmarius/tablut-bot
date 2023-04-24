@@ -30,7 +30,10 @@ export interface GameState {
 }
 
 export interface PlayRequest {
-    player: PlayerId;
+    playerId: PlayerId;
+    gameId: GameId;
+    attacker: boolean;
+    board: Board;
     requestId: RequestId;
     possibleActions: GameAction[];
 }
