@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -32,16 +33,28 @@ public class LobbyController {
 
     private final NotificationService notificationService;
 
-    @Operation(summary = "Returns the list of games",
-            description = "Returns all games, whether they are in progress or not")
-    @ApiResponse(responseCode = "200", description = "Successfully returned the list of games")
+    @Operation(summary = "Returns the list of game ids",
+            description = "Returns all game ids, whether they are in progress or not")
+    @ApiResponse(responseCode = "200", description = "Successfully returned the list of game ids")
     @GetMapping("/games")
-    public ResponseEntity<List<GameDto>> getGames() {
+    public ResponseEntity<List<GameId>> getGameIds() {
         List<Game> games = gameService.getGames();
-        List<GameDto> gameDtos = games.stream()
-                .map(GameMapper::map)
+        List<GameId> gameIds = games.stream()
+                .map(Game::getGameId)
                 .toList();
-        return ResponseEntity.ok(gameDtos);
+        return ResponseEntity.ok(gameIds);
+    }
+
+    @Operation(summary = "Returns the game",
+            description = "Returns the game, whether it is in progress or not")
+    @ApiResponse(responseCode = "200", description = "Successfully returned the game")
+    @ApiResponse(responseCode = "404", description = "Could not find the game with the given id")
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<GameDto> getGame(@PathVariable int gameId) {
+        Optional<Game> game = gameService.getGame(gameId);
+        return game.map(GameMapper::map)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Returns the list of tournaments",
@@ -51,7 +64,7 @@ public class LobbyController {
     public ResponseEntity<List<TournamentDto>> getTournaments() {
         var tournaments = tournamentService.getTournaments();
         var dtos = tournaments.stream()
-                .map(TournamentMapper::map)
+                .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .toList();
         return ResponseEntity.ok(dtos);
     }
@@ -61,9 +74,9 @@ public class LobbyController {
     @ApiResponse(responseCode = "200", description = "Successfully returned the tournament")
     @ApiResponse(responseCode = "404", description = "Did not find the tournament")
     @GetMapping("/tournament/{tournamentId}")
-    public ResponseEntity<TournamentDto> getTournaments(@PathVariable int tournamentId) {
+    public ResponseEntity<TournamentDto> getTournament(@PathVariable int tournamentId) {
         return tournamentService.getTournament(tournamentId)
-                .map(TournamentMapper::map)
+                .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -71,7 +84,7 @@ public class LobbyController {
     @Operation(summary = "Creates a new game",
             description = "Creates a new game and returns the game id")
     @ApiResponse(responseCode = "200", description = "Successfully created a new game")
-    @PostMapping("/game")
+    @PostMapping("/game/{gameId}")
     public ResponseEntity<GameId> createGame() {
         Game game = gameService.createGame();
         return ResponseEntity.ok(game.getGameId());

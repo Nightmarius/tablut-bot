@@ -1,8 +1,8 @@
 import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
-import LinkButton from "../../shared/button/LinkButton";
+import LinkButton from "../../shared/ui/button/LinkButton";
 
 import styled from "styled-components";
-import Button, { Style } from "../../shared/button/Button";
+import Button, { ButtonStyle } from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
 
 const StyledRow = styled.div`
@@ -43,7 +43,7 @@ export default function TournamentRow({ tournament }: Props) {
     function startTournament(): void {
         remoteService.post("/api/lobby/tournament/" + tournament.id.value + "/start", {})
     }
-    
+
     // TODO ZTOPCHA-21: Disable start button if tournament is not ready to start
     // TODO ZTOPCHA-14: Hide start button if user is not admin
     return (
@@ -61,12 +61,13 @@ export default function TournamentRow({ tournament }: Props) {
                 {
                     tournament.status === TournamentStatus.NOT_STARTED &&
                     tournament.players.length > 1 ?
-                        <Button style={Style.PURPLE} text="Start" onClick={startTournament}/> :
+                        <Button style={ButtonStyle.PURPLE} onClick={startTournament}>Start</Button> :
                         <div></div>
                 }
             </Column>
             <Column>
-                <LinkButton style={Style.PURPLE} text="Spectate" linkTarget={"/tournament/" + tournament.id.value}/>
+                <LinkButton style={ButtonStyle.PURPLE}
+                            linkTarget={"/tournament/" + tournament.id.value}>Spectate</LinkButton>
             </Column>
         </StyledRow>
     )

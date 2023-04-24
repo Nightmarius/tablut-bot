@@ -36,45 +36,38 @@ private repository.
 You should be able to open the Swagger endpoint documentation at `http://localhost:8080/swagger-ui/index.html`.
 ![swagger.png](doc/swagger.png)
 
-### Start angular frontend
-
-1. Start the angular frontend either by
-    1. By selecting the "Angular Frontend" and running it
-       ![runconfig-npm.png](doc/runconfig-npm.png)
-    2. Or by executing `cd angular-frontend` followed by `npm start` \
-2. You should now be able to open `http://localhost:4200` in your favorite browser to access the frontend.
-3. Create a new game by clicking the button "Create new game"
-
-Now you should see the following screen:
-![setup-complete-with-example-component.png](doc/setup-complete-frontend.png)
-
 ### Start react frontend
 
 1. Start the react frontend either by
-   1. By selecting the "React Frontend" and running it
-      ![runconfig-react.png](doc/runconfig-react.png)
-   2. Or by executing `cd react-frontend` followed by `npm run dev` \
+    1. By selecting the "React Frontend" and running it
+       ![runconfig-react.png](doc/runconfig-react.png)
+    2. Or by executing `cd react-frontend` followed by `npm run dev` \
 2. You should now be able to open `http://localhost:5173` in your favorite browser to access the frontend.
 
 Now you should see the following screen:
-![vite-startup.png](doc/vite-startup.png)
+![vite-startup.png](doc/react-frontend.png)
 
 ### Start bots
 
-This module contains the logic of how bots should connect to the backend game server and play "Rock, Paper, Scissors".
+This module contains the logic of how bots should connect to the backend game server and play "Tablut".
 By using different Spring Profiles, you can switch between different implementations of the bots "brain".
 
-1. Start "BestBot" using the run configuration "BestBot". It uses port 8081.
-   ![runconfig-bestbot.png](doc/runconfig-bestbot.png)
-2. Start "SimpleBot" using the run configuration "SimpleBot". It uses port 8082.
-   ![runconfig-simplebot.png](doc/runconfig-simplebot.png)
-3. Both consoles of the bots should now be waiting for the game to start and have a console output similar to this:
+1. Create a tournament in the frontend by clicking on "Tournaments" and then "Create Tournament".
+   ![create-tournament.png](doc/create-tournament.png)
+2. Start "Andres" using the run configuration "Andres". It uses port 8081.
+   ![runconfig-bestbot.png](doc/runconfig-andres.png)
+2. Start "Marius" using the run configuration "SimpleBot". It uses port 8082.
+   ![runconfig-simplebot.png](doc/runconfig-marius.png)
+3. Both consoles of the bots should now be waiting for the tournament to start and have a console output similar to
+   this:
    ![console-bestbot.png](doc/console-bestbot.png)
-3. The game you created in the frontend should now be ready to be started (button not greyed out anymore).
-4. Start the game by clicking the button "Start" and wait for the bots to play their game.
+3. The tournament you created in the frontend should now be ready to be started.
+4. Start the tournament by clicking the button "Start".
+5. Click on the "Spectate" button to see the pairings of the bots.
+   ![tournament-table.png](doc/tournament-table.png)
+6. Click on the "Start game" button and wait for the game to be finished.
 5. The game should be finished, as can be seen in the frontend:
    ![game-finished.png](doc/game-finished.png)
-   The bots will have automatically shut down after the game has finished.
 
 ### common module
 

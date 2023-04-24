@@ -3,13 +3,13 @@ import {Player, PlayerId, TournamentDto, TournamentStatus} from "../../shared/do
 import {useParams} from "react-router";
 import remoteService from "../../services/RemoteService";
 import {useEffect, useState} from "react";
-import LoadingPage from "../../shared/loading/LoadingPage";
+import LoadingPage from "../../shared/ui/loading/LoadingPage";
 import Leaderboard from "../Leaderboard/Leaderboard";
+import Lobby from "./Lobby";
 
 function getPlayerName(players: Player[], playerId: PlayerId) {
     return players.find(player => player.id.value === playerId.value).name;
 }
-
 function mapScores(tournament: TournamentDto) {
     return tournament.scores.map((score) => {
         return {
@@ -57,7 +57,7 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.NOT_STARTED) {
-        return <div>Waiting for players...</div>;
+        return <Lobby players={tournament.players}/>
     }
 
     if (tournament.status === TournamentStatus.DELETED) {

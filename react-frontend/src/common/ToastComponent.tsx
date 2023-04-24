@@ -1,4 +1,4 @@
-import {toast, ToastOptions} from "react-toastify";
+import { toast, ToastOptions } from "react-toastify";
 
 const defaultToastOptions: ToastOptions = {
 
@@ -16,16 +16,22 @@ export function presentErrorToast(message: string): void {
 
     toast.error(message, {
         ...defaultToastOptions,
-        style: {background: "var(--tertiary)"}
+        style: { background: "var(--tertiary)" }
     });
 }
 
 export function presentInfoToast(message: string): void {
 
-    toast.info(message, defaultToastOptions);
+    toast.info(message, {
+        ...defaultToastOptions,
+        style: { background: "var(--quarternary)" }
+    });
 }
 
 export function presentSuccessToast(message: string): void {
 
-    toast.success(message, defaultToastOptions);
+    toast.success(message, {
+        ...defaultToastOptions,
+        style: { background: "var(--secondary)" }
+    });
 }

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button, { Style } from "../../shared/button/Button";
+import Button from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
 
 const Title = styled.h1`
@@ -24,7 +24,7 @@ const CenterSpan = styled.span`
 
 export default function NoTournamentsPage() {
 
-    function createTournament() {
+    function handleCreateTournament() {
         remoteService.post("/api/lobby/tournament", {})
     }
 
@@ -34,7 +34,7 @@ export default function NoTournamentsPage() {
             <Title>Coming soon!</Title>
             <Description>There are no tournaments at the moment. Come back later at the day of the event!</Description>
             <CenterSpan>
-                <Button style={Style.PURPLE} onClick={createTournament} text="Create a new tournament"></Button>
+                <Button onClick={handleCreateTournament}>Create a new tournament</Button>
             </CenterSpan>
         </div>
     )
