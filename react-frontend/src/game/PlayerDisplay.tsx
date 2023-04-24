@@ -1,5 +1,5 @@
-import { PlayerRoles } from "../GamePage";
-import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
+import { PlayerRoles } from "./GamePage";
+import Chip, { ChipStyle } from "../shared/ui/chip/Chip";
 import styled from "styled-components";
 
 const ChipContainer = styled.div`
@@ -28,6 +28,7 @@ export const RegisteredPlayers = ({ participants }: { participants: PlayerRoles 
     return (
         <ChipContainer>
             <Chip style={ChipStyle.BLACK}>{participants.attacker?.name.value || "Attacker"}</Chip>
+            <div>versus</div>
             <Chip style={ChipStyle.WHITE}>{participants.defender?.name.value || "Attacker"}</Chip>
         </ChipContainer>
     )

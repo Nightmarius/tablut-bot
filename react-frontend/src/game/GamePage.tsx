@@ -1,22 +1,17 @@
 import { useParams } from "react-router";
 import TablutBoard from "./board/TablutBoard";
 import styled from "styled-components";
-import remoteService from "../services/RemoteService";
-import { presentSuccessToast } from "../common/ToastComponent";
 import { useGamePolling } from "../shared/hooks/GameStatePollingHook";
-import PlayerDisplay from "./playerDisplay/PlayerDisplay";
-import { GameStatus, Player } from "../shared/domain/model";
+import PlayerDisplay from "./PlayerDisplay";
+import { Player } from "../shared/domain/model";
 import LoadingPage from "../shared/ui/loading/LoadingPage";
-import Button from "../shared/ui/button/Button";
+import GameStatusSection from "./GameStatusSection";
+import MoveList from "./MoveList";
 
 export interface PlayerRoles {
     attacker: Player | null;
     defender: Player | null;
 }
-
-const GameStateContainer = styled.div`
-  margin-left: 1.0em;
-`;
 
 const BoardContainer = styled.div`
   margin-left: 0.5em;
@@ -26,11 +21,20 @@ const GameContainer = styled.div`
   margin-left: 0.5em;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
 `;
 
 const Title = styled.h1`
+  font-size: 3rem;
   text-align: center;
+`;
+
+const GameStateContainer = styled.div`
+  margin-top: 10vh;
+  margin-left: 1.0em;
+  width: 14rem;
+  font-size: 1.5rem;
 `;
 
 export default function GamePage() {
@@ -44,7 +48,6 @@ export default function GamePage() {
         return <h2>Game does not exist :(</h2>
     }
 
-    // TODO ZTOPCHA-14: Hide start game button if user is not admin
     return (
         <>
             <GameContainer>
@@ -52,23 +55,13 @@ export default function GamePage() {
                     <Title> Game {gameId} </Title>
                     <PlayerDisplay players={playerRoles}/>
                     <TablutBoard board={game?.state.board!}/>
-                    {game?.status === GameStatus.NOT_STARTED &&
-                        <Button onClick={() => handleStartGame(gameId!)}>"Start Game"</Button>}
+                    <GameStatusSection game={game!}/>
                 </BoardContainer>
                 <GameStateContainer>
+                    <MoveList game={game!}/>
                 </GameStateContainer>
             </GameContainer>
-
         </>
     )
 }
 
-const handleStartGame = (gameId: string) => {
-
-    remoteService.post(`/api/lobby/game/${gameId}/start`)
-        .then(() => {
-
-            presentSuccessToast(`Game "${gameId}" has started`)
-
-        });
-}

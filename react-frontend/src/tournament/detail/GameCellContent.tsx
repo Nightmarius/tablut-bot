@@ -48,7 +48,7 @@ export default function GameCellContent({ game }: Props) {
     const winner = getWinner(game);
 
     const getChipStyleForPlayer = (player: Player): ChipStyle => {
-        return player === player1 ? ChipStyle.WHITE : ChipStyle.BLACK;
+        return player === player1 ? ChipStyle.BLACK : ChipStyle.WHITE;
     }
 
     function handleStartGame() {
