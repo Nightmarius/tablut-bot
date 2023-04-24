@@ -73,7 +73,7 @@ export default function InfoBox({ title, text, buttonText, linkTarget, imagePlac
                 <Title className="typing">{title}</Title>
                 {text && <Paragraph>{text}</Paragraph>}
                 {buttonText && linkTarget &&
-                    <LinkButton style={ButtonStyle.WHITE} text={buttonText} linkTarget={linkTarget}/>}
+                    <LinkButton style={ButtonStyle.WHITE} linkTarget={linkTarget}>{buttonText}</LinkButton>}
             </Description>
         </Box>
     )

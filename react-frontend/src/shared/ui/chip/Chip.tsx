@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ReactNode } from "react";
 
 const StyledChip = styled.div<StyleProps>`
   background-color: ${({ chipBackgroundColor }) => chipBackgroundColor === ChipStyle.BLACK && "var(--primary)" || "white"};
@@ -14,10 +15,10 @@ export interface StyleProps {
     chipBackgroundColor: ChipStyle
 }
 
-export default function Chip({ text, style }: Props) {
+export default function Chip({ children, style }: Props) {
 
     return (
-        <StyledChip chipBackgroundColor={style}>{text}</StyledChip>
+        <StyledChip chipBackgroundColor={style}>{children}</StyledChip>
     )
 }
 
@@ -26,6 +27,6 @@ export enum ChipStyle {
 }
 
 interface Props {
-    text: string;
+    children: ReactNode;
     style: ChipStyle
 }

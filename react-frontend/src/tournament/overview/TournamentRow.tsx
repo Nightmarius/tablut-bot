@@ -61,13 +61,13 @@ export default function TournamentRow({ tournament }: Props) {
                 {
                     tournament.status === TournamentStatus.NOT_STARTED &&
                     tournament.players.length > 1 ?
-                        <Button style={ButtonStyle.PURPLE} text="Start" onClick={startTournament}/> :
+                        <Button style={ButtonStyle.PURPLE} onClick={startTournament}>Start</Button> :
                         <div></div>
                 }
             </Column>
             <Column>
-                <LinkButton style={ButtonStyle.PURPLE} text="Spectate"
-                            linkTarget={"/tournament/" + tournament.id.value}/>
+                <LinkButton style={ButtonStyle.PURPLE}
+                            linkTarget={"/tournament/" + tournament.id.value}>Spectate</LinkButton>
             </Column>
         </StyledRow>
     )
