@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {PlayerName} from "../../shared/domain/model";
 
 const Container = styled.div`
   padding: 2rem 0;
@@ -61,6 +62,18 @@ const Name = styled.span`
   margin-right: 0.5rem;
   width: 10rem;
   text-align: left;
+  opacity: 0;
+  animation: slideInAnimationY 1s ease forwards;
+
+  @keyframes slideInAnimationY {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
 `;
 
 const ProgressBarContainer = styled.div`
@@ -76,24 +89,54 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = styled.span<ProgressBarProps>`
-  background-color: ${(props) => props.color};
+  position: relative;
+  display: block;
   height: 0.6rem;
   margin-right: 0.5rem;
   border-radius: 4px;
-  width: ${(props) => props.width};
+  width: ${(props:ProgressBarProps) => props.width};
+  background-color: var(--background);
+  overflow: hidden;
+  
+  &:before {
+    position: absolute;
+    content: '';
+    height: 100%;
+    background-color: ${(props) => props.color};
+    animation: progress 1s ease forwards;
+  }
+  @keyframes progress {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
 `;
 
 const Points = styled.span`
   width: 10rem;
   text-align: left;
+  opacity: 0;
+  animation: slideInAnimation 1s ease forwards 0.8s;
+
+  @keyframes slideInAnimation {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 interface Props {
-    scores: { name: string, points: number }[];
+    scores: { name: PlayerName, points: number }[];
 }
 
 export default function Leaderboard({scores}: Props) {
-    const sortedScores = scores.sort((a, b) => b.points - a.points);
+    const sortedScores = [...scores].sort((a, b) => b.points - a.points);
 
     let currentPosition = 1;
 
@@ -121,10 +164,10 @@ export default function Leaderboard({scores}: Props) {
                     }
 
                     return (
-                        <ScoreListItem key={index}>
+                        <ScoreListItem key={currentPosition}>
                             <NamePositionContainer>
                                 <Position>{currentPosition}</Position>
-                                <Name>{score.name}</Name>
+                                <Name>{score.name.value}</Name>
                             </NamePositionContainer>
                             <ProgressBarContainer>
                                 <ProgressBar

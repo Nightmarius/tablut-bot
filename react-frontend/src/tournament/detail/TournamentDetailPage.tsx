@@ -1,10 +1,23 @@
 import TournamentTable from "./TournamentTable";
-import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
-import { useParams } from "react-router";
+import {Player, PlayerId, TournamentDto, TournamentStatus} from "../../shared/domain/model";
+import {useParams} from "react-router";
 import remoteService from "../../services/RemoteService";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import LoadingPage from "../../shared/ui/loading/LoadingPage";
+import Leaderboard from "../Leaderboard/Leaderboard";
 import Lobby from "./Lobby";
+
+function getPlayerName(players: Player[], playerId: PlayerId) {
+    return players.find(player => player.id.value === playerId.value).name;
+}
+function mapScores(tournament: TournamentDto) {
+    return tournament.scores.map((score) => {
+        return {
+            name: getPlayerName(tournament.players, score.playerId),
+            points: score.score
+        };
+    });
+}
 
 export default function TournamentDetailPage() {
 
@@ -52,10 +65,8 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.FINISHED) {
-        // TODO ZTOPCHA-29: show the leaderboard
-        return <TournamentTable tournament={tournament}/>;
+        return <Leaderboard scores={mapScores(tournament)}/>
     }
-
 
     return <TournamentTable tournament={tournament}/>;
 
