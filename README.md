@@ -10,16 +10,14 @@ If your setup already has some of the required tools installed, please adjust ac
 
 1. Install newest Node from here https://nodejs.org/en/ (currently 18.15.0 LTS)
 2. Run `npm install -g npm@9.6.1`
-3. Run `npm install -g @angular/cli@15.2.2`
-4. Verify your versions with `ng version`:  
-   Angular CLI: **15.2.2** \
-   Node: **18.15.0** \
-   Package Manager: npm **9.6.1**
+3. Verify your versions with 
+   - `npm -v`: 9.6.1
+   - `node -v`: v18.15.0
 4. Install a new version of IntelliJ
 5. Clone the master branch with `git clone https://github.com/Cyberdog52/hackathon.git`
 6. Open the project with IntelliJ and let gradle build the project
 7. If prompted, install java (17.0.5)
-7. Install the npm dependencies with `cd angular-frontend` followed by `npm install`
+7. Install the npm dependencies with `cd react-frontend` followed by `npm install`
 
 During the hackathon your team can decide to use a custom branch on this GitHub repository or to fork it to your own
 private repository.
