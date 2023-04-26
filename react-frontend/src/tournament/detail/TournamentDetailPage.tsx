@@ -1,5 +1,5 @@
 import TournamentTable from "./TournamentTable";
-import {Player, PlayerId, TournamentDto, TournamentStatus} from "../../shared/domain/model";
+import {Player, PlayerId, PlayerName, TournamentDto, TournamentStatus} from "../../shared/domain/model";
 import {useParams} from "react-router";
 import remoteService from "../../services/RemoteService";
 import {useEffect, useState} from "react";
@@ -8,12 +8,14 @@ import Leaderboard from "../Leaderboard/Leaderboard";
 import Lobby from "./Lobby";
 
 function getPlayerName(players: Player[], playerId: PlayerId) {
-    return players.find(player => player.id.value === playerId.value).name;
+    const player = players.find(player => player.id.value === playerId.value);
+    return player ? player.name : "Unknown Player";
 }
+
 function mapScores(tournament: TournamentDto) {
     return tournament.scores.map((score) => {
         return {
-            name: getPlayerName(tournament.players, score.playerId),
+            name: getPlayerName(tournament.players, score.playerId) as PlayerName,
             points: score.score
         };
     });
@@ -21,7 +23,7 @@ function mapScores(tournament: TournamentDto) {
 
 export default function TournamentDetailPage() {
 
-    let { tournamentId } = useParams();
+    let {tournamentId} = useParams();
 
     let [tournament, setTournament] = useState<TournamentDto>();
 
@@ -65,7 +67,11 @@ export default function TournamentDetailPage() {
     }
 
     if (tournament.status === TournamentStatus.FINISHED) {
-        return <Leaderboard scores={mapScores(tournament)}/>
+        return <>
+            <Leaderboard scores={mapScores(tournament)}/>
+            <TournamentTable tournament={tournament}/>
+        </>
+
     }
 
     return <TournamentTable tournament={tournament}/>;
