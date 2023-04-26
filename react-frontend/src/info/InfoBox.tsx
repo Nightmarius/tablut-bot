@@ -60,7 +60,7 @@ export interface DescriptionProps {
 }
 
 
-export default function InfoBox({ title, text, buttonText, linkTarget, imagePlacement, imageName }: Props) {
+export default function InfoBox({ title, text, buttonText, linkTarget, imagePlacement, image }: Props) {
 
     const id = nanoid();
 
@@ -68,7 +68,7 @@ export default function InfoBox({ title, text, buttonText, linkTarget, imagePlac
     useSlideAnimationOnIntersection(`.box-${id} h3, .box-${id} p`, slideDirection);
 
     return (
-        <Box className={`box-${id}`} imageUrl={"src/assets/" + imageName} placement={imagePlacement}>
+        <Box className={`box-${id}`} imageUrl={image} placement={imagePlacement}>
             <Description placement={imagePlacement}>
                 <Title className="typing">{title}</Title>
                 {text && <Paragraph>{text}</Paragraph>}
@@ -90,5 +90,5 @@ interface Props {
     buttonText?: string;
     linkTarget?: string;
     imagePlacement: Placement;
-    imageName: string;
+    image: string;
 }
