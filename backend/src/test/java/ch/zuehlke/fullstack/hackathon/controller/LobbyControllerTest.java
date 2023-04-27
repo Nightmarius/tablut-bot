@@ -38,7 +38,7 @@ class LobbyControllerTest {
     void getGames_emptyList_successfully() {
         when(gameServiceMock.getGames()).thenReturn(List.of());
 
-        ResponseEntity<List<GameDto>> response = lobbyController.getGames();
+        ResponseEntity<List<GameId>> response = lobbyController.getGameIds();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody()).isEqualTo(List.of());

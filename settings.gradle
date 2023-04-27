@@ -1,4 +1,4 @@
-rootProject.name = 'Hackathon'
+rootProject.name = 'Zühlke Coding Challenge'
 include 'backend'
 include 'react-frontend'
 include 'bot'
