@@ -83,9 +83,11 @@ To push a new version to Heroku, run `git push heroku master`
 
 To push from a branch execute `git push heroku <branchname>:master`
 
-## Production URL
+## Production URLs
 
-https://zuehlke-coding-challenge.herokuapp.com/
+Frontend: https://zuehlke-coding-challenge.herokuapp.com/
+
+Swagger: https://zuehlke-coding-challenge.herokuapp.com/swagger-ui/index.html
 
 ## How it was set up
 
