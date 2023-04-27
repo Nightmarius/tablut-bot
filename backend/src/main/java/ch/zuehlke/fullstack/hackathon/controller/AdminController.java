@@ -129,8 +129,8 @@ public class AdminController {
 
     @ApiResponse(responseCode = "200", description = "Got bot successfully")
     @GetMapping("/bot/{name}")
-    public ResponseEntity<BotDto> getBot(@PathVariable PlayerName name) {
-        return ResponseEntity.ok(botService.getBot(name).orElse(null));
+    public ResponseEntity<BotDto> getBot(@PathVariable String name) {
+        return ResponseEntity.ok(botService.getBot(new PlayerName(name)).orElse(null));
     }
 
 }

@@ -3,6 +3,8 @@ package ch.zuehlke.fullstack.hackathon.controller;
 import ch.zuehlke.common.BotDto;
 import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.PlayerName;
+import ch.zuehlke.common.Token;
+import ch.zuehlke.fullstack.hackathon.database.Bot;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.service.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,32 +36,24 @@ public class AdminControllerTest {
         botServiceMock = mock(BotService.class);
         notificationServiceMock = mock(NotificationService.class);
         adminController = new AdminController(adminServiceMock, gameServiceMock, tournamentServiceMock, botServiceMock, notificationServiceMock);
-        List<PlayerName> names = new ArrayList<>(Arrays.asList("dave", "marvin", "fritz"));
-        adminController.generate(names);
+        List<BotDto> bots = new ArrayList<BotDto>();
+        bots.add(new Bot("bestBot", "1111").getDto());
+        when(botServiceMock.getBots()).thenReturn(bots);
     }
 
     @Test
     void getBots_successfully() {
         List<BotDto> bots = adminController.getBots().getBody();
 
-        assertThat(bots).hasSize(3);
-        assertThat(bots.get(0).name()).isEqualTo(new PlayerName("dave"));
-        assertThat(bots.get(1).name()).isEqualTo(new PlayerName("marvin"));
-        assertThat(bots.get(2).name()).isEqualTo(new PlayerName("fritz"));
-        assertThat(bots.get(0).token().value().length()).isEqualTo(32);
+        assertThat(bots).hasSize(1);
+        assertThat(bots.get(0).name()).isEqualTo(new PlayerName("bestBot"));
+        assertThat(bots.get(0).token()).isEqualTo(new Token("1111"));
     }
 
     @Test
     void generate_successfully() {
-        List<String> names = new ArrayList<>(Arrays.asList("dave", "marvin", "fritz"));
-        adminController.generate(names);
-        List<BotDto> bots = adminController.getBots().getBody();
-
-        assertThat(bots).hasSize(6);
-        assertThat(bots.get(0).name()).isEqualTo(new PlayerName("dave"));
-        assertThat(bots.get(1).name()).isEqualTo(new PlayerName("marvin"));
-        assertThat(bots.get(2).name()).isEqualTo(new PlayerName("fritz"));
-        assertThat(bots.get(0).token().value().length()).isEqualTo(32);
+        adminController.generate(new PlayerName("dave"));
+        verify(botServiceMock).addBot(new PlayerName("dave"));
     }
 
     @Test

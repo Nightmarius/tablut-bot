@@ -30,10 +30,10 @@ public class BotController {
     @ApiResponse(responseCode = "403", description = "Bot credentials invalid")
     @ApiResponse(responseCode = "404", description = "The game does not exist")
     @PostMapping("/game/{gameId}/join")
-    public ResponseEntity<JoinResponse> joinGame(@PathVariable int gameId, @RequestHeader(value = "token") String token, @RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<JoinResponse> joinGame(@PathVariable int gameId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
         BotDto savedBot = botService.getBot(joinRequest.name()).orElse(null);
 
-        if (savedBot == null || savedBot.token().value().equals(token)) {
+        if (savedBot == null || !savedBot.token().value().equals(token)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -55,7 +55,13 @@ public class BotController {
     @ApiResponse(responseCode = "400", description = "Tournament is already full")
     @ApiResponse(responseCode = "404", description = "The tournament does not exist")
     @PostMapping("/tournament/{tournamentId}/join")
-    public ResponseEntity<JoinResponse> joinTournament(@PathVariable int tournamentId, @RequestHeader(value = "token") String token, @RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<JoinResponse> joinTournament(@PathVariable int tournamentId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
+        BotDto savedBot = botService.getBot(joinRequest.name()).orElse(null);
+
+        if (savedBot == null || !savedBot.token().value().equals(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         var joinResult = tournamentService.join(tournamentId, joinRequest.name());
 
         if (joinResult.resultType() == TournamentJoinResult.TournamentJoinResultType.TOURNAMENT_NOT_FOUND) {
@@ -74,7 +80,14 @@ public class BotController {
     @ApiResponse(responseCode = "400", description = "Player is not part of the game or the move is invalid")
     @ApiResponse(responseCode = "404", description = "Game was not found")
     @PostMapping("/game/{gameId}/play")
-    public ResponseEntity<Void> play(@PathVariable int gameId, @RequestHeader(value = "token") String token, @RequestBody Move move) {
+    public ResponseEntity<Void> play(@PathVariable int gameId, @RequestHeader String token, @RequestBody Move move) {
+        //TODO get name here somehow
+        PlayerName name = new PlayerName("bestBot");
+        BotDto savedBot = botService.getBot(name).orElse(null);
+        if (savedBot == null || !savedBot.token().value().equals(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         PlayResult playResult = gameService.play(move, new GameId(gameId));
         if (playResult.resultType() == PlayResult.PlayResultType.GAME_NOT_FOUND) {
             return ResponseEntity.notFound().build();

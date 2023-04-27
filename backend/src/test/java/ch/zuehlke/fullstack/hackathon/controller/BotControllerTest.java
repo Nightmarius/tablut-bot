@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,18 +33,10 @@ public class BotControllerTest {
         tournamentServiceMock = mock(TournamentService.class);
         notificationServiceMock = mock(NotificationService.class);
         botController = new BotController(botServiceMock, gameServiceMock, tournamentServiceMock, notificationServiceMock);
+        BotDto bestBot = new BotDto(new PlayerName("bestBot"), new Token("1111"));
+        when(botServiceMock.getBot(new PlayerName("fakeBot"))).thenReturn(null);
+        when(botServiceMock.getBot(new PlayerName("bestBot"))).thenReturn(Optional.of(bestBot));
     }
-
-/*
-    @Test
-    void join_successfully() {
-        List<BotDto> bots = botController.getBots().getBody();
-        String token = bots.get(0).getToken();
-        String joined = botController.join(new BotDao("fritz", token)).getBody();
-
-        assertThat(joined).isEqualTo("fritz");
-    }*/
-
 
     @Test
     void join_successfully() {
@@ -61,9 +55,6 @@ public class BotControllerTest {
 
     @Test
     void join_wrongNameReturns403() {
-        JoinResult joinResult = new JoinResult(new PlayerId(), JoinResult.JoinResultType.SUCCESS);
-        when(gameServiceMock.join(anyInt(), any())).thenReturn(joinResult);
-
         PlayerName playerName = new PlayerName("myCustomBot");
         JoinRequest joinRequest = new JoinRequest(playerName);
         ResponseEntity<JoinResponse> response = botController.joinGame(42, "1111", joinRequest);
@@ -73,9 +64,6 @@ public class BotControllerTest {
 
     @Test
     void join_wrongTokenReturns403() {
-        JoinResult joinResult = new JoinResult(new PlayerId(), JoinResult.JoinResultType.SUCCESS);
-        when(gameServiceMock.join(anyInt(), any())).thenReturn(joinResult);
-
         PlayerName playerName = new PlayerName("bestBot");
         JoinRequest joinRequest = new JoinRequest(playerName);
         ResponseEntity<JoinResponse> response = botController.joinGame(42, "1234", joinRequest);
@@ -120,7 +108,7 @@ public class BotControllerTest {
 
         when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.SUCCESS));
 
-        ResponseEntity<Void> response = botController.play(gameId.value(), move);
+        ResponseEntity<Void> response = botController.play(gameId.value(), "1111", move);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody()).isNull();
@@ -133,7 +121,7 @@ public class BotControllerTest {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
         when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.GAME_NOT_FOUND));
 
-        ResponseEntity<Void> response = botController.play(gameId.value(), move);
+        ResponseEntity<Void> response = botController.play(gameId.value(), "1111", move);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
         assertThat(response.getBody()).isNull();
@@ -146,7 +134,7 @@ public class BotControllerTest {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
         when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.PLAYER_NOT_PART_OF_GAME));
 
-        ResponseEntity<Void> response = botController.play(gameId.value(), move);
+        ResponseEntity<Void> response = botController.play(gameId.value(), "1111", move);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(400));
         assertThat(response.getBody()).isNull();
@@ -159,7 +147,7 @@ public class BotControllerTest {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
         when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.INVALID_ACTION));
 
-        ResponseEntity<Void> response = botController.play(gameId.value(), move);
+        ResponseEntity<Void> response = botController.play(gameId.value(), "1111", move);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(400));
         assertThat(response.getBody()).isNull();

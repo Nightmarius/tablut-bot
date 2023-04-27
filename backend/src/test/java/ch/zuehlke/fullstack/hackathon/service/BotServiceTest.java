@@ -24,5 +24,4 @@ public class BotServiceTest {
         String token = botService.generateToken();
         assertThat(token).hasSize(32);
     }
-
 }
