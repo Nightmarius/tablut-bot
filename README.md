@@ -98,5 +98,5 @@ Heroku automatically detects that the project uses gradle, so it enables the sta
 To get access to the npm command, you must add the buildpack for nodejs: `heroku buildpacks:set heroku/nodejs --index 1`.
 Putting it at index 1 ensures that gradle is used as the primary buildpack but npm is installed first. 
 Unfortunately the nodejs buildpack requires you to have a package.json in the root folder, so that's why there is an empty package.json in the root folder.
-You can check the installed buildpacks with `heroku buildpacks`
+You can check the installed buildpacks with `heroku buildpacks`.
 
