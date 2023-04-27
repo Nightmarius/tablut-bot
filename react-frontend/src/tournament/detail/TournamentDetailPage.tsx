@@ -10,6 +10,7 @@ import Lobby from "./Lobby";
 function getPlayerName(players: Player[], playerId: PlayerId) {
     return players.find(player => player.id.value === playerId.value).name;
 }
+
 function mapScores(tournament: TournamentDto) {
     return tournament.scores.map((score) => {
         return {
@@ -21,13 +22,13 @@ function mapScores(tournament: TournamentDto) {
 
 export default function TournamentDetailPage() {
 
-    let { tournamentId } = useParams();
+    let {tournamentId} = useParams();
 
     let [tournament, setTournament] = useState<TournamentDto>();
 
     useEffect(() => {
         const fetchTournament = () => {
-            remoteService.get<TournamentDto>("/api/lobby/tournament/" + tournamentId)
+            remoteService.get<TournamentDto>("/api/tournament/" + tournamentId)
                 .then((response: TournamentDto) => {
                     setTournament(response);
                 });
