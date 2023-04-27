@@ -1,5 +1,8 @@
 package ch.zuehlke.fullstack.hackathon.database;
 
+import ch.zuehlke.common.BotDto;
+import ch.zuehlke.common.PlayerName;
+import ch.zuehlke.common.Token;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -7,12 +10,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class BotData {
+public class Bot {
     @Id
-    private Long id;
     private String name;
     private String token;
+
+    public BotDto getDto() {
+        return new BotDto(new PlayerName(this.name), new Token(this.token));
+    }
 }

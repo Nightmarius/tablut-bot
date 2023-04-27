@@ -1,20 +1,38 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
-import ch.zuehlke.fullstack.hackathon.database.BotData;
-import org.springframework.data.jpa.repository.JpaRepository;
+import ch.zuehlke.common.BotDto;
+import ch.zuehlke.common.PlayerName;
+import ch.zuehlke.fullstack.hackathon.database.Bot;
+import ch.zuehlke.fullstack.hackathon.database.BotRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class BotService {
-    private JpaRepository<BotData, Long> botRepo;
+    private final BotRepository botRepo;
 
-    public Optional<BotData> getBotById(Long id){
-        return botRepo.findById(id);
+    public Optional<BotDto> getBotById(Long id) {
+        return botRepo.findById(id).map(Bot::getDto);
     }
-    public List<BotData> getBots(){
-        return botRepo.findAll();
+
+    public Optional<BotDto> getBot(PlayerName name) {
+        return botRepo.findById(Long.valueOf(name.value())).map(Bot::getDto);
+    }
+
+    public void addBot(PlayerName name) {
+        botRepo.save(new Bot(name.value(), generateToken()));
+    }
+
+    public List<BotDto> getBots() {
+        return botRepo.findAll().stream().map(Bot::getDto).toList();
+    }
+
+    String generateToken() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }
