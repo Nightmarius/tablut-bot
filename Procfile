@@ -1,2 +1,2 @@
-web: cd backend && ./gradlew bootRun
-worker: cd react-frontend && npm run dev
+web: java -jar backend/build/libs/backend-1.0.0.jar --server.port=$PORT
+frontend: npm run dev --prefix react-frontend
