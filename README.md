@@ -83,6 +83,10 @@ To push a new version to Heroku, run `git push heroku master`
 
 To push from a branch execute `git push heroku <branchname>:master`
 
+## Production URL
+
+https://zuehlke-coding-challenge.herokuapp.com/
+
 ## How it was set up
 
 The first command to connect it to heroku's git was `heroku git:remote -a zuehlke-coding-challenge`
