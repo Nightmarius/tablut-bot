@@ -3,7 +3,11 @@ plugins {
     id "base"
 }
 
-task appNpmBuild(type: NpmTask) {
+task appNpmInstall(type: NpmTask) {
+    args = ["install"]
+}
+
+task appNpmBuild(type: NpmTask, dependsOn: appNpmInstall) {
     args = ["run", "build"]
 }
 
