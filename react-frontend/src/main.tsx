@@ -2,7 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import InfoPage from "./info/InfoPage"
 import "./index.css"
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error/ErrorPage";
 import RulesPage from "./rules/RulesPage";
 import GamePage from "./game/GamePage";
@@ -12,7 +12,7 @@ import { AdminPage } from "./admin/AdminPage";
 import { ToastContainer } from "react-toastify";
 import TournamentOverviewPage from "./tournament/overview/TournamentOverviewPage";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: "/",
         element: <InfoPage/>,
