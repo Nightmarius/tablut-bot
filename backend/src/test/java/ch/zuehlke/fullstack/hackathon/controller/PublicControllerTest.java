@@ -27,7 +27,7 @@ class PublicControllerTest {
     }
 
     @Test
-    void getGames_emptyList_successfully() {
+    void getGameIds_emptyList_successfully() {
         when(gameServiceMock.getGames()).thenReturn(List.of());
 
         ResponseEntity<List<GameId>> response = publicController.getGameIds();
