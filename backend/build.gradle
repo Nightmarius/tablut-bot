@@ -46,3 +46,11 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+task copyWebApp(type: Copy) {
+    from "$rootDir/react-frontend/dist"
+    into "$rootDir/backend/build/resources/main/static/."
+}
+
+bootJar.dependsOn(copyWebApp)
+compileJava.dependsOn ":react-frontend:build"

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="BestBot" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="bestbot" />
-    <module name="Hackathon.bot.main" />
+    <module name="Zühlke_Coding_Challenge.bot.main" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
