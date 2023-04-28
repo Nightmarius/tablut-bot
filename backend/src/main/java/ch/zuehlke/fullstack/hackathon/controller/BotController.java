@@ -31,7 +31,8 @@ public class BotController {
     @ApiResponse(responseCode = "404", description = "The game does not exist")
     @PostMapping("/game/{gameId}/join")
     public ResponseEntity<JoinResponse> joinGame(@PathVariable int gameId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
-        AuthenticationResult result = botAuthService.authenticate(joinRequest.name(), new Token(token));
+        BotDto bot = new BotDto(joinRequest.name(), new Token(token));
+        AuthenticationResult result = botAuthService.authenticate(bot);
         if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -55,7 +56,8 @@ public class BotController {
     @ApiResponse(responseCode = "404", description = "The tournament does not exist")
     @PostMapping("/tournament/{tournamentId}/join")
     public ResponseEntity<JoinResponse> joinTournament(@PathVariable int tournamentId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
-        AuthenticationResult result = botAuthService.authenticate(joinRequest.name(), new Token(token));
+        BotDto bot = new BotDto(joinRequest.name(), new Token(token));
+        AuthenticationResult result = botAuthService.authenticate(bot);
         if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -81,7 +83,8 @@ public class BotController {
     public ResponseEntity<Void> play(@PathVariable int gameId, @RequestHeader String token, @RequestBody Move move) {
         //TODO get name here somehow
         PlayerName name = new PlayerName("bestBot");
-        AuthenticationResult result = botAuthService.authenticate(name, new Token(token));
+        BotDto bot = new BotDto(name, new Token(token));
+        AuthenticationResult result = botAuthService.authenticate(bot);
         if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

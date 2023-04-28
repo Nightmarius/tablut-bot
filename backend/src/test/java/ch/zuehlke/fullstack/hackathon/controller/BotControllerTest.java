@@ -1,7 +1,7 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
 import ch.zuehlke.common.*;
-import ch.zuehlke.fullstack.hackathon.service.BotService;
+import ch.zuehlke.fullstack.hackathon.service.BotAuthenticationService;
 import ch.zuehlke.fullstack.hackathon.service.GameService;
 import ch.zuehlke.fullstack.hackathon.service.NotificationService;
 import ch.zuehlke.fullstack.hackathon.service.TournamentService;
@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -21,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class BotControllerTest {
 
     private BotController botController;
-    private BotService botServiceMock;
+    private BotAuthenticationService botAuthServiceMock;
     private GameService gameServiceMock;
     private TournamentService tournamentServiceMock;
     private NotificationService notificationServiceMock;
@@ -33,14 +31,14 @@ public class BotControllerTest {
 
     @BeforeEach
     void setUp() {
-        botServiceMock = mock(BotService.class);
+        botAuthServiceMock = mock(BotAuthenticationService.class);
         gameServiceMock = mock(GameService.class);
         tournamentServiceMock = mock(TournamentService.class);
         notificationServiceMock = mock(NotificationService.class);
-        botController = new BotController(botServiceMock, gameServiceMock, tournamentServiceMock, notificationServiceMock);
+        botController = new BotController(botAuthServiceMock, gameServiceMock, tournamentServiceMock, notificationServiceMock);
         BotDto bestBotDto = new BotDto(bestBot, bestToken);
-        when(botServiceMock.getBot(fakeBot)).thenReturn(Optional.empty());
-        when(botServiceMock.getBot(bestBot)).thenReturn(Optional.of(bestBotDto));
+        when(botAuthServiceMock.authenticate(any())).thenReturn(AuthenticationResult.DENIED);
+        when(botAuthServiceMock.authenticate(bestBotDto)).thenReturn(AuthenticationResult.SUCCESS);
     }
 
     @Test
