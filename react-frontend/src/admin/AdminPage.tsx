@@ -15,7 +15,8 @@ export function AdminPage() {
 
     const [gameIds, setGameIds] = useState(new Array<number>);
     const [bots, setBots] = useState<BotDto[]>(new Array<BotDto>);
-    const [name, setName] = useState<string>("");
+    const [name, setName] = useState("");
+    const [warning, setWarning] = useState("");
     const handleCreateGame = () => {
 
         remoteService.post<GameId>('/api/game')
@@ -28,7 +29,7 @@ export function AdminPage() {
     };
 
     function generateToken() {
-        remoteService.post('/admin/bots/generate', {
+        remoteService.post('/admin/bot/generate', {
             "value": name
         }).then(getBots);
     }
@@ -44,8 +45,10 @@ export function AdminPage() {
         setName(name)
         remoteService.get<BotDto>('/admin/bot/' + name)
             .then((bot: BotDto) => {
-                if (bot != null) {
-
+                if (bot.name != undefined) {
+                    setWarning(name + " already exists try using " + name + "1 instead.")
+                } else {
+                    setWarning("")
                 }
             })
     }
@@ -54,14 +57,13 @@ export function AdminPage() {
         <>
             <button onClick={handleCreateGame}>New Game</button>
             <GameList gameIds={gameIds}/>
+            {warning != null && <p>{warning}</p>}
             <input type="text" placeholder="Name" value={name} onChange={(e) => handleNameChange(e.target.value)}/>
             <button onClick={generateToken}>Generate Access token</button>
             {bots.map((bot) => (
-                <a key={bot.name.value} onClick={() => {/*copy token to clipboard*/
-                }}>
+                <a key={bot.name.value} onClick={() => navigator.clipboard.writeText(bot.token.value)}>
                     <li>
-                        {bot.name.value}:
-                        {bot.token.value}
+                        {bot.name.value}: {bot.token.value}
                     </li>
                 </a>)
             )}

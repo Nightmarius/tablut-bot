@@ -16,12 +16,8 @@ import java.util.UUID;
 public class BotService {
     private final BotRepository botRepo;
 
-    public Optional<BotDto> getBotById(Long id) {
-        return botRepo.findById(id).map(Bot::getDto);
-    }
-
     public Optional<BotDto> getBot(PlayerName name) {
-        return botRepo.findById(Long.valueOf(name.value())).map(Bot::getDto);
+        return botRepo.findById(name.value()).map(Bot::getDto);
     }
 
     public void addBot(PlayerName name) {
