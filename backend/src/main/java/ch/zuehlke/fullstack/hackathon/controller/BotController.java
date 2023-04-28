@@ -1,7 +1,7 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
 import ch.zuehlke.common.*;
-import ch.zuehlke.fullstack.hackathon.service.BotService;
+import ch.zuehlke.fullstack.hackathon.service.BotAuthenticationService;
 import ch.zuehlke.fullstack.hackathon.service.GameService;
 import ch.zuehlke.fullstack.hackathon.service.NotificationService;
 import ch.zuehlke.fullstack.hackathon.service.TournamentService;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BotController {
 
-    private final BotService botService;
+    private final BotAuthenticationService botAuthService;
     private final GameService gameService;
     private final TournamentService tournamentService;
     private final NotificationService notificationService;
@@ -31,9 +31,8 @@ public class BotController {
     @ApiResponse(responseCode = "404", description = "The game does not exist")
     @PostMapping("/game/{gameId}/join")
     public ResponseEntity<JoinResponse> joinGame(@PathVariable int gameId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
-        BotDto savedBot = botService.getBot(joinRequest.name()).orElse(null);
-
-        if (savedBot == null || !savedBot.token().value().equals(token)) {
+        AuthenticationResult result = botAuthService.authenticate(joinRequest.name(), new Token(token));
+        if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -56,9 +55,8 @@ public class BotController {
     @ApiResponse(responseCode = "404", description = "The tournament does not exist")
     @PostMapping("/tournament/{tournamentId}/join")
     public ResponseEntity<JoinResponse> joinTournament(@PathVariable int tournamentId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
-        BotDto savedBot = botService.getBot(joinRequest.name()).orElse(null);
-
-        if (savedBot == null || !savedBot.token().value().equals(token)) {
+        AuthenticationResult result = botAuthService.authenticate(joinRequest.name(), new Token(token));
+        if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -83,8 +81,8 @@ public class BotController {
     public ResponseEntity<Void> play(@PathVariable int gameId, @RequestHeader String token, @RequestBody Move move) {
         //TODO get name here somehow
         PlayerName name = new PlayerName("bestBot");
-        BotDto savedBot = botService.getBot(name).orElse(null);
-        if (savedBot == null || !savedBot.token().value().equals(token)) {
+        AuthenticationResult result = botAuthService.authenticate(name, new Token(token));
+        if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
