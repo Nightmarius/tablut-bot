@@ -27,7 +27,7 @@ public class AdminController {
     private final BotService botService;
     private final NotificationService notificationService;
 
-
+    //TODO refactor login in ZTOPCHA-14
     @GetMapping("/login")
     public boolean login() {
         return adminService.login("Admin", "pass");
