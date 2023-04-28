@@ -71,3 +71,34 @@ By using different Spring Profiles, you can switch between different implementat
 
 This module is used to share code between the backend and the bots. It mainly consists of domain logic and DTOs.
 
+
+# Deployment
+
+To deploy to Heroku you need to have the Heroku CLI installed and be logged in. \
+Follow the installation guide at https://devcenter.heroku.com/articles/heroku-cli
+
+Once you have downloaded the CLI, login with `heroku login`
+
+To push a new version to Heroku, run `git push heroku master`
+
+To push from a branch execute `git push heroku <branchname>:master`
+
+## Production URLs
+
+Frontend: https://zuehlke-coding-challenge.herokuapp.com/
+
+Swagger: https://zuehlke-coding-challenge.herokuapp.com/swagger-ui/index.html
+
+## How it was set up
+
+The first command to connect it to heroku's git was `heroku git:remote -a zuehlke-coding-challenge`
+
+To set the default gradle task:
+`heroku config:set GRADLE_TASK="build -x test --stacktrace"`
+
+Heroku automatically detects that the project uses gradle, so it enables the stack `heroku/gradle` by default.
+To get access to the npm command, you must add the buildpack for nodejs: `heroku buildpacks:set heroku/nodejs --index 1`.
+Putting it at index 1 ensures that gradle is used as the primary buildpack but npm is installed first. 
+Unfortunately the nodejs buildpack requires you to have a package.json in the root folder, so that's why there is an empty package.json in the root folder.
+You can check the installed buildpacks with `heroku buildpacks`.
+
