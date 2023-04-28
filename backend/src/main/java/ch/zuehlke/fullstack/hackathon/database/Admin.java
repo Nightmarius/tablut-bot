@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class AdminData {
+public class Admin {
     @Id
-    private Long id;
     private String username;
     private String password;
 }
