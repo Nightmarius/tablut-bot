@@ -108,7 +108,7 @@ public class BotControllerTest {
     void play_successfully() {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
 
-        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.SUCCESS));
+        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(PlayResult.SUCCESS);
 
         ResponseEntity<Void> response = botController.play(gameId.value(), bestToken.value(), move);
 
@@ -120,7 +120,7 @@ public class BotControllerTest {
     @Test
     void play_whenGameIsNotFound_returns404() {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
-        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.GAME_NOT_FOUND));
+        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(PlayResult.GAME_NOT_FOUND);
 
         ResponseEntity<Void> response = botController.play(gameId.value(), bestToken.value(), move);
 
@@ -132,7 +132,7 @@ public class BotControllerTest {
     @Test
     void play_whenPlayerIsNotPartOfTheGame_returns400() {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
-        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.PLAYER_NOT_PART_OF_GAME));
+        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(PlayResult.PLAYER_NOT_PART_OF_GAME);
 
         ResponseEntity<Void> response = botController.play(gameId.value(), bestToken.value(), move);
 
@@ -144,7 +144,7 @@ public class BotControllerTest {
     @Test
     void play_whenActionIsInvalid_returns400() {
         Move move = new Move(new PlayerId(), new RequestId(), gameId, new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
-        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(new PlayResult(PlayResult.PlayResultType.INVALID_ACTION));
+        when(gameServiceMock.play(eq(move), eq(gameId))).thenReturn(PlayResult.INVALID_ACTION);
 
         ResponseEntity<Void> response = botController.play(gameId.value(), bestToken.value(), move);
 

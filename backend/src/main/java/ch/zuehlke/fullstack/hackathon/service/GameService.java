@@ -4,7 +4,6 @@ import ch.zuehlke.common.*;
 import ch.zuehlke.fullstack.hackathon.controller.JoinResult;
 import ch.zuehlke.fullstack.hackathon.controller.JoinResult.JoinResultType;
 import ch.zuehlke.fullstack.hackathon.controller.PlayResult;
-import ch.zuehlke.fullstack.hackathon.controller.PlayResult.PlayResultType;
 import ch.zuehlke.fullstack.hackathon.controller.StartResult;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import org.springframework.stereotype.Service;
@@ -77,17 +76,17 @@ public class GameService {
     public PlayResult play(Move move, GameId gameId) {
         Optional<Game> optionalGame = getGame(gameId.value());
         if (optionalGame.isEmpty()) {
-            return new PlayResult(PlayResultType.GAME_NOT_FOUND);
+            return PlayResult.GAME_NOT_FOUND;
         }
 
         Game game = optionalGame.get();
         if (!game.isMoveAllowed(move)) {
-            return new PlayResult(PlayResultType.INVALID_ACTION);
+            return PlayResult.INVALID_ACTION;
         }
 
         game.playMove(move);
 
-        return new PlayResult(PlayResultType.SUCCESS);
+        return PlayResult.SUCCESS;
     }
 
     public List<Game> getGames(List<GameId> gameIds) {

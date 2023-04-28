@@ -89,10 +89,10 @@ public class BotController {
         }
 
         PlayResult playResult = gameService.play(move, new GameId(gameId));
-        if (playResult.resultType() == PlayResult.PlayResultType.GAME_NOT_FOUND) {
+        if (playResult == PlayResult.GAME_NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
-        if (playResult.resultType() == PlayResult.PlayResultType.PLAYER_NOT_PART_OF_GAME || playResult.resultType() == PlayResult.PlayResultType.INVALID_ACTION) {
+        if (playResult == PlayResult.PLAYER_NOT_PART_OF_GAME || playResult == PlayResult.INVALID_ACTION) {
             return ResponseEntity.badRequest().build();
         }
         notificationService.notifyGameUpdate(new GameId(gameId));
