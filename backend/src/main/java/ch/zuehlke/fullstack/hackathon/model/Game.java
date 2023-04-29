@@ -3,6 +3,7 @@ package ch.zuehlke.fullstack.hackathon.model;
 import ch.zuehlke.common.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public class Game {
 
     public static final int MAX_PLAYERS = 2;
@@ -59,6 +61,7 @@ public class Game {
     }
 
     public void finishGame() {
+        currentMoves = new ArrayList<>();
         status = GameStatus.FINISHED;
 
     }
@@ -70,11 +73,15 @@ public class Game {
     public boolean isMoveAllowed(Move move) {
         return status == GameStatus.IN_PROGRESS &&
                 state.currentRequests().stream()
-                        .anyMatch(request -> request.playerId().equals(move.playerId()) && request.requestId().equals(move.requestId()));
+                        .anyMatch(request -> request.playerId().equals(move.playerId())
+                                && request.requestId().equals(move.requestId())
+                                && request.possibleActions().stream().anyMatch(action -> action.equals(move.action())
+                        ));
     }
 
     public void playMove(Move move) {
         if (!isMoveAllowed(move)) {
+            log.warn("Move not allowed for gameId {}: {}", gameId, move);
             return;
         }
 
@@ -104,5 +111,9 @@ public class Game {
             return Optional.empty();
         }
         return Optional.ofNullable(state.moves().get(state.moves().size() - 1).playerId());
+    }
+
+    public void printBoard() {
+        internalGameState.printBoard();
     }
 }

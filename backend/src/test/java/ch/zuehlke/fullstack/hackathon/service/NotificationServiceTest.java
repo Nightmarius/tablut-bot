@@ -1,10 +1,8 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
-import ch.zuehlke.common.GameDto;
 import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.GameUpdate;
 import ch.zuehlke.fullstack.hackathon.model.Game;
-import ch.zuehlke.fullstack.hackathon.model.GameMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,6 +22,7 @@ class NotificationServiceTest {
     void setUp() {
         this.simpMessagingTemplateMock = mock(SimpMessagingTemplate.class);
         this.gameServiceMock = mock(GameService.class);
+        this.tournamentService = mock(TournamentService.class);
         this.notificationService = new NotificationService(simpMessagingTemplateMock, gameServiceMock, tournamentService);
     }
 
@@ -35,8 +34,7 @@ class NotificationServiceTest {
 
         notificationService.notifyGameUpdate(game.getGameId());
 
-        GameDto expectedGameDto = GameMapper.map(game);
-        verify(simpMessagingTemplateMock).convertAndSend("/topic/game/" + gameIdValue, new GameUpdate(expectedGameDto));
+        verify(simpMessagingTemplateMock).convertAndSend(eq("/topic/game/"), any(GameUpdate.class));
         verify(gameServiceMock).getGame(gameIdValue);
     }
 

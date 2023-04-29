@@ -15,20 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BoardTest {
 
-    private static Stream<Arguments> boardSetup() {
-        // TODO: restliche Felder testen
-        return Stream.of(
-                Arguments.of(4, 0, FieldState.ATTACKER),
-                Arguments.of(0, 4, FieldState.ATTACKER),
-                Arguments.of(4, 8, FieldState.ATTACKER),
-                Arguments.of(8, 4, FieldState.ATTACKER),
-                Arguments.of(4, 2, FieldState.DEFENDER),
-                Arguments.of(2, 4, FieldState.DEFENDER),
-                Arguments.of(4, 6, FieldState.DEFENDER),
-                Arguments.of(6, 4, FieldState.DEFENDER)
-        );
-    }
-
     @Test
     void initialBoard_sizeIs9x9() {
         var board = Board.createInitialBoard();
@@ -64,6 +50,36 @@ public class BoardTest {
         Field expected = new Field(new Coordinates(x, y), state);
         var board = Board.createInitialBoard();
 
-        assertThat(board.fields()[x][y]).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(board.fields()[y][x]).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> boardSetup() {
+        return Stream.of(
+                Arguments.of(3, 0, FieldState.ATTACKER),
+                Arguments.of(4, 0, FieldState.ATTACKER),
+                Arguments.of(5, 0, FieldState.ATTACKER),
+                Arguments.of(4, 1, FieldState.ATTACKER),
+                Arguments.of(0, 3, FieldState.ATTACKER),
+                Arguments.of(0, 4, FieldState.ATTACKER),
+                Arguments.of(0, 5, FieldState.ATTACKER),
+                Arguments.of(1, 4, FieldState.ATTACKER),
+                Arguments.of(3, 8, FieldState.ATTACKER),
+                Arguments.of(4, 8, FieldState.ATTACKER),
+                Arguments.of(5, 8, FieldState.ATTACKER),
+                Arguments.of(4, 7, FieldState.ATTACKER),
+                Arguments.of(8, 3, FieldState.ATTACKER),
+                Arguments.of(8, 4, FieldState.ATTACKER),
+                Arguments.of(8, 5, FieldState.ATTACKER),
+                Arguments.of(7, 4, FieldState.ATTACKER),
+                Arguments.of(4, 2, FieldState.DEFENDER),
+                Arguments.of(4, 3, FieldState.DEFENDER),
+                Arguments.of(2, 4, FieldState.DEFENDER),
+                Arguments.of(3, 4, FieldState.DEFENDER),
+                Arguments.of(4, 5, FieldState.DEFENDER),
+                Arguments.of(4, 6, FieldState.DEFENDER),
+                Arguments.of(5, 4, FieldState.DEFENDER),
+                Arguments.of(6, 4, FieldState.DEFENDER),
+                Arguments.of(4, 4, FieldState.KING)
+        );
     }
 }
