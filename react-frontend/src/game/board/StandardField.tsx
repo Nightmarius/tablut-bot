@@ -28,7 +28,7 @@ export function StandardField({ fieldValue, isKingField = false }: FieldProps) {
         return <Crown />;
     };
     let color;
-    const renderField = (fieldContent: FieldState, isKingField: boolean = false) => {
+    const renderField = (fieldContent: FieldState, isKingField = false) => {
         let figure;
         switch (fieldContent) {
             case FieldState.ATTACKER:

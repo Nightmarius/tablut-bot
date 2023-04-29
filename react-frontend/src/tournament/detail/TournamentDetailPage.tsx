@@ -22,9 +22,9 @@ function mapScores(tournament: TournamentDto) {
 }
 
 export default function TournamentDetailPage() {
-    let { tournamentId } = useParams();
+    const { tournamentId } = useParams();
 
-    let [tournament, setTournament] = useState<TournamentDto>();
+    const [tournament, setTournament] = useState<TournamentDto>();
 
     useEffect(() => {
         const fetchTournament = () => {

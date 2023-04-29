@@ -38,12 +38,12 @@ const GameStateContainer = styled.div`
 `;
 
 export default function GamePage() {
-    let { gameId } = useParams();
-    const { game, playerRoles, isLoading } = useGamePolling(gameId!, 1000);
+    const { gameId } = useParams();
+    const { game, playerRoles, isLoading } = useGamePolling(1000, gameId);
 
     if (isLoading) {
         return <LoadingPage />;
-    } else if (!isLoading && !game) {
+    } else if (!game) {
         return <h2>Game does not exist :(</h2>;
     }
 
@@ -53,11 +53,11 @@ export default function GamePage() {
                 <BoardContainer>
                     <Title> Game {gameId} </Title>
                     <PlayerDisplay players={playerRoles} />
-                    <TablutBoard board={game?.state.board!} />
-                    <GameStatusSection game={game!} />
+                    <TablutBoard board={game.state.board} />
+                    <GameStatusSection game={game} />
                 </BoardContainer>
                 <GameStateContainer>
-                    <MoveList game={game!} />
+                    <MoveList game={game} />
                 </GameStateContainer>
             </GameContainer>
         </>

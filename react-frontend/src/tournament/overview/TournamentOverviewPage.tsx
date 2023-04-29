@@ -24,7 +24,7 @@ const Title = styled.h1`
 `;
 
 export default function TournamentOverviewPage() {
-    let [tournaments, setTournaments] = useState<TournamentDto[] | undefined>(undefined);
+    const [tournaments, setTournaments] = useState<TournamentDto[] | undefined>(undefined);
 
     useEffect(() => {
         const fetchTournaments = () => {
@@ -43,7 +43,7 @@ export default function TournamentOverviewPage() {
     }, []);
 
     function createTournament() {
-        remoteService.post("/api/tournament", {});
+        remoteService.post("/admin/tournament", {});
     }
 
     if (tournaments === undefined) {

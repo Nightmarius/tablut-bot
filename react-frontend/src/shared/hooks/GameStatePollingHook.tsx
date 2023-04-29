@@ -3,7 +3,7 @@ import remoteService from "../../services/RemoteService";
 import { GameDto, Player } from "../domain/model";
 import { presentErrorToast } from "../../common/ToastComponent";
 
-export function useGamePolling(gameId: string, interval: number) {
+export function useGamePolling(interval: number, gameId?: string) {
     const [game, setGame] = useState<GameDto | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const playerRoles = game ? mapPlayersToRole(game?.players) : defaultPlayerRoles;

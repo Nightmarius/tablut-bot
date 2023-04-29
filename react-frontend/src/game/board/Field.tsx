@@ -35,7 +35,7 @@ export function Field({ fieldValue, isKingField = false }: FieldProps) {
         return <Crown />;
     };
     let color;
-    const renderField = (fieldContent: number, isKingField: boolean = false) => {
+    const renderField = (fieldContent: number, isKingField = false) => {
         let figure;
         switch (fieldContent) {
             case FieldType.ATTACKER:
