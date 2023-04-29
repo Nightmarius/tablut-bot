@@ -14,13 +14,21 @@ If your setup already has some of the required tools installed, please adjust ac
    - `npm -v`: 9.6.1
    - `node -v`: v18.15.0
 4. Install a new version of IntelliJ
-5. Clone the master branch with `git clone https://github.com/Cyberdog52/hackathon.git`
+5. Clone the master branch with `git clone https://bitbucket.zuehlke.com/scm/ztopcha/zuehlke-challenge-2023.git`
 6. Open the project with IntelliJ and let gradle build the project
 7. If prompted, install java (17.0.5)
 7. Install the npm dependencies with `cd react-frontend` followed by `npm install`
 
-During the hackathon your team can decide to use a custom branch on this GitHub repository or to fork it to your own
-private repository.
+### Recommended IntelliJ plugins:
+- Lombok (usually already installed)
+- Spring (usually already installed)
+- TSLint (usually already installed)
+- React Buddy
+- Prettier
+- Styled components & Styled JSX
+- .env files support
+- React CSS Modules
+- Github Copilot ;)
 
 ## Overview / How to run
 
