@@ -1,6 +1,6 @@
-import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
-import 'react-toastify/dist/ReactToastify.css';
-import {presentErrorToast} from "../common/ToastComponent";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { presentErrorToast } from "../common/ToastComponent";
 
 class RemoteService {
     private instance: AxiosInstance;
@@ -10,53 +10,46 @@ class RemoteService {
             baseURL: import.meta.env.VITE_BACKEND_URL,
             timeout: 5000,
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         });
     }
 
     private handleResponse<T>(response: AxiosResponse<T>): T {
-
         return response.data;
     }
 
     private handleError<T>(error: AxiosError<T>): T {
-
         presentErrorToast(`Http error occurred with the message: ${error.message}`);
-        throw new AxiosError(`Http error occurred with the message: ${error.message}!`)
-
+        throw new AxiosError(`Http error occurred with the message: ${error.message}!`);
     }
 
     get<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .get<T>(path, config)
             .then((response) => this.handleResponse<T>(response))
-            .catch(error => this.handleError(error));
+            .catch((error) => this.handleError(error));
     }
-
 
     post<T>(path: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .post<T>(path, data, config)
             .then((response) => this.handleResponse<T>(response))
-            .catch(error => this.handleError(error));
+            .catch((error) => this.handleError(error));
     }
-
 
     put<T>(path: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .put<T>(path, data, config)
             .then((response) => this.handleResponse<T>(response))
-            .catch(error => this.handleError(error));
-
+            .catch((error) => this.handleError(error));
     }
-
 
     delete<T>(path: string, config?: AxiosRequestConfig): Promise<T> {
         return this.instance
             .delete<T>(path, config)
             .then((response) => this.handleResponse<T>(response))
-            .catch(error => this.handleError(error));
+            .catch((error) => this.handleError(error));
     }
 }
 

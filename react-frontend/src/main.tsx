@@ -1,7 +1,7 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
-import InfoPage from "./info/InfoPage"
-import "./index.css"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import InfoPage from "./info/InfoPage";
+import "./index.css";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error/ErrorPage";
 import RulesPage from "./rules/RulesPage";
@@ -15,35 +15,35 @@ import TournamentOverviewPage from "./tournament/overview/TournamentOverviewPage
 const router = createHashRouter([
     {
         path: "/",
-        element: <InfoPage/>,
-        errorElement: <ErrorPage/>,
+        element: <InfoPage />,
+        errorElement: <ErrorPage />,
     },
     {
         path: "/rules",
-        element: <RulesPage/>,
+        element: <RulesPage />,
     },
     {
         path: "/tournament",
-        element: <TournamentOverviewPage/>,
+        element: <TournamentOverviewPage />,
     },
     {
         path: "/tournament/:tournamentId",
-        element: <TournamentDetailPage/>,
+        element: <TournamentDetailPage />,
     },
     {
         path: "/game/:gameId",
-        element: <GamePage/>,
+        element: <GamePage />,
     },
     {
         path: "/admin",
-        element: <AdminPage/>,
+        element: <AdminPage />,
     },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <ToastContainer/>
-        <Header/>
-        <RouterProvider router={router}/>
-    </React.StrictMode>,
-)
+        <ToastContainer />
+        <Header />
+        <RouterProvider router={router} />
+    </React.StrictMode>
+);

@@ -14,38 +14,37 @@ export interface PlayerRoles {
 }
 
 const BoardContainer = styled.div`
-  margin-left: 0.5em;
+    margin-left: 0.5em;
 `;
 
 const GameContainer = styled.div`
-  margin-left: 0.5em;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
+    margin-left: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
 `;
 
 const Title = styled.h1`
-  font-size: 3rem;
-  text-align: center;
+    font-size: 3rem;
+    text-align: center;
 `;
 
 const GameStateContainer = styled.div`
-  margin-top: 10vh;
-  margin-left: 1.0em;
-  width: 14rem;
-  font-size: 1.5rem;
+    margin-top: 10vh;
+    margin-left: 1em;
+    width: 14rem;
+    font-size: 1.5rem;
 `;
 
 export default function GamePage() {
-
     let { gameId } = useParams();
     const { game, playerRoles, isLoading } = useGamePolling(gameId!, 1000);
 
     if (isLoading) {
-        return <LoadingPage/>;
+        return <LoadingPage />;
     } else if (!isLoading && !game) {
-        return <h2>Game does not exist :(</h2>
+        return <h2>Game does not exist :(</h2>;
     }
 
     return (
@@ -53,15 +52,14 @@ export default function GamePage() {
             <GameContainer>
                 <BoardContainer>
                     <Title> Game {gameId} </Title>
-                    <PlayerDisplay players={playerRoles}/>
-                    <TablutBoard board={game?.state.board!}/>
-                    <GameStatusSection game={game!}/>
+                    <PlayerDisplay players={playerRoles} />
+                    <TablutBoard board={game?.state.board!} />
+                    <GameStatusSection game={game!} />
                 </BoardContainer>
                 <GameStateContainer>
-                    <MoveList game={game!}/>
+                    <MoveList game={game!} />
                 </GameStateContainer>
             </GameContainer>
         </>
-    )
+    );
 }
-

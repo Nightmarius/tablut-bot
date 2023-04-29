@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
 
+export enum Direction {
+    Left,
+    Right,
+}
+
 export default function useSlideAnimationOnIntersection(querySelector: string, direction: Direction) {
     const elements = useRef<Array<HTMLElement>>([]);
 
@@ -13,8 +18,8 @@ export default function useSlideAnimationOnIntersection(querySelector: string, d
                         entry.target.animate(
                             [
                                 {
-                                    transform: direction == Direction.Left ? "translateX(-50px)" : "translateX(+50px)",
-                                    opacity: 0
+                                    transform: direction === Direction.Left ? "translateX(-50px)" : "translateX(+50px)",
+                                    opacity: 0,
                                 },
                                 { transform: "translateX(0)", opacity: 1 },
                             ],
@@ -37,9 +42,4 @@ export default function useSlideAnimationOnIntersection(querySelector: string, d
             observer.observe(element);
         });
     }, [querySelector, direction]);
-}
-
-export enum Direction {
-    Left,
-    Right,
 }

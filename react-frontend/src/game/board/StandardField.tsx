@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import {Crown, Figure} from "./Figure";
-import {FieldState} from "../../shared/domain/model";
+import { Crown, Figure } from "./Figure";
+import { FieldState } from "../../shared/domain/model";
 
 interface FieldProps {
     fieldValue: FieldState;
     isKingField?: boolean;
 }
 
-
-export function KingField({fieldValue}: { fieldValue: FieldState }) {
-    return <StandardField fieldValue={fieldValue} isKingField={true}/>;
+export function KingField({ fieldValue }: { fieldValue: FieldState }) {
+    return <StandardField fieldValue={fieldValue} isKingField={true} />;
 }
 const StyledField = styled.div<{ color: string; size: string }>`
     width: ${(props) => props.size};
@@ -19,38 +18,42 @@ const StyledField = styled.div<{ color: string; size: string }>`
     display: flex;
     justify-content: center;
     align-items: center;
-  `;
-export function StandardField({fieldValue, isKingField = false}: FieldProps) {
+`;
+export function StandardField({ fieldValue, isKingField = false }: FieldProps) {
     const renderFigure = (color: string) => {
-        return <Figure color={color}/>;
+        return <Figure color={color} />;
     };
 
     const renderCrown = () => {
-        return <Crown/>;
-    }
+        return <Crown />;
+    };
     let color;
     const renderField = (fieldContent: FieldState, isKingField: boolean = false) => {
         let figure;
         switch (fieldContent) {
             case FieldState.ATTACKER:
-                color = 'var(--pieceField)';
-                figure = renderFigure('var(--attacker)');
+                color = "var(--pieceField)";
+                figure = renderFigure("var(--attacker)");
                 break;
             case FieldState.DEFENDER:
-                color = 'var(--pieceField)';
-                figure = renderFigure('var(--defender)');
+                color = "var(--pieceField)";
+                figure = renderFigure("var(--defender)");
                 break;
             case FieldState.KING:
-                color = 'var(--pieceField)';
+                color = "var(--pieceField)";
                 figure = renderCrown();
                 break;
             default:
-                color = 'var(--emptyField)';
+                color = "var(--emptyField)";
         }
         if (isKingField) {
-            color = 'var(--kingField)';
+            color = "var(--kingField)";
         }
-        return <StyledField color={color} size={window.innerWidth > 600 ? "3.125rem" : "1.875rem"}>{figure}</StyledField>;
+        return (
+            <StyledField color={color} size={window.innerWidth > 600 ? "3.125rem" : "1.875rem"}>
+                {figure}
+            </StyledField>
+        );
     };
     return renderField(fieldValue, isKingField);
 }

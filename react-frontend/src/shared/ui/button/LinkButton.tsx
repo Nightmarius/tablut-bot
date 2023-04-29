@@ -2,7 +2,6 @@ import { useNavigate } from "react-router";
 import Button, { ButtonStyle } from "./Button";
 import { ReactNode } from "react";
 
-
 export default function LinkButton({ children, linkTarget, style }: Props) {
     const navigate = useNavigate();
 
@@ -17,8 +16,10 @@ export default function LinkButton({ children, linkTarget, style }: Props) {
     }
 
     return (
-        <Button style={style} onClick={handleClick}>{children}</Button>
-    )
+        <Button style={style} onClick={handleClick}>
+            {children}
+        </Button>
+    );
 }
 
 interface Props {
