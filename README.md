@@ -96,11 +96,7 @@ To push from a branch execute `git push heroku <branchname>:master`
 The first command to connect it to heroku's git was `heroku git:remote -a zuehlke-coding-challenge`
 
 In the Backend project, the newly created Gradle task `herokuBuild` is used to build the backend jar and copy the built
-frontend into its static folder. It also checks if the `bot` and `common` project can be built successfully.
-The custom task `herokuBuild` was created to ensure that the frontend is not built when you only want to build the
-backend project.
-Otherwise, it would have built the frontend for tasks like `./gradlew :backend:build` or when running the backend tests
-in IntelliJ.
+frontend into its static folder in the jar. It also checks if the `bot` and `common` project can be built successfully.
 
 To set the default gradle task:
 `heroku config:set GRADLE_TASK="herokuBuild --stacktrace"`

@@ -56,8 +56,9 @@ task copyWebApp(type: Copy) {
     into "$rootDir/backend/build/resources/main/static/."
 }
 
+bootJar.dependsOn(copyWebApp)
+
 task herokuBuild {
-    dependsOn 'copyWebApp'
     dependsOn 'build'
     dependsOn ':common:build' // make sure the tests are green
     dependsOn ':bot:build' // make sure the tests are green
