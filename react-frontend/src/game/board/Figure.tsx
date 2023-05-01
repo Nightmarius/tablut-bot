@@ -1,17 +1,35 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import crown from "../../assets/crown.svg";
+import { PixelOffset } from "./StandardField";
 
 export const Crown = () => {
-    return (
-        <div>
-            <img src={crown} alt="Crown SVG imgae" />
-        </div>
-    );
+    return <img src={crown} alt="Crown image for King" />;
 };
-export const Figure = styled.div<{ color: string }>`
+
+const moveAnimation = (x: number, y: number) => keyframes`
+  from {
+    transform: translate(0px, 0px);
+  }
+
+  to {
+    transform: translate(${x}px, ${y}px);
+  }
+`;
+
+export const Circle = styled.div<{ color: string }>`
     border-radius: 50%;
     background-color: ${(props) => props.color};
     border: 1px solid black;
     width: 85%;
     height: 85%;
+`;
+
+export const Figure = styled.div<{ animateTo?: PixelOffset }>`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: ${(props) => (props.animateTo ? moveAnimation(props.animateTo.x, props.animateTo.y) : "")} 2s ease-in-out
+        infinite;
 `;
