@@ -15,6 +15,8 @@ repositories {
 dependencies {
     // Implementation packages
     implementation project(':common')
+    runtimeOnly project(':react-frontend')
+
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -49,9 +51,14 @@ test {
 }
 
 task copyWebApp(type: Copy) {
+    dependsOn ':react-frontend:build'
     from "$rootDir/react-frontend/dist"
     into "$rootDir/backend/build/resources/main/static/."
 }
 
-bootJar.dependsOn(copyWebApp)
-compileJava.dependsOn ":react-frontend:build"
+task herokuBuild {
+    dependsOn 'copyWebApp'
+    dependsOn 'build'
+    dependsOn ':common:build' // make sure the tests are green
+    dependsOn ':bot:build' // make sure the tests are green
+}
