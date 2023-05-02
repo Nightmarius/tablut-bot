@@ -91,6 +91,12 @@ To push a new version to Heroku, run `git push heroku master`
 
 To push from a branch execute `git push heroku <branchname>:master`
 
+## Production URLs
+
+Frontend: https://zuehlke-coding-challenge.herokuapp.com/
+
+Swagger: https://zuehlke-coding-challenge.herokuapp.com/swagger-ui/index.html
+
 ## How it was set up
 
 The first command to connect it to heroku's git was `heroku git:remote -a zuehlke-coding-challenge`
@@ -107,5 +113,5 @@ To get access to the npm command, you must add the buildpack for nodejs: `heroku
 Putting it at index 1 ensures that gradle is used as the primary buildpack but npm is installed first.
 Unfortunately the nodejs buildpack requires you to have a package.json in the root folder, so that's why there is an
 empty package.json in the root folder.
-You can check the installed buildpacks with `heroku buildpacks`
+You can check the installed buildpacks with `heroku buildpacks`.
 
