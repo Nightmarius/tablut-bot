@@ -9,4 +9,13 @@ public enum FieldState {
         }
         return (this == DEFENDER || this == KING) && other == ATTACKER;
     }
+
+    public String getSymbol() {
+        return switch (this) {
+            case EMPTY -> " ";
+            case ATTACKER -> "A";
+            case DEFENDER -> "D";
+            case KING -> "K";
+        };
+    }
 }
