@@ -155,4 +155,19 @@ public class InternalGameState {
                 .isEmpty();
 
     }
+
+    public void printBoard() {
+        System.out.println("Move " + getActionHistory().size());
+        System.out.println("  012345678");
+        for (int y = 0; y < 9; y++) {
+            System.out.print(y + " ");
+            var line = new StringBuilder();
+            for (int x = 0; x < 9; x++) {
+                var field = board.getFieldForCoordinate(new Coordinates(x, y));
+                line.append(field.state().getSymbol());
+            }
+            System.out.println(line);
+        }
+
+    }
 }
