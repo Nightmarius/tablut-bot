@@ -29,7 +29,7 @@ export default function TournamentDetailPage() {
 
     useEffect(() => {
         const fetchTournament = () => {
-            remoteService.get<TournamentDto>("/api/lobby/tournament/" + tournamentId)
+            remoteService.get<TournamentDto>("/api/tournament/" + tournamentId)
                 .then((response: TournamentDto) => {
                     setTournament(response);
                 });

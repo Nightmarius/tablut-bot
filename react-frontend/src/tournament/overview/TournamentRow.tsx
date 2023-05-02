@@ -1,8 +1,8 @@
-import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
+import {TournamentDto, TournamentStatus} from "../../shared/domain/model";
 import LinkButton from "../../shared/ui/button/LinkButton";
 
 import styled from "styled-components";
-import Button, { ButtonStyle } from "../../shared/ui/button/Button";
+import Button, {ButtonStyle} from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
 
 const StyledRow = styled.div`
@@ -25,7 +25,7 @@ const Text = styled.p`
   margin: 0;
 `;
 
-export default function TournamentRow({ tournament }: Props) {
+export default function TournamentRow({tournament}: Props) {
 
     function getStatus(tournamentStatus: TournamentStatus) {
         switch (tournamentStatus) {
@@ -41,7 +41,7 @@ export default function TournamentRow({ tournament }: Props) {
     }
 
     function startTournament(): void {
-        remoteService.post("/api/lobby/tournament/" + tournament.id.value + "/start", {})
+        remoteService.post("/api/tournament/" + tournament.id.value + "/start", {})
     }
 
     // TODO ZTOPCHA-21: Disable start button if tournament is not ready to start

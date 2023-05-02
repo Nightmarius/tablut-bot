@@ -1,9 +1,9 @@
-import { GameDto, GameStatus, Player } from "../shared/domain/model";
+import {GameDto, GameStatus, Player} from "../shared/domain/model";
 import Button from "../shared/ui/button/Button";
-import Chip, { ChipStyle } from "../shared/ui/chip/Chip";
-import { getWinner } from "../shared/domain/helper";
+import Chip, {ChipStyle} from "../shared/ui/chip/Chip";
+import {getWinner} from "../shared/domain/helper";
 import remoteService from "../services/RemoteService";
-import { presentSuccessToast } from "../common/ToastComponent";
+import {presentSuccessToast} from "../common/ToastComponent";
 import styled from "styled-components";
 
 
@@ -26,7 +26,7 @@ const WinnerSection = styled.div`
 `;
 
 
-export default function GameStatusSection({ game }: Props) {
+export default function GameStatusSection({game}: Props) {
 
     const winner = getWinner(game);
 
@@ -36,7 +36,7 @@ export default function GameStatusSection({ game }: Props) {
 
     const handleStartGame = () => {
 
-        remoteService.post(`/api/lobby/game/${game.id.value}/start`)
+        remoteService.post(`/api/game/${game.id.value}/start`)
             .then(() => {
                 presentSuccessToast(`Game ${game.id.value} has started`)
             });

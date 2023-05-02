@@ -1,10 +1,10 @@
-import { GameDto, GameStatus, Player } from "../../shared/domain/model";
+import {GameDto, GameStatus, Player} from "../../shared/domain/model";
 import styled from "styled-components";
-import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
-import { getPlayerForNextTurn, getWinner } from "../../shared/domain/helper";
+import Chip, {ChipStyle} from "../../shared/ui/chip/Chip";
+import {getPlayerForNextTurn, getWinner} from "../../shared/domain/helper";
 import Button from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
-import { useNavigate } from "react-router";
+import {useNavigate} from "react-router";
 
 const MatchUpContainer = styled.span`
   display: flex;
@@ -38,7 +38,7 @@ const GameContainer = styled.span`
 
 `;
 
-export default function GameCellContent({ game }: Props) {
+export default function GameCellContent({game}: Props) {
 
     const navigate = useNavigate();
 
@@ -52,7 +52,7 @@ export default function GameCellContent({ game }: Props) {
     }
 
     function handleStartGame() {
-        remoteService.post(`/api/lobby/game/${game?.id.value}/start`, {});
+        remoteService.post(`/api/game/${game?.id.value}/start`, {});
     }
 
     function handleNavigateToGame() {

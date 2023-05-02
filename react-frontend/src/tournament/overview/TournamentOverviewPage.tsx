@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { TournamentDto } from "../../shared/domain/model";
+import {useEffect, useState} from "react";
+import {TournamentDto} from "../../shared/domain/model";
 import remoteService from "../../services/RemoteService";
 import LoadingPage from "../../shared/ui/loading/LoadingPage";
 import NoTournamentsPage from "./NoTournamentsPage";
@@ -30,7 +30,7 @@ export default function TournamentOverviewPage() {
 
     useEffect(() => {
         const fetchTournaments = () => {
-            remoteService.get<TournamentDto[]>("/api/lobby/tournaments")
+            remoteService.get<TournamentDto[]>("/api/tournaments")
                 .then((response: TournamentDto[]) => {
                     setTournaments(response);
                 })
@@ -46,7 +46,7 @@ export default function TournamentOverviewPage() {
     }, []);
 
     function createTournament() {
-        remoteService.post("/api/lobby/tournament", {})
+        remoteService.post("/admin/tournament", {})
     }
 
     if (tournaments == undefined) {

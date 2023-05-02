@@ -109,3 +109,12 @@ export enum TournamentStatus {
     FINISHED = "FINISHED",
     DELETED = "DELETED",
 }
+
+export interface BotDto {
+    name: PlayerName;
+    token: Token;
+}
+
+export interface Token {
+    value: string;
+}

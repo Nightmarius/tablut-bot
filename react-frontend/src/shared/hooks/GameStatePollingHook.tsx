@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import remoteService from "../../services/RemoteService";
-import { GameDto, Player } from "../domain/model";
-import { presentErrorToast } from "../../common/ToastComponent";
+import {GameDto, Player} from "../domain/model";
+import {presentErrorToast} from "../../common/ToastComponent";
 
 export function useGamePolling(gameId: string, interval: number) {
 
@@ -12,7 +12,7 @@ export function useGamePolling(gameId: string, interval: number) {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            remoteService.get<GameDto>(`/api/lobby/game/${gameId}`)
+            remoteService.get<GameDto>(`/api/game/${gameId}`)
                 .then((foundGame: GameDto) => {
 
                     if (foundGame) {
@@ -36,7 +36,7 @@ export function useGamePolling(gameId: string, interval: number) {
     }, [gameId, interval]);
 
 
-    return { game, playerRoles, isLoading };
+    return {game, playerRoles, isLoading};
 }
 
 export function hasGameStateChange(oldGame: GameDto, newGame: GameDto) {
@@ -60,7 +60,7 @@ const mapPlayersToRole = (players: Player[]) => {
     if (players.length > 1) {
         defender = players[1]
     }
-    return ({ attacker, defender })
+    return ({attacker, defender})
 }
 
-const defaultPlayerRoles = { attacker: null, defender: null }
+const defaultPlayerRoles = {attacker: null, defender: null}
