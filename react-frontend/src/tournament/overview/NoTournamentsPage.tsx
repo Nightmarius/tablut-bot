@@ -25,7 +25,7 @@ const CenterSpan = styled.span`
 export default function NoTournamentsPage() {
 
     function handleCreateTournament() {
-        remoteService.post("/api/tournament", {})
+        remoteService.post("/admin/tournament", {})
     }
 
     // TODO ZTOPCHA-14: Hide button if user is not admin
