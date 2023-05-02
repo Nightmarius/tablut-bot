@@ -46,7 +46,7 @@ export default function TournamentOverviewPage() {
     }, []);
 
     function createTournament() {
-        remoteService.post("/api/tournament", {})
+        remoteService.post("/admin/tournament", {})
     }
 
     if (tournaments == undefined) {
