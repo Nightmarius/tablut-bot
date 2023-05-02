@@ -1,32 +1,31 @@
-import {TournamentDto, TournamentStatus} from "../../shared/domain/model";
+import { TournamentDto, TournamentStatus } from "../../shared/domain/model";
 import LinkButton from "../../shared/ui/button/LinkButton";
 
 import styled from "styled-components";
-import Button, {ButtonStyle} from "../../shared/ui/button/Button";
+import Button, { ButtonStyle } from "../../shared/ui/button/Button";
 import remoteService from "../../services/RemoteService";
 
 const StyledRow = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  height: 4%;
-  width: 100%;
-  padding-bottom: 4px;
-  padding-top: 4px;
-  border-bottom: 1px solid var(--quinary);
-`
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    height: 4%;
+    width: 100%;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    border-bottom: 1px solid var(--quinary);
+`;
 
 const Column = styled.div`
-  padding-right: 1px;
+    padding-right: 1px;
 `;
 
 const Text = styled.p`
-  font-size: 1.5rem;
-  margin: 0;
+    font-size: 1.5rem;
+    margin: 0;
 `;
 
-export default function TournamentRow({tournament}: Props) {
-
+export default function TournamentRow({ tournament }: Props) {
     function getStatus(tournamentStatus: TournamentStatus) {
         switch (tournamentStatus) {
             case TournamentStatus.IN_PROGRESS:
@@ -41,7 +40,7 @@ export default function TournamentRow({tournament}: Props) {
     }
 
     function startTournament(): void {
-        remoteService.post("/api/tournament/" + tournament.id.value + "/start", {})
+        remoteService.post("/api/tournament/" + tournament.id.value + "/start", {});
     }
 
     // TODO ZTOPCHA-21: Disable start button if tournament is not ready to start
@@ -58,19 +57,21 @@ export default function TournamentRow({tournament}: Props) {
                 <Text>{tournament.players.length} Players</Text>
             </Column>
             <Column>
-                {
-                    tournament.status === TournamentStatus.NOT_STARTED &&
-                    tournament.players.length > 1 ?
-                        <Button style={ButtonStyle.PURPLE} onClick={startTournament}>Start</Button> :
-                        <div></div>
-                }
+                {tournament.status === TournamentStatus.NOT_STARTED && tournament.players.length > 1 ? (
+                    <Button style={ButtonStyle.PURPLE} onClick={startTournament}>
+                        Start
+                    </Button>
+                ) : (
+                    <div></div>
+                )}
             </Column>
             <Column>
-                <LinkButton style={ButtonStyle.PURPLE}
-                            linkTarget={"/tournament/" + tournament.id.value}>Spectate</LinkButton>
+                <LinkButton style={ButtonStyle.PURPLE} linkTarget={"/tournament/" + tournament.id.value}>
+                    Spectate
+                </LinkButton>
             </Column>
         </StyledRow>
-    )
+    );
 }
 
 export interface Props {

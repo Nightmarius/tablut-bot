@@ -2,12 +2,10 @@ package ch.zuehlke.fullstack.hackathon.model;
 
 import ch.zuehlke.common.GameDto;
 import ch.zuehlke.common.GameId;
-import ch.zuehlke.common.GameState;
 import ch.zuehlke.common.GameStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GameMapperTest {
 
@@ -20,8 +18,10 @@ class GameMapperTest {
 
         assertThat(gameDto.id()).isEqualTo(gameId);
         assertThat(gameDto.players()).isEqualTo(game.getPlayers());
-        assertEquals(GameStatus.NOT_STARTED, gameDto.status());
-        assertEquals(new GameState(), gameDto.state());
+        assertThat(gameDto.status()).isEqualTo(GameStatus.NOT_STARTED);
+        assertThat(gameDto.state().moves()).isEmpty();
+        assertThat(gameDto.state().currentRequests()).isEmpty();
+        assertThat(gameDto.state().board().fields()).hasDimensions(9, 9);
     }
 
 }

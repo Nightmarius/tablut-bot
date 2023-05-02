@@ -10,17 +10,26 @@ If your setup already has some of the required tools installed, please adjust ac
 
 1. Install newest Node from here https://nodejs.org/en/ (currently 18.15.0 LTS)
 2. Run `npm install -g npm@9.6.1`
-3. Verify your versions with 
-   - `npm -v`: 9.6.1
-   - `node -v`: v18.15.0
+3. Verify your versions with
+    - `npm -v`: 9.6.1
+    - `node -v`: v18.15.0
 4. Install a new version of IntelliJ
-5. Clone the master branch with `git clone https://github.com/Cyberdog52/hackathon.git`
+5. Clone the master branch with `git clone https://bitbucket.zuehlke.com/scm/ztopcha/zuehlke-challenge-2023.git`
 6. Open the project with IntelliJ and let gradle build the project
 7. If prompted, install java (17.0.5)
 7. Install the npm dependencies with `cd react-frontend` followed by `npm install`
 
-During the hackathon your team can decide to use a custom branch on this GitHub repository or to fork it to your own
-private repository.
+### Recommended IntelliJ plugins:
+
+- Lombok (usually already installed)
+- Spring (usually already installed)
+- TSLint (usually already installed)
+- React Buddy
+- Prettier
+- Styled components & Styled JSX
+- .env files support
+- React CSS Modules
+- Github Copilot ;)
 
 ## Overview / How to run
 
@@ -71,7 +80,6 @@ By using different Spring Profiles, you can switch between different implementat
 
 This module is used to share code between the backend and the bots. It mainly consists of domain logic and DTOs.
 
-
 # Deployment
 
 To deploy to Heroku you need to have the Heroku CLI installed and be logged in. \
@@ -93,12 +101,17 @@ Swagger: https://zuehlke-coding-challenge.herokuapp.com/swagger-ui/index.html
 
 The first command to connect it to heroku's git was `heroku git:remote -a zuehlke-coding-challenge`
 
+In the Backend project, the newly created Gradle task `herokuBuild` is used to build the backend jar and copy the built
+frontend into its static folder in the jar. It also checks if the `bot` and `common` project can be built successfully.
+
 To set the default gradle task:
-`heroku config:set GRADLE_TASK="build -x test --stacktrace"`
+`heroku config:set GRADLE_TASK="herokuBuild --stacktrace"`
 
 Heroku automatically detects that the project uses gradle, so it enables the stack `heroku/gradle` by default.
-To get access to the npm command, you must add the buildpack for nodejs: `heroku buildpacks:set heroku/nodejs --index 1`.
-Putting it at index 1 ensures that gradle is used as the primary buildpack but npm is installed first. 
-Unfortunately the nodejs buildpack requires you to have a package.json in the root folder, so that's why there is an empty package.json in the root folder.
+To get access to the npm command, you must add the buildpack for nodejs: `heroku buildpacks:set heroku/nodejs --index 1`
+.
+Putting it at index 1 ensures that gradle is used as the primary buildpack but npm is installed first.
+Unfortunately the nodejs buildpack requires you to have a package.json in the root folder, so that's why there is an
+empty package.json in the root folder.
 You can check the installed buildpacks with `heroku buildpacks`.
 

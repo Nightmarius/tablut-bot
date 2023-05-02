@@ -7,11 +7,11 @@ export const Crown = () => {
             <img src={crown} alt="Crown SVG imgae" />
         </div>
     );
-}
+};
 export const Figure = styled.div<{ color: string }>`
     border-radius: 50%;
     background-color: ${(props) => props.color};
     border: 1px solid black;
     width: 85%;
     height: 85%;
-    `;
+`;

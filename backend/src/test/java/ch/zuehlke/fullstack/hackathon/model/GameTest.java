@@ -42,6 +42,7 @@ class GameTest {
         game.finishGame();
 
         assertEquals(GameStatus.FINISHED, game.getStatus());
+        assertThat(game.getCurrentMoves()).isEmpty();
     }
 
     @Test
@@ -135,6 +136,22 @@ class GameTest {
     }
 
     @Test
+    void isMoveAllowed_withInValidMove_returnsFalse() {
+        Game game = new Game(new GameId(1));
+        PlayerId playerId1 = new PlayerId();
+        game.addPlayer(new Player(playerId1, new PlayerName("name1")));
+        PlayerId playerId2 = new PlayerId();
+        game.addPlayer(new Player(playerId2, new PlayerName("name2")));
+        game.startGame();
+        RequestId requestId = getRequestId(game, playerId1);
+
+        // move where a piece jumps over a different piece
+        boolean canPlayMove = game.isMoveAllowed(new Move(playerId1, requestId, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 7))));
+
+        assertThat(canPlayMove).isFalse();
+    }
+
+    @Test
     void playMove_withValidMove_updatesStateSuccessfully() {
         Game game = new Game(new GameId(1));
         PlayerId playerId1 = new PlayerId();
@@ -149,54 +166,66 @@ class GameTest {
         assertThat(game.getState().currentRequests()).hasSize(1);
         assertThat(game.getState().currentRequests()).noneMatch(request -> request.playerId().equals(playerId1));
         assertThat(game.getState().currentRequests()).anyMatch(request -> request.playerId().equals(playerId2));
-        assertThat(game.getCurrentMoves()).hasSize(1);
-        assertThat(game.getCurrentMoves()).anyMatch(move -> move.playerId().equals(playerId1));
-        assertThat(game.getCurrentMoves()).noneMatch(move -> move.playerId().equals(playerId2));
+        assertThat(game.getCurrentMoves()).hasSize(0);
+        assertThat(game.getState().moves()).hasSize(1);
+        assertThat(game.getState().moves()).anyMatch(move -> move.playerId().equals(playerId1));
+        assertThat(game.getState().moves()).noneMatch(move -> move.playerId().equals(playerId2));
     }
 
+
+
     @Test
-    void playMove_bothPlayersPlaySame_finishesGameSuccessfully() {
+    void playMove_attackerWinsByCapturing_finishesGameSuccessfully() {
         Game game = new Game(new GameId(1));
         PlayerId playerId1 = new PlayerId();
         game.addPlayer(new Player(playerId1, new PlayerName("name1")));
         PlayerId playerId2 = new PlayerId();
         game.addPlayer(new Player(playerId2, new PlayerName("name2")));
         game.startGame();
-        RequestId requestId1 = getRequestId(game, playerId1);
-        RequestId requestId2 = getRequestId(game, playerId2);
 
-        game.playMove(new Move(playerId1, requestId1, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0))));
-        game.playMove(new Move(playerId2, requestId2, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(3, 0), new Coordinates(0, 0))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(3, 4), new Coordinates(3, 0))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(3, 8), new Coordinates(3, 4))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(4, 3), new Coordinates(6, 3))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(4, 3))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(4, 5), new Coordinates(6, 5))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(0, 5), new Coordinates(4, 5))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(5, 4), new Coordinates(5, 2))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(5, 8), new Coordinates(5, 4))));
+        game.printBoard(); // just for visualization
 
-        assertThat(game.getState().currentRequests()).hasSize(0);
-        assertThat(game.getCurrentMoves()).hasSize(2);
-        assertThat(game.getCurrentMoves()).anyMatch(move -> move.playerId().equals(playerId1));
-        assertThat(game.getCurrentMoves()).anyMatch(move -> move.playerId().equals(playerId2));
-        assertThat(game.getStatus()).isEqualTo(GameStatus.FINISHED);
-        assertThat(game.getWinner()).isEmpty();
-    }
-
-    @Test
-    void playMove_firstPlayerWins_finishesGameSuccessfully() {
-        Game game = new Game(new GameId(1));
-        PlayerId playerId1 = new PlayerId();
-        game.addPlayer(new Player(playerId1, new PlayerName("name1")));
-        PlayerId playerId2 = new PlayerId();
-        game.addPlayer(new Player(playerId2, new PlayerName("name2")));
-        game.startGame();
-        RequestId requestId1 = getRequestId(game, playerId1);
-        RequestId requestId2 = getRequestId(game, playerId2);
-
-        game.playMove(new Move(playerId1, requestId1, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0))));
-        game.playMove(new Move(playerId2, requestId2, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0))));
 
         assertThat(game.getState().currentRequests()).hasSize(0);
-        assertThat(game.getCurrentMoves()).hasSize(2);
-        assertThat(game.getCurrentMoves()).anyMatch(move -> move.playerId().equals(playerId1));
-        assertThat(game.getCurrentMoves()).anyMatch(move -> move.playerId().equals(playerId2));
+        assertThat(game.getCurrentMoves()).hasSize(0);
+        assertThat(game.getState().moves()).hasSize(9);
         assertThat(game.getStatus()).isEqualTo(GameStatus.FINISHED);
         assertThat(game.getWinner()).isPresent();
         assertThat(game.getWinner().get()).isEqualTo(playerId1);
+    }
+
+    @Test
+    void playMove_defenderWinsByEscaping_finishesGameSuccessfully() {
+        Game game = new Game(new GameId(1));
+        PlayerId playerId1 = new PlayerId();
+        game.addPlayer(new Player(playerId1, new PlayerName("name1")));
+        PlayerId playerId2 = new PlayerId();
+        game.addPlayer(new Player(playerId2, new PlayerName("name2")));
+
+        game.startGame();
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(3, 0), new Coordinates(0, 0))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(3, 4), new Coordinates(3, 7))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(0, 0), new Coordinates(0, 1))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(4, 4), new Coordinates(3, 4))));
+        game.playMove(new Move(playerId1, getRequestId(game, playerId1), game.getGameId(), new GameAction(new Coordinates(0, 1), new Coordinates(0, 0))));
+        game.playMove(new Move(playerId2, getRequestId(game, playerId2), game.getGameId(), new GameAction(new Coordinates(3, 4), new Coordinates(3, 0))));
+        game.printBoard(); // just for visualization
+
+        assertThat(game.getState().currentRequests()).hasSize(0);
+        assertThat(game.getCurrentMoves()).hasSize(0);
+        assertThat(game.getState().moves()).hasSize(6);
+        assertThat(game.getStatus()).isEqualTo(GameStatus.FINISHED);
+        assertThat(game.getWinner()).isPresent();
+        assertThat(game.getWinner().get()).isEqualTo(playerId2);
     }
 
     private static RequestId getRequestId(Game game, PlayerId playerId1) {
