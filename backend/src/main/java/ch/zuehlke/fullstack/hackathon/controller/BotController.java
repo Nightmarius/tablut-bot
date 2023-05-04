@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping(value = "/api")
@@ -30,7 +32,7 @@ public class BotController {
     @ApiResponse(responseCode = "403", description = "Bot credentials invalid")
     @ApiResponse(responseCode = "404", description = "The game does not exist")
     @PostMapping("/game/{gameId}/join")
-    public ResponseEntity<JoinResponse> joinGame(@PathVariable int gameId, @RequestHeader String token, @RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<JoinResponse> joinGame(@PathVariable int gameId, @RequestHeader("token") String token, @RequestBody JoinRequest joinRequest) {
         BotDto bot = new BotDto(joinRequest.name(), new Token(token));
         AuthenticationResult result = botAuthService.authenticate(bot);
         if (result == AuthenticationResult.DENIED) {
@@ -79,24 +81,27 @@ public class BotController {
     @ApiResponse(responseCode = "200", description = "Successfully played the move")
     @ApiResponse(responseCode = "400", description = "Player is not part of the game or the move is invalid")
     @ApiResponse(responseCode = "404", description = "Game was not found")
-    @PostMapping("/game/{gameId}/play")
-    public ResponseEntity<Void> play(@PathVariable int gameId, @RequestHeader String token, @RequestBody Move move) {
-        //TODO get name here somehow
-        PlayerName name = new PlayerName("bestBot");
-        BotDto bot = new BotDto(name, new Token(token));
+    @PostMapping("/game/{gameIdInt}/play")
+    public ResponseEntity<Void> play(@PathVariable int gameIdInt, @RequestHeader String token, @RequestBody Move move) {
+        GameId gameId = new GameId(gameIdInt);
+        Optional<PlayerName> name = gameService.getPlayerName(gameIdInt, move.playerId());
+        if (name.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        BotDto bot = new BotDto(name.get(), new Token(token));
         AuthenticationResult result = botAuthService.authenticate(bot);
         if (result == AuthenticationResult.DENIED) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        PlayResult playResult = gameService.play(move, new GameId(gameId));
+        PlayResult playResult = gameService.play(move, gameId);
         if (playResult == PlayResult.GAME_NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
         if (playResult == PlayResult.PLAYER_NOT_PART_OF_GAME || playResult == PlayResult.INVALID_ACTION) {
             return ResponseEntity.badRequest().build();
         }
-        notificationService.notifyGameUpdate(new GameId(gameId));
+        notificationService.notifyGameUpdate(gameId);
 
         tournamentService.update();
         notificationService.notifyTournamentUpdate(new TournamentId(1));
