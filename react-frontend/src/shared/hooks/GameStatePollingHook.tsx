@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import remoteService from "../../services/RemoteService";
-import { GameDto, Player } from "../domain/model";
+import { GameDto, PlayerName } from "../domain/model";
 import { presentErrorToast } from "../../common/ToastComponent";
 
 export function useGamePolling(interval: number, gameId?: string) {
@@ -42,7 +42,7 @@ export function hasGameStateChange(oldGame: GameDto, newGame: GameDto) {
     return oldGame.state.moves.length < newGame.state.moves.length;
 }
 
-const mapPlayersToRole = (players: Player[]) => {
+const mapPlayersToRole = (players: PlayerName[]) => {
     let attacker = null;
     let defender = null;
 

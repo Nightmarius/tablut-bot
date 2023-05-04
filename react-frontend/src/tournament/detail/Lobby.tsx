@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Player } from "../../shared/domain/model";
+import { PlayerName } from "../../shared/domain/model";
 
 const Title = styled.h1`
     font-size: 3rem;
@@ -37,7 +37,7 @@ export default function Lobby({ players }: Props) {
 
             <PlayerContainer>
                 {players.map((player) => (
-                    <PlayerChip key={player.id.value}>{player.name.value}</PlayerChip>
+                    <PlayerChip key={player.value}>{player.value}</PlayerChip>
                 ))}
             </PlayerContainer>
         </>
@@ -45,5 +45,5 @@ export default function Lobby({ players }: Props) {
 }
 
 interface Props {
-    players: Player[];
+    players: PlayerName[];
 }

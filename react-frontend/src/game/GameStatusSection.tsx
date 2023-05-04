@@ -1,4 +1,4 @@
-import { GameDto, GameStatus, Player } from "../shared/domain/model";
+import { GameDto, GameStatus, PlayerName } from "../shared/domain/model";
 import Button from "../shared/ui/button/Button";
 import Chip, { ChipStyle } from "../shared/ui/chip/Chip";
 import { getWinner } from "../shared/domain/helper";
@@ -27,7 +27,7 @@ const WinnerSection = styled.div`
 export default function GameStatusSection({ game }: Props) {
     const winner = getWinner(game);
 
-    const getChipStyleForPlayer = (player: Player): ChipStyle => {
+    const getChipStyleForPlayer = (player: PlayerName): ChipStyle => {
         return player === game?.players[0] ? ChipStyle.BLACK : ChipStyle.WHITE;
     };
 
@@ -55,7 +55,7 @@ export default function GameStatusSection({ game }: Props) {
                     {winner ? (
                         <WinnerSection>
                             <div>Winner:</div>
-                            <Chip style={getChipStyleForPlayer(winner)}>{winner.name.value}</Chip>
+                            <Chip style={getChipStyleForPlayer(winner)}>{winner.value}</Chip>
                         </WinnerSection>
                     ) : (
                         <div>Draw</div>
