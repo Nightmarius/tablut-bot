@@ -64,25 +64,25 @@ public class AdminControllerTest {
     void generate_doesNotOverwrite() {
         when(botServiceMock.getBot(bestBot)).thenReturn(Optional.of(bestBotDto));
         adminController.generate(bestBot);
-        verify(botServiceMock, times(0)).addBot(bestBot);
+        verify(botServiceMock, never()).addBot(bestBot);
     }
 
     @Test
     void generate_noEmpty() {
         adminController.generate(new PlayerName(""));
-        verify(botServiceMock, times(0)).addBot(any());
+        verify(botServiceMock, never()).addBot(any());
     }
 
     @Test
     void generate_noNull() {
         adminController.generate(null);
-        verify(botServiceMock, times(0)).addBot(any());
+        verify(botServiceMock, never()).addBot(any());
     }
 
     @Test
     void generate_noUndefined() {
         adminController.generate(new PlayerName(null));
-        verify(botServiceMock, times(0)).addBot(any());
+        verify(botServiceMock, never()).addBot(any());
     }
 
     @Test

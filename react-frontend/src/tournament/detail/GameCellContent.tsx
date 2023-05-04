@@ -49,7 +49,7 @@ export default function GameCellContent({ game }: Props) {
     };
 
     function handleStartGame() {
-        remoteService.post(`/api/game/${game?.id.value}/start`, {});
+        remoteService.post(`/admin/game/${game?.id.value}/start`, {});
     }
 
     function handleNavigateToGame() {

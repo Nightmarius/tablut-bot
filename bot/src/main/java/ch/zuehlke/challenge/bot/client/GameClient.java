@@ -5,6 +5,8 @@ import ch.zuehlke.challenge.bot.util.ApplicationProperties;
 import ch.zuehlke.common.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,10 +27,14 @@ public class GameClient {
         JoinRequest signUpRequest = new JoinRequest(new PlayerName(applicationProperties.getName()));
         log.info("Joining game with request {}", signUpRequest);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("token", applicationProperties.getToken());
+        HttpEntity<JoinRequest> httpEntity = new HttpEntity<>(signUpRequest, headers);
+
         // Improve: Handle exceptions
         ResponseEntity<JoinResponse> signUpResponse = hackathonRestTemplateClient
                 .postForEntity(applicationProperties.getBackendJoinUrl(),
-                        signUpRequest,
+                        httpEntity,
                         JoinResponse.class,
                         applicationProperties.getGameId()
                 );
@@ -46,13 +52,17 @@ public class GameClient {
     }
 
     public PlayerId joinTournament() {
-        var joinRequest = new TournamentJoinRequest(new PlayerName(applicationProperties.getName()));
+        TournamentJoinRequest joinRequest = new TournamentJoinRequest(new PlayerName(applicationProperties.getName()));
         log.info("Joining tournament with request {}", joinRequest);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("token", applicationProperties.getToken());
+        HttpEntity<TournamentJoinRequest> httpEntity = new HttpEntity<>(joinRequest, headers);
 
         // Improve: Handle exceptions
         ResponseEntity<JoinResponse> signUpResponse = hackathonRestTemplateClient
                 .postForEntity(applicationProperties.getBackendTournamentJoinUrl(),
-                        joinRequest,
+                        httpEntity,
                         JoinResponse.class,
                         applicationProperties.getTournamentId()
                 );
@@ -72,10 +82,16 @@ public class GameClient {
     public void play(Move move) {
         log.info("Playing move: {}", move);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("token", applicationProperties.getToken());
+        HttpEntity<Move> httpEntity = new HttpEntity<>(move, headers);
+
+        log.info("Sending play request with entity: {}", httpEntity);
+
         // Improve: Handle exceptions
         ResponseEntity<Void> response = hackathonRestTemplateClient
                 .postForEntity(applicationProperties.getBackendPlayUrl(),
-                        move,
+                        httpEntity,
                         Void.class,
                         move.gameId().value()
                 );

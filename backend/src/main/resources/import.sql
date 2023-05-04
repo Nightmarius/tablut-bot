@@ -1,2 +1,2 @@
 INSERT INTO Admin (username, password) VALUES ('admin', 'reallyBad123');
-INSERT INTO Bot (name, token) VALUES ('bestBot', '1111'),('adminBot', '2222');
+INSERT INTO Bot (name, token) VALUES ('Andre', '1111'),('Andres', '2222'),('Benjamin', '3333'),('Marius', '6666');

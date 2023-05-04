@@ -97,4 +97,12 @@ public class GameService {
         }
         return games;
     }
+
+    public Optional<PlayerName> getPlayerName(int gameId, PlayerId playerId) {
+        Optional<Game> game = getGame(gameId);
+        return game.flatMap(value -> value.getPlayers().stream()
+                .filter(player -> player.id().equals(playerId))
+                .map(Player::name)
+                .findFirst());
+    }
 }
