@@ -1,4 +1,6 @@
 import Chapter from "./Chapter";
+import { GameAction } from "../shared/domain/model";
+import { INITIAL_BOARD } from "../shared/domain/boards";
 
 export default function RulesPage() {
     const setupRules = [
@@ -25,10 +27,23 @@ export default function RulesPage() {
         "Capturing the king outside of the castle requires it to be surrounded on two opposite sides like any other piece",
     ];
 
+    const simpleMoveAnimation = {
+        action: {
+            from: {
+                x: 3,
+                y: 0,
+            },
+            to: {
+                x: 3,
+                y: 3,
+            },
+        } as GameAction,
+    };
+
     return (
         <div>
-            <Chapter rules={setupRules} title={"Setup"} exampleText={"just an example"} />
-            <Chapter rules={movingRules} title={"Moving"} />
+            <Chapter rules={setupRules} title={"Setup"} board={INITIAL_BOARD} />
+            <Chapter rules={movingRules} title={"Moving"} board={INITIAL_BOARD} animation={simpleMoveAnimation} />
             <Chapter rules={capturingRules} title={"Capturing"} />
             <Chapter rules={winningRules} title={"Winning"} />
         </div>

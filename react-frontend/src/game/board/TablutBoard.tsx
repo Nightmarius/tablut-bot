@@ -5,8 +5,12 @@ import { useEffect, useRef, useState } from "react";
 
 type TablutBoardProps = {
     board: Board;
-    action?: GameAction;
+    animation?: BoardAnimation;
 };
+
+export interface BoardAnimation {
+    action: GameAction;
+}
 
 const Row = styled.div`
     display: flex;
@@ -36,7 +40,7 @@ const TablutBoardContainer = styled.div`
     width: fit-content;
 `;
 
-export default function TablutBoard({ board, action }: TablutBoardProps) {
+export default function TablutBoard({ board, animation }: TablutBoardProps) {
     const [fieldPositions, setFieldPositions] = useState<{ [key: string]: { x: number; y: number } }>({});
 
     function columnCoordinateOf(colIndex: number) {
@@ -70,6 +74,10 @@ export default function TablutBoard({ board, action }: TablutBoardProps) {
     }, [boardRef]);
 
     function getTargetPixelPosition(rowIndex: number, colIndex: number): PixelOffset | undefined {
+        if (!animation) {
+            return;
+        }
+        const action = animation.action;
         if (action?.from.y !== rowIndex || action?.from.x !== colIndex) {
             return;
         }
