@@ -1,15 +1,15 @@
-import { GameAction, GameDto, GameStatus, Player } from "./model";
+import { GameAction, GameDto, GameStatus, PlayerName } from "./model";
 
-export const getPlayerForNextTurn = (game: GameDto | undefined): Player | undefined => {
+export const getPlayerForNextTurn = (game: GameDto | undefined): PlayerName | undefined => {
     if (game?.status === GameStatus.IN_PROGRESS && game.state.currentRequests.length > 0) {
-        return game.players.find((player) => player.id?.value === game.state.currentRequests[0].playerName?.value);
+        return game.players.find((player) => player?.value === game.state.currentRequests[0].playerName?.value);
     }
     return undefined;
 };
 
-export const getWinner = (game: GameDto | undefined): Player | undefined => {
+export const getWinner = (game: GameDto | undefined): PlayerName | undefined => {
     if (game?.status === GameStatus.FINISHED) {
-        return game.players.find((player) => player.id.value === game.winner?.value && game.winner !== undefined);
+        return game.players.find((player) => player.value === game.winner?.value && game.winner !== undefined);
     }
     return undefined;
 };
