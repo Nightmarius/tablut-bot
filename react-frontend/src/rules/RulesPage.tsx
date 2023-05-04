@@ -1,6 +1,6 @@
 import Chapter from "./Chapter";
 import { GameAction } from "../shared/domain/model";
-import { INITIAL_BOARD } from "../shared/domain/boards";
+import { END_GAME, INITIAL_BOARD, MID_GAME } from "../shared/domain/boards";
 
 export default function RulesPage() {
     const setupRules = [
@@ -40,12 +40,38 @@ export default function RulesPage() {
         } as GameAction,
     };
 
+    const blackCaptureAnimation = {
+        action: {
+            from: {
+                x: 0,
+                y: 6,
+            },
+            to: {
+                x: 3,
+                y: 6,
+            },
+        } as GameAction,
+    };
+
+    const whiteEscapesAnimation = {
+        action: {
+            from: {
+                x: 5,
+                y: 2,
+            },
+            to: {
+                x: 8,
+                y: 2,
+            },
+        } as GameAction,
+    };
+
     return (
         <div>
             <Chapter rules={setupRules} title={"Setup"} board={INITIAL_BOARD} />
             <Chapter rules={movingRules} title={"Moving"} board={INITIAL_BOARD} animation={simpleMoveAnimation} />
-            <Chapter rules={capturingRules} title={"Capturing"} />
-            <Chapter rules={winningRules} title={"Winning"} />
+            <Chapter rules={capturingRules} title={"Capturing"} board={MID_GAME} animation={blackCaptureAnimation} />
+            <Chapter rules={winningRules} title={"Winning"} board={END_GAME} animation={whiteEscapesAnimation} />
         </div>
     );
 }

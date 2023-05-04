@@ -37,7 +37,7 @@ export function StandardField({ fieldValue, isKingField = false, animateTo, id }
     const renderCrown = () => {
         return (
             <Figure id={id} animateTo={animateTo}>
-                <Crown />;
+                <Crown />
             </Figure>
         );
     };

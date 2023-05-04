@@ -7,11 +7,11 @@ export const Crown = () => {
 };
 
 const moveAnimation = (x: number, y: number) => keyframes`
-  from {
+  0%, 25% {
     transform: translate(0px, 0px);
   }
 
-  to {
+  75%, 100% {
     transform: translate(${x}px, ${y}px);
   }
 `;
@@ -30,6 +30,6 @@ export const Figure = styled.div<{ animateTo?: PixelOffset }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: ${(props) => (props.animateTo ? moveAnimation(props.animateTo.x, props.animateTo.y) : "")} 2s ease-in-out
+    animation: ${(props) => (props.animateTo ? moveAnimation(props.animateTo.x, props.animateTo.y) : "")} 4s ease-in-out
         infinite;
 `;
