@@ -1,5 +1,7 @@
 import Example from "./Example";
 import styled from "styled-components";
+import { Board } from "../shared/domain/model";
+import { BoardAnimation } from "../game/board/TablutBoard";
 
 const Section = styled.div`
     padding-left: 4vw;
@@ -26,7 +28,7 @@ const Examples = styled.div`
     vertical-align: top;
 `;
 
-export default function Chapter({ rules, title, exampleText }: Props) {
+export default function Chapter({ rules, title, board, animation }: Props) {
     const mapRules = () => {
         return rules.map((rule) => <li key={rule}>{rule}</li>);
     };
@@ -37,7 +39,7 @@ export default function Chapter({ rules, title, exampleText }: Props) {
             <Rules>
                 <ul>{mapRules()}</ul>
             </Rules>
-            <Examples>{exampleText && <Example exampleText={exampleText} />}</Examples>
+            <Examples>{board && <Example board={board} animation={animation} />}</Examples>
         </Section>
     );
 }
@@ -45,5 +47,6 @@ export default function Chapter({ rules, title, exampleText }: Props) {
 interface Props {
     rules: string[];
     title: string;
-    exampleText?: string;
+    board?: Board;
+    animation?: BoardAnimation;
 }

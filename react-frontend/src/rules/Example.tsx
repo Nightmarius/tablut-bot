@@ -1,12 +1,11 @@
-export default function Example({ exampleText }: Props) {
-    return (
-        <div>
-            <p>{exampleText}</p>
-            <p>INSERT BOARD HERE WITH AMAZING ANIMATION</p>
-        </div>
-    );
+import TablutBoard, { BoardAnimation } from "../game/board/TablutBoard";
+import { Board } from "../shared/domain/model";
+
+export default function Example({ board, animation }: Props) {
+    return <TablutBoard board={board} animation={animation}></TablutBoard>;
 }
 
 interface Props {
-    exampleText: string;
+    board: Board;
+    animation?: BoardAnimation;
 }
