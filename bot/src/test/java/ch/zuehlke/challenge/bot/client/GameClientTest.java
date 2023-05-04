@@ -16,10 +16,8 @@ import static org.mockito.Mockito.*;
 class GameClientTest {
 
     private GameClient gameClient;
-
     private RestTemplate restTemplateMock;
     private ApplicationProperties applicationPropertiesMock;
-
     private ShutDownService shutDownServiceMock;
     private final PlayerName playerName = new PlayerName("name");
 
@@ -36,20 +34,20 @@ class GameClientTest {
 
     @Test
     void join_successfully() {
-        when(applicationPropertiesMock.getBackendJoinUrl()).thenReturn("/api/lobby/join");
+        when(applicationPropertiesMock.getBackendJoinUrl()).thenReturn("/lobby/join");
 
         ResponseEntity<JoinResponse> response = ResponseEntity.ok(new JoinResponse(playerName));
-        when(restTemplateMock.postForEntity(any(), any(), eq(JoinResponse.class))).thenReturn(response);
+        when(restTemplateMock.postForEntity(any(), any(), eq(JoinResponse.class), anyInt())).thenReturn(response);
 
         PlayerName actualPlayerName = gameClient.join();
 
         assertThat(actualPlayerName).isEqualTo(playerName);
         JoinRequest expectedRequest = new JoinRequest(new PlayerName("name"));
-
+        
         HttpHeaders headers = new HttpHeaders();
         headers.set("token", "1111");
         HttpEntity<JoinRequest> httpEntity = new HttpEntity<>(expectedRequest, headers);
-        verify(restTemplateMock, times(1)).postForEntity("/api/lobby/join", httpEntity, JoinResponse.class, 1);
+        verify(restTemplateMock, times(1)).postForEntity("/lobby/join", httpEntity, JoinResponse.class, 1);
     }
 
     @Test

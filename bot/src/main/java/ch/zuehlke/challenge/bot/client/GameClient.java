@@ -25,7 +25,6 @@ public class GameClient {
 
     private final ShutDownService shutDownService;
 
-
     public PlayerName join() {
         JoinRequest signUpRequest = new JoinRequest(new PlayerName(applicationProperties.getName()));
         log.info("Joining lobby with request {}", signUpRequest);
@@ -38,7 +37,8 @@ public class GameClient {
         ResponseEntity<JoinResponse> signUpResponse = restTemplateClient
                 .postForEntity(applicationProperties.getBackendJoinUrl(),
                         httpEntity,
-                        JoinResponse.class
+                        JoinResponse.class,
+                        1
                 );
         log.info("Received response: {}", signUpResponse);
         if (signUpResponse.getStatusCode().is2xxSuccessful() && signUpResponse.getBody() != null) {
