@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -39,6 +41,7 @@ public class BotControllerTest {
         BotDto bestBotDto = new BotDto(bestBot, bestToken);
         when(botAuthServiceMock.authenticate(any())).thenReturn(AuthenticationResult.DENIED);
         when(botAuthServiceMock.authenticate(bestBotDto)).thenReturn(AuthenticationResult.SUCCESS);
+        when(gameServiceMock.getPlayerName(anyInt(), any())).thenReturn(Optional.of(bestBot));
     }
 
     @Test
