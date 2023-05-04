@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SimpleBot2" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="simplebot2" />
+  <configuration default="false" name="ProdBot1" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="prodbot1" />
     <module name="Zühlke_Coding_Challenge.bot.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.challenge.bot.BotApplication" />
     <method v="2">
