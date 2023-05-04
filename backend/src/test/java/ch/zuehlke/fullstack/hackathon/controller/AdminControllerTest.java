@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,6 +29,7 @@ public class AdminControllerTest {
     private NotificationService notificationServiceMock;
     private final PlayerName bestBot = new PlayerName("bestBot");
     private final Token bestToken = new Token("11111111111111111111111111111111");
+    private final BotDto bestBotDto = new BotDto(bestBot, bestToken);
     private final GameId gameId = new GameId(42);
 
     @BeforeEach
@@ -38,7 +40,7 @@ public class AdminControllerTest {
         botServiceMock = mock(BotService.class);
         notificationServiceMock = mock(NotificationService.class);
         adminController = new AdminController(adminServiceMock, gameServiceMock, tournamentServiceMock, botServiceMock, notificationServiceMock);
-        List<BotDto> bots = new ArrayList<BotDto>();
+        List<BotDto> bots = new ArrayList<>();
         bots.add(new BotDto(bestBot, bestToken));
         when(botServiceMock.getBots()).thenReturn(bots);
     }
@@ -56,6 +58,31 @@ public class AdminControllerTest {
     void generate_successfully() {
         adminController.generate(bestBot);
         verify(botServiceMock).addBot(bestBot);
+    }
+
+    @Test
+    void generate_doesNotOverwrite() {
+        when(botServiceMock.getBot(bestBot)).thenReturn(Optional.of(bestBotDto));
+        adminController.generate(bestBot);
+        verify(botServiceMock, times(0)).addBot(bestBot);
+    }
+
+    @Test
+    void generate_noEmpty() {
+        adminController.generate(new PlayerName(""));
+        verify(botServiceMock, times(0)).addBot(any());
+    }
+
+    @Test
+    void generate_noNull() {
+        adminController.generate(null);
+        verify(botServiceMock, times(0)).addBot(any());
+    }
+
+    @Test
+    void generate_noUndefined() {
+        adminController.generate(new PlayerName(null));
+        verify(botServiceMock, times(0)).addBot(any());
     }
 
     @Test
