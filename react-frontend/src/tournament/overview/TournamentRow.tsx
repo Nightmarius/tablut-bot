@@ -40,7 +40,7 @@ export default function TournamentRow({ tournament }: Props) {
     }
 
     function startTournament(): void {
-        remoteService.post("/api/tournament/" + tournament.id.value + "/start", {});
+        remoteService.post("/admin/tournament/" + tournament.id.value + "/start", {});
     }
 
     // TODO ZTOPCHA-21: Disable start button if tournament is not ready to start
