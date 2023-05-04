@@ -38,7 +38,6 @@ const END_GAME_STR: string[] = [
 
 export const INITIAL_BOARD: Board = createBoardFromStringArray(INITIAL_BOARD_STR);
 export const MID_GAME: Board = createBoardFromStringArray(MID_GAME_STR);
-
 export const END_GAME: Board = createBoardFromStringArray(END_GAME_STR);
 
 function createBoardFromStringArray(strings: string[]): Board {
