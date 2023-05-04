@@ -1,10 +1,17 @@
 import styled from "styled-components";
-import { KingField, StandardField } from "./StandardField";
-import { Board } from "../../shared/domain/model";
+import { KingField, PixelOffset, StandardField } from "./StandardField";
+import { Board, GameAction, Position } from "../../shared/domain/model";
+import { useEffect, useRef, useState } from "react";
 
 type TablutBoardProps = {
     board: Board;
+    animation?: BoardAnimation;
 };
+
+export interface BoardAnimation {
+    action: GameAction;
+    removePieces?: Position[];
+}
 
 const Row = styled.div`
     display: flex;
@@ -14,19 +21,18 @@ const TablutRow = styled.div`
     margin: 0 auto;
 `;
 const RowIndex = styled.span`
-    margin: 0.5em;
     align-self: center;
-`;
-const ColIndex = styled.span`
-    margin: 0.5em;
-    align-self: center;
+    padding-right: 0.5rem;
 `;
 const ColumnIndexContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    width: 100%;
-    margin-left: 0.5em;
+    align-items: center;
+
+    // nasty hack to make the column indexes match the board
+    width: ${window.innerWidth > 600 ? "105%" : "101%"};
+    margin-left: ${window.innerWidth > 600 ? "-0.3rem" : "0.3rem"};
 `;
 const TablutBoardContainer = styled.div`
     flex-wrap: wrap;
@@ -34,15 +40,79 @@ const TablutBoardContainer = styled.div`
     width: fit-content;
 `;
 
-export default function TablutBoard({ board }: TablutBoardProps) {
+export default function TablutBoard({ board, animation }: TablutBoardProps) {
+    const [fieldPositions, setFieldPositions] = useState<{ [key: string]: { x: number; y: number } }>({});
+
     function columnCoordinateOf(colIndex: number) {
         return String.fromCharCode(65 + colIndex);
     }
+
+    const boardRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const calculateFieldPositions = () => {
+            const newFieldPositions: { [key: string]: { x: number; y: number } } = {};
+            const boardContainer = boardRef.current;
+            if (!boardContainer) {
+                return;
+            }
+            const fieldElements = boardContainer.querySelectorAll("[id^='field-']");
+            fieldElements.forEach((fieldElement) => {
+                const { top, left } = fieldElement.getBoundingClientRect();
+                const fieldId = fieldElement.getAttribute("id");
+                if (fieldId) {
+                    newFieldPositions[fieldId] = { x: left, y: top };
+                }
+            });
+            setFieldPositions(newFieldPositions);
+        };
+        calculateFieldPositions();
+        window.addEventListener("resize", calculateFieldPositions);
+        return () => {
+            window.removeEventListener("resize", calculateFieldPositions);
+        };
+    }, [boardRef]);
+
+    function getTargetPixelPosition(rowIndex: number, colIndex: number): PixelOffset | undefined {
+        if (!animation) {
+            return;
+        }
+        const action = animation.action;
+        if (action?.from.y !== rowIndex || action?.from.x !== colIndex) {
+            return;
+        }
+        const currentPosition = getPixelPosition(action.from.y, action.from.x);
+        const targetPosition = getPixelPosition(action.to.y, action.to.x);
+
+        return {
+            x: targetPosition.x - currentPosition.x,
+            y: targetPosition.y - currentPosition.y,
+        };
+    }
+
+    function getPixelPosition(rowIndex: number, colIndex: number): { x: number; y: number } {
+        const fieldId = `field-${rowIndex}-${colIndex}`;
+        if (!fieldPositions[fieldId]) {
+            return { x: 0, y: 0 };
+        }
+        return fieldPositions[fieldId];
+    }
+
+    function needsRemovalAnimation(rowIndex: number, colIndex: number): boolean {
+        if (!animation) {
+            return false;
+        }
+        if (!animation.removePieces) {
+            return false;
+        }
+        return animation.removePieces.some((position) => position.x === colIndex && position.y === rowIndex);
+    }
+
     return (
-        <TablutBoardContainer>
+        <TablutBoardContainer ref={boardRef}>
             <ColumnIndexContainer>
                 {board.fields[0].map((_, colIndex) => (
-                    <ColIndex key={colIndex}>{columnCoordinateOf(colIndex)}</ColIndex>
+                    <span key={colIndex}>{columnCoordinateOf(colIndex)}</span>
                 ))}
             </ColumnIndexContainer>
             {board.fields.map((row, rowIndex) => (
@@ -51,9 +121,25 @@ export default function TablutBoard({ board }: TablutBoardProps) {
                     <Row>
                         {row.map((field, colIndex) => {
                             if (rowIndex === 4 && colIndex === 4) {
-                                return <KingField fieldValue={field.state} key={`${rowIndex}${colIndex}`} />;
+                                return (
+                                    <KingField
+                                        fieldValue={field.state}
+                                        key={`${rowIndex}${colIndex}`}
+                                        animateTo={getTargetPixelPosition(rowIndex, colIndex)}
+                                        animateRemove={needsRemovalAnimation(rowIndex, colIndex)}
+                                        id={`field-${rowIndex}-${colIndex}`}
+                                    />
+                                );
                             } else {
-                                return <StandardField fieldValue={field.state} key={`${rowIndex}${colIndex}`} />;
+                                return (
+                                    <StandardField
+                                        fieldValue={field.state}
+                                        key={`${rowIndex}${colIndex}`}
+                                        animateTo={getTargetPixelPosition(rowIndex, colIndex)}
+                                        animateRemove={needsRemovalAnimation(rowIndex, colIndex)}
+                                        id={`field-${rowIndex}-${colIndex}`}
+                                    />
+                                );
                             }
                         })}
                     </Row>
