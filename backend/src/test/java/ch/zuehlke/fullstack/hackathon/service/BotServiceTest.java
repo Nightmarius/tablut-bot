@@ -43,6 +43,6 @@ public class BotServiceTest {
     @Test
     void removeBot_doesNotRemoveOtherBots() {
         botService.removeBot(new PlayerName("fakeBot"));
-        verify(botRepoMock, times(0)).delete(bot);
+        verify(botRepoMock, never()).delete(any());
     }
 }

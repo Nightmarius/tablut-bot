@@ -4,8 +4,6 @@ import ch.zuehlke.challenge.bot.client.GameClient;
 import ch.zuehlke.challenge.bot.service.GameService;
 import ch.zuehlke.challenge.bot.util.ApplicationProperties;
 import ch.zuehlke.common.*;
-import ch.zuehlke.common.Board;
-import ch.zuehlke.common.Coordinates;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,8 +61,8 @@ class GameServiceTest {
         gameService.setPlayerId(playerId);
         gameService.onGameUpdate(gameUpdate);
 
-        verify(brainMock, times(0)).decide(anyBoolean(), any(), any());
-        verify(gameClientMock, times(0)).play(any());
+        verify(brainMock, never()).decide(anyBoolean(), any(), any());
+        verify(gameClientMock, never()).play(any());
     }
 
     @Test
@@ -77,8 +75,8 @@ class GameServiceTest {
         gameService.setPlayerId(playerId);
         gameService.onGameUpdate(gameUpdate);
 
-        verify(brainMock, times(0)).decide(anyBoolean(), any(), any());
-        verify(gameClientMock, times(0)).play(any());
+        verify(brainMock, never()).decide(anyBoolean(), any(), any());
+        verify(gameClientMock, never()).play(any());
     }
 
     @Test
@@ -107,7 +105,7 @@ class GameServiceTest {
         gameService.setPlayerId(playerId);
         gameService.onGameUpdate(gameUpdate);
 
-        verify(brainMock, times(0)).decide(anyBoolean(), any(), any());
-        verify(gameClientMock, times(0)).play(any());
+        verify(brainMock, never()).decide(anyBoolean(), any(), any());
+        verify(gameClientMock, never()).play(any());
     }
 }
