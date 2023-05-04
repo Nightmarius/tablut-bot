@@ -19,7 +19,7 @@ public class BotAuthenticationService {
             return AuthenticationResult.DENIED;
         }
         if (!savedBot.token().value().equals(botDto.token().value())) {
-            log.info("Bot token " + botDto.token() + " not valid");
+            log.info("Bot token " + botDto.token() + " not equal to " + savedBot.token());
             return AuthenticationResult.DENIED;
         }
         return AuthenticationResult.SUCCESS;
