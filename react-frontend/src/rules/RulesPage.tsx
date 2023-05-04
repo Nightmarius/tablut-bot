@@ -7,11 +7,13 @@ export default function RulesPage() {
         "The game is played on a 9×9 board",
         "The 16 attackers play against the 8 defenders and the king",
         "The king starts on the central square known as the castle",
+        "The black attackers start the game by moving a piece",
+        "The players take turns until the game ends",
     ];
     const movingRules = [
-        "Any piece can move any number of squares in a straight line. Like a rook in chess",
+        "Any piece can move any number of squares in a straight line (like a rook in chess)",
         "No piece may ever pass over another piece in its path",
-        "Only the king may enter or move through the castle",
+        "Only the king may enter or move through the castle (blue center field)",
         "A piece may be moved in between two enemy pieces without being captured",
     ];
     const capturingRules = [
