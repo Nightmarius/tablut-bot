@@ -2,7 +2,6 @@ package ch.zuehlke.challenge.bot.client;
 
 import ch.zuehlke.challenge.bot.service.GameService;
 import ch.zuehlke.challenge.bot.util.ApplicationProperties;
-import ch.zuehlke.common.GameUpdate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,9 +26,8 @@ class StompClientTest {
 
     @Test
     void handleFrame_updatesGame_successfully() {
-        GameUpdate emptyGameUpdate = new GameUpdate(null);
-        stompClient.handleFrame(null, emptyGameUpdate);
+        stompClient.handleFrame(null, null);
 
-        verify(gameServiceMock, times(1)).onGameUpdate(emptyGameUpdate);
+        verify(gameServiceMock, times(1)).onGameUpdate(null);
     }
 }
