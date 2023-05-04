@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { BotDto } from "../shared/domain/model";
 import Button from "../shared/ui/button/Button";
 import styled from "styled-components";
-import Input from "../shared/ui/input/input";
+import Input from "../shared/ui/input/Input";
 
 const StyledRow = styled.div`
     display: grid;
