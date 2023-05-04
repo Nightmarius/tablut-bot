@@ -1,4 +1,4 @@
-import { Board, FieldState } from "./model";
+import { Board, FieldState, Position } from "./model";
 
 export const INITIAL_BOARD: Board = {
     fields: [
@@ -311,3 +311,15 @@ export const END_GAME: Board = {
         ],
     ],
 };
+
+export function getAllPositions(board: Board, state: FieldState): Position[] {
+    const positions: Position[] = [];
+    board.fields.forEach((row, y) => {
+        row.forEach((field, x) => {
+            if (field.state === state) {
+                positions.push({ x, y });
+            }
+        });
+    });
+    return positions;
+}

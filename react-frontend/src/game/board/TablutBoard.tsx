@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { KingField, PixelOffset, StandardField } from "./StandardField";
-import { Board, GameAction } from "../../shared/domain/model";
+import { Board, GameAction, Position } from "../../shared/domain/model";
 import { useEffect, useRef, useState } from "react";
 
 type TablutBoardProps = {
@@ -10,6 +10,7 @@ type TablutBoardProps = {
 
 export interface BoardAnimation {
     action: GameAction;
+    removePieces?: Position[];
 }
 
 const Row = styled.div`
@@ -98,6 +99,16 @@ export default function TablutBoard({ board, animation }: TablutBoardProps) {
         return fieldPositions[fieldId];
     }
 
+    function needsRemovalAnimation(rowIndex: number, colIndex: number): boolean {
+        if (!animation) {
+            return false;
+        }
+        if (!animation.removePieces) {
+            return false;
+        }
+        return animation.removePieces.some((position) => position.x === colIndex && position.y === rowIndex);
+    }
+
     return (
         <TablutBoardContainer ref={boardRef}>
             <ColumnIndexContainer>
@@ -116,6 +127,7 @@ export default function TablutBoard({ board, animation }: TablutBoardProps) {
                                         fieldValue={field.state}
                                         key={`${rowIndex}${colIndex}`}
                                         animateTo={getTargetPixelPosition(rowIndex, colIndex)}
+                                        animateRemove={needsRemovalAnimation(rowIndex, colIndex)}
                                         id={`field-${rowIndex}-${colIndex}`}
                                     />
                                 );
@@ -125,6 +137,7 @@ export default function TablutBoard({ board, animation }: TablutBoardProps) {
                                         fieldValue={field.state}
                                         key={`${rowIndex}${colIndex}`}
                                         animateTo={getTargetPixelPosition(rowIndex, colIndex)}
+                                        animateRemove={needsRemovalAnimation(rowIndex, colIndex)}
                                         id={`field-${rowIndex}-${colIndex}`}
                                     />
                                 );

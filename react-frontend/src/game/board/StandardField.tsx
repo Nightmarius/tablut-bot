@@ -12,10 +12,19 @@ interface FieldProps {
     id: string;
     isKingField?: boolean;
     animateTo?: PixelOffset;
+    animateRemove?: boolean;
 }
 
-export function KingField({ fieldValue, isKingField = true, animateTo, id }: FieldProps) {
-    return <StandardField fieldValue={fieldValue} isKingField={isKingField} animateTo={animateTo} id={id} />;
+export function KingField({ fieldValue, isKingField = true, animateTo, animateRemove, id }: FieldProps) {
+    return (
+        <StandardField
+            fieldValue={fieldValue}
+            isKingField={isKingField}
+            animateTo={animateTo}
+            id={id}
+            animateRemove={animateRemove}
+        />
+    );
 }
 
 const StyledField = styled.div<{ color: string; size: string; animateTo?: PixelOffset }>`
@@ -25,10 +34,10 @@ const StyledField = styled.div<{ color: string; size: string; animateTo?: PixelO
     border: 1px solid white;
 `;
 
-export function StandardField({ fieldValue, isKingField = false, animateTo, id }: FieldProps) {
+export function StandardField({ fieldValue, isKingField = false, animateTo, animateRemove, id }: FieldProps) {
     const renderFigure = (color: string) => {
         return (
-            <Figure id={id} animateTo={animateTo}>
+            <Figure id={id} animateTo={animateTo} animateRemove={animateRemove}>
                 <Circle color={color} />
             </Figure>
         );
@@ -36,7 +45,7 @@ export function StandardField({ fieldValue, isKingField = false, animateTo, id }
 
     const renderCrown = () => {
         return (
-            <Figure id={id} animateTo={animateTo}>
+            <Figure id={id} animateTo={animateTo} animateRemove={animateRemove}>
                 <Crown />
             </Figure>
         );

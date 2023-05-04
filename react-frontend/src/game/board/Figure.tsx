@@ -16,6 +16,16 @@ const moveAnimation = (x: number, y: number) => keyframes`
   }
 `;
 
+const removeAnimation = () => keyframes`
+  0%, 75% {
+    opacity: 100%;
+  }
+
+  90%, 100% {
+    opacity: 0;
+  }
+`;
+
 export const Circle = styled.div<{ color: string }>`
     border-radius: 50%;
     background-color: ${(props) => props.color};
@@ -24,12 +34,13 @@ export const Circle = styled.div<{ color: string }>`
     height: 85%;
 `;
 
-export const Figure = styled.div<{ animateTo?: PixelOffset }>`
+export const Figure = styled.div<{ animateTo?: PixelOffset; animateRemove?: boolean }>`
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     animation: ${(props) => (props.animateTo ? moveAnimation(props.animateTo.x, props.animateTo.y) : "")} 4s ease-in-out
-        infinite;
+            infinite,
+        ${(props) => (props.animateRemove ? removeAnimation() : "")} 4s linear infinite;
 `;

@@ -1,6 +1,6 @@
 import Chapter from "./Chapter";
-import { GameAction } from "../shared/domain/model";
-import { END_GAME, INITIAL_BOARD, MID_GAME } from "../shared/domain/boards";
+import { FieldState, GameAction } from "../shared/domain/model";
+import { END_GAME, getAllPositions, INITIAL_BOARD, MID_GAME } from "../shared/domain/boards";
 
 export default function RulesPage() {
     const setupRules = [
@@ -51,6 +51,12 @@ export default function RulesPage() {
                 y: 6,
             },
         } as GameAction,
+        removePieces: [
+            {
+                x: 4,
+                y: 6,
+            },
+        ],
     };
 
     const whiteEscapesAnimation = {
@@ -64,6 +70,7 @@ export default function RulesPage() {
                 y: 2,
             },
         } as GameAction,
+        removePieces: getAllPositions(END_GAME, FieldState.ATTACKER),
     };
 
     return (
