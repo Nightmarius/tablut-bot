@@ -21,19 +21,18 @@ const TablutRow = styled.div`
     margin: 0 auto;
 `;
 const RowIndex = styled.span`
-    margin: 0.5em;
     align-self: center;
-`;
-const ColIndex = styled.span`
-    margin: 0.5em;
-    align-self: center;
+    padding-right: 0.5rem;
 `;
 const ColumnIndexContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    width: 100%;
-    margin-left: 0.5em;
+    align-items: center;
+
+    // nasty hack to make the column indexes match the board
+    width: ${window.innerWidth > 600 ? "105%" : "101%"};
+    margin-left: ${window.innerWidth > 600 ? "-0.3rem" : "0.3rem"};
 `;
 const TablutBoardContainer = styled.div`
     flex-wrap: wrap;
@@ -113,7 +112,7 @@ export default function TablutBoard({ board, animation }: TablutBoardProps) {
         <TablutBoardContainer ref={boardRef}>
             <ColumnIndexContainer>
                 {board.fields[0].map((_, colIndex) => (
-                    <ColIndex key={colIndex}>{columnCoordinateOf(colIndex)}</ColIndex>
+                    <span key={colIndex}>{columnCoordinateOf(colIndex)}</span>
                 ))}
             </ColumnIndexContainer>
             {board.fields.map((row, rowIndex) => (
