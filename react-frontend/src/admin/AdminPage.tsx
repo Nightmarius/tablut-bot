@@ -50,11 +50,8 @@ export function AdminPage() {
     };
 
     function generateToken() {
-        remoteService
-            .post("/admin/bot/generate", {
-                value: name,
-            })
-            .then(getBots);
+        remoteService.post("/admin/bot/generate", { value: name }).then(getBots);
+        setName("");
     }
 
     function getBots() {
@@ -74,6 +71,10 @@ export function AdminPage() {
         });
     }
 
+    function deleteBot(name: string) {
+        remoteService.delete("/admin/bot/" + name).then(getBots);
+    }
+
     return (
         <>
             <button onClick={handleCreateGame}>New Game</button>
@@ -84,6 +85,7 @@ export function AdminPage() {
                     <div>{bot.name.value}</div>
                     <div>{bot.token.value}</div>
                     <StyledButton onClick={() => navigator.clipboard.writeText(bot.token.value)}>Copy</StyledButton>
+                    <StyledButton onClick={() => deleteBot(bot.name.value)}>❌</StyledButton>
                 </StyledRow>
             ))}
             {warning != null && <p>{warning}</p>}

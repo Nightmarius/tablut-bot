@@ -28,8 +28,13 @@ public class BotService {
         botRepo.save(new Bot(name.value(), generateToken()));
     }
 
-    public void removeBot(PlayerName name) {
-        getBot(name).ifPresent(bot -> botRepo.delete(new Bot(name.value(), bot.token().value())));
+    public boolean removeBot(PlayerName name) {
+        Optional<BotDto> bot = getBot(name);
+        if (bot.isEmpty()) {
+            return false;
+        }
+        botRepo.delete(new Bot(name.value(), bot.get().token().value()));
+        return true;
     }
 
     String generateToken() {

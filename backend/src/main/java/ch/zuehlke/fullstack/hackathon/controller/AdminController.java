@@ -137,4 +137,15 @@ public class AdminController {
         return ResponseEntity.ok(botService.getBot(new PlayerName(name)).orElse(null));
     }
 
+    @ApiResponse(responseCode = "200", description = "Delete bot successfully")
+    @ApiResponse(responseCode = "404", description = "Bot did not exist and can therefore not be deleted")
+    @DeleteMapping("/bot/{name}")
+    public ResponseEntity<Void> deleteBot(@PathVariable String name) {
+        boolean success = botService.removeBot(new PlayerName(name));
+        if (!success) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
 }
