@@ -1,5 +1,5 @@
 import TournamentTable from "./TournamentTable";
-import { Player, PlayerId, PlayerName, TournamentDto, TournamentStatus } from "../../shared/domain/model";
+import { PlayerName, TournamentDto, TournamentStatus } from "../../shared/domain/model";
 import { useParams } from "react-router";
 import remoteService from "../../services/RemoteService";
 import { useEffect, useState } from "react";
@@ -7,15 +7,15 @@ import LoadingPage from "../../shared/ui/loading/LoadingPage";
 import Leaderboard from "../Leaderboard/Leaderboard";
 import Lobby from "./Lobby";
 
-function getPlayerName(players: Player[], playerId: PlayerId) {
-    const player = players.find((player) => player.id.value === playerId.value);
-    return player ? player.name : "Unknown Player";
+function getPlayerName(players: PlayerName[], playerName: PlayerName) {
+    const player = players.find((player) => player.value === playerName.value);
+    return player ?? "Unknown Player";
 }
 
 function mapScores(tournament: TournamentDto) {
     return tournament.scores.map((score) => {
         return {
-            name: getPlayerName(tournament.players, score.playerId) as PlayerName,
+            name: getPlayerName(tournament.players, score.playerName) as PlayerName,
             points: score.score,
         };
     });

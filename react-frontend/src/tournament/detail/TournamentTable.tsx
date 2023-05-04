@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Player, TournamentDto } from "../../shared/domain/model";
+import { PlayerName, TournamentDto } from "../../shared/domain/model";
 import GameCellContent from "./GameCellContent";
 import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
 
@@ -33,11 +33,11 @@ const Cell = styled.td`
 `;
 
 export default function TournamentTable({ tournament }: Props) {
-    const getGame = (player1: Player, player2: Player) => {
+    const getGame = (player1: PlayerName, player2: PlayerName) => {
         return tournament.state.games.find((game) => {
             if (game.players.length < 2) return false;
-            const player1InGame = game.players.at(0)?.id.value === player1.id.value;
-            const player2InGame = game.players.at(1)?.id.value === player2.id.value;
+            const player1InGame = game.players.at(0)?.value === player1.value;
+            const player2InGame = game.players.at(1)?.value === player2.value;
             return player1InGame && player2InGame;
         });
     };
@@ -50,7 +50,7 @@ export default function TournamentTable({ tournament }: Props) {
                         <OuterCell></OuterCell>
                         {tournament.players.map((player, index) => (
                             <OuterCell key={index}>
-                                <Chip style={ChipStyle.WHITE}>{player.name.value}</Chip>
+                                <Chip style={ChipStyle.WHITE}>{player.value}</Chip>
                             </OuterCell>
                         ))}
                     </Row>
@@ -59,7 +59,7 @@ export default function TournamentTable({ tournament }: Props) {
                     {tournament.players.map((player1, index1) => (
                         <Row key={index1}>
                             <OuterCell>
-                                <Chip style={ChipStyle.BLACK}>{player1.name.value}</Chip>
+                                <Chip style={ChipStyle.BLACK}>{player1.value}</Chip>
                             </OuterCell>
                             {tournament.players.map((player2, index2) => (
                                 <Cell key={index2}>
@@ -72,7 +72,7 @@ export default function TournamentTable({ tournament }: Props) {
                         <OuterCell>Total Points</OuterCell>
                         {tournament.players.map((player, index) => (
                             <OuterCell key={index}>
-                                {tournament.scores.find((score) => score.playerId.value === player.id.value)?.score}
+                                {tournament.scores.find((score) => score.playerName.value === player.value)?.score}
                             </OuterCell>
                         ))}
                     </Row>

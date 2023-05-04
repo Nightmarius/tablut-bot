@@ -2,7 +2,6 @@ package ch.zuehlke.challenge.bot.service;
 
 import ch.zuehlke.challenge.bot.brain.Brain;
 import ch.zuehlke.challenge.bot.client.GameClient;
-import ch.zuehlke.challenge.bot.util.ApplicationProperties;
 import ch.zuehlke.common.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,27 +23,20 @@ public class GameService {
 
     @Getter
     @Setter
-    private PlayerId playerId;
+    private PlayerName playerName;
 
     private final GameClient gameClient;
 
     // Improve: find a better way to keep track of already processed requests
     private final Set<RequestId> alreadyProcessedRequestIds = new HashSet<>();
 
-    private final ApplicationProperties applicationProperties;
-
     @EventListener(ApplicationReadyEvent.class)
-    public void joinTournamentOrGame() {
-        if (applicationProperties.isTournamentBot()) {
-            this.playerId = gameClient.joinTournament();
-        } else {
-            this.playerId = gameClient.join();
-        }
+    public void join() {
+        this.playerName = gameClient.join();
     }
 
-    public void onGameUpdate(GameUpdate gameUpdate) {
+    public void onGameUpdate(GameDto gameDto) {
         // Improve: use this to get updates from the bots
-        GameDto gameDto = gameUpdate.gameDto();
         if (gameDto.status() == GameStatus.NOT_STARTED) {
             log.info("Not taking any action, game is not started yet...");
             return;
@@ -52,7 +44,7 @@ public class GameService {
 
         gameDto.state().currentRequests().stream()
                 .filter(request -> !alreadyProcessedRequestIds.contains(request.requestId()))
-                .filter(request -> request.playerId().equals(playerId))
+                .filter(request -> request.playerName().equals(playerName))
                 .forEach(this::processRequest);
     }
 
@@ -62,7 +54,7 @@ public class GameService {
 
         GameAction decision = brain.decide(playRequest.attacker(), playRequest.board(), playRequest.possibleActions());
 
-        Move move = new Move(playerId, playRequest.requestId(), playRequest.gameId(), decision);
+        Move move = new Move(playerName, playRequest.requestId(), playRequest.gameId(), decision);
         gameClient.play(move);
     }
 

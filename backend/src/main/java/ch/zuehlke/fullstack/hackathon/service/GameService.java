@@ -1,6 +1,8 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
-import ch.zuehlke.common.*;
+import ch.zuehlke.common.GameId;
+import ch.zuehlke.common.Move;
+import ch.zuehlke.common.PlayerName;
 import ch.zuehlke.fullstack.hackathon.controller.JoinResult;
 import ch.zuehlke.fullstack.hackathon.controller.JoinResult.JoinResultType;
 import ch.zuehlke.fullstack.hackathon.controller.PlayResult;
@@ -47,14 +49,13 @@ public class GameService {
         if (game.isEmpty()) {
             return new JoinResult(null, JoinResultType.GAME_NOT_FOUND);
         }
-        Player newPlayer = new Player(new PlayerId(), name);
 
-        boolean success = game.get().addPlayer(newPlayer);
+        boolean success = game.get().addPlayer(name);
         if (!success) {
             return new JoinResult(null, JoinResultType.GAME_FULL);
         }
 
-        return new JoinResult(newPlayer.id(), JoinResultType.SUCCESS);
+        return new JoinResult(name, JoinResultType.SUCCESS);
     }
 
     public StartResult startGame(int gameId) {
@@ -96,13 +97,5 @@ public class GameService {
             game.ifPresent(games::add);
         }
         return games;
-    }
-
-    public Optional<PlayerName> getPlayerName(int gameId, PlayerId playerId) {
-        Optional<Game> game = getGame(gameId);
-        return game.flatMap(value -> value.getPlayers().stream()
-                .filter(player -> player.id().equals(playerId))
-                .map(Player::name)
-                .findFirst());
     }
 }

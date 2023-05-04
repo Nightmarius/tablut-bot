@@ -2,7 +2,6 @@ package ch.zuehlke.challenge.bot.brain;
 
 import ch.zuehlke.challenge.bot.client.GameClient;
 import ch.zuehlke.challenge.bot.service.GameService;
-import ch.zuehlke.challenge.bot.util.ApplicationProperties;
 import ch.zuehlke.common.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,34 +17,33 @@ class GameServiceTest {
     private GameService gameService;
     private GameClient gameClientMock;
     private Brain brainMock;
+    private PlayerName playerName = new PlayerName("name1");
 
     @BeforeEach
     void setUp() {
         gameClientMock = mock(GameClient.class);
         brainMock = mock(Brain.class);
-        gameService = new GameService(brainMock, gameClientMock, mock(ApplicationProperties.class));
+        gameService = new GameService(brainMock, gameClientMock);
     }
 
     @Test
     void joinGame_callGameClient_successfully() {
-        PlayerId expectedPlayerId = new PlayerId();
-        when(gameClientMock.join()).thenReturn(expectedPlayerId);
-        gameService.joinTournamentOrGame();
+        when(gameClientMock.join()).thenReturn(playerName);
+        gameService.join();
 
-        assertThat(gameService.getPlayerId()).isEqualTo(expectedPlayerId);
+        assertThat(gameService.getPlayerName()).isEqualTo(playerName);
         verify(gameClientMock, times(1)).join();
     }
 
     @Test
     void onGameUpdate_withImportantUpdate_playsMove() {
-        PlayerId playerId = new PlayerId();
         var board = Board.createInitialBoard();
-        GameState state = new GameState(Set.of(new PlayRequest(playerId, new GameId(1), true, board, Set.of())), List.of());
-        GameUpdate gameUpdate = new GameUpdate(new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null));
+        GameState state = new GameState(Set.of(new PlayRequest(playerName, new GameId(1), true, board, Set.of())), List.of());
+        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
         when(brainMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
-        gameService.setPlayerId(playerId);
-        gameService.onGameUpdate(gameUpdate);
+        gameService.setPlayerName(playerName);
+        gameService.onGameUpdate(gameDto);
 
         verify(brainMock, times(1)).decide(true, board, Set.of());
         verify(gameClientMock, times(1)).play(any());
@@ -53,13 +51,12 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenGameIsNotStarted_doesNotPlayMove() {
-        PlayerId playerId = new PlayerId();
         GameState state = new GameState(Set.of(), List.of());
-        GameUpdate gameUpdate = new GameUpdate(new GameDto(new GameId(1), List.of(), GameStatus.NOT_STARTED, state, null));
+        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.NOT_STARTED, state, null);
         when(brainMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
-        gameService.setPlayerId(playerId);
-        gameService.onGameUpdate(gameUpdate);
+        gameService.setPlayerName(playerName);
+        gameService.onGameUpdate(gameDto);
 
         verify(brainMock, never()).decide(anyBoolean(), any(), any());
         verify(gameClientMock, never()).play(any());
@@ -67,13 +64,12 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenGameIsFinished_doesNotPlayMove() {
-        PlayerId playerId = new PlayerId();
         GameState state = new GameState(Set.of(), List.of());
-        GameUpdate gameUpdate = new GameUpdate(new GameDto(new GameId(1), List.of(), GameStatus.FINISHED, state, null));
+        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.FINISHED, state, null);
         when(brainMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
-        gameService.setPlayerId(playerId);
-        gameService.onGameUpdate(gameUpdate);
+        gameService.setPlayerName(playerName);
+        gameService.onGameUpdate(gameDto);
 
         verify(brainMock, never()).decide(anyBoolean(), any(), any());
         verify(gameClientMock, never()).play(any());
@@ -81,15 +77,14 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenCalledTwice_onlyPlaysOneMove() {
-        PlayerId playerId = new PlayerId();
         var board = Board.createInitialBoard();
-        GameState state = new GameState(Set.of(new PlayRequest(playerId, new GameId(1), true, board, Set.of())), List.of());
-        GameUpdate gameUpdate = new GameUpdate(new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null));
+        GameState state = new GameState(Set.of(new PlayRequest(playerName, new GameId(1), true, board, Set.of())), List.of());
+        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
         when(brainMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
-        gameService.setPlayerId(playerId);
-        gameService.onGameUpdate(gameUpdate);
-        gameService.onGameUpdate(gameUpdate); // call twice
+        gameService.setPlayerName(playerName);
+        gameService.onGameUpdate(gameDto);
+        gameService.onGameUpdate(gameDto); // call twice
 
         verify(brainMock, times(1)).decide(true, board, Set.of());
         verify(gameClientMock, times(1)).play(any());
@@ -97,13 +92,12 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenItsForADifferentPlayer_doesNotPlayMove() {
-        PlayerId playerId = new PlayerId();
-        GameState state = new GameState(Set.of(new PlayRequest(new PlayerId(), new GameId(1), true, Board.createInitialBoard(), Set.of())), List.of());
-        GameUpdate gameUpdate = new GameUpdate(new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null));
+        GameState state = new GameState(Set.of(new PlayRequest(playerName, new GameId(1), true, Board.createInitialBoard(), Set.of())), List.of());
+        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
         when(brainMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
-        gameService.setPlayerId(playerId);
-        gameService.onGameUpdate(gameUpdate);
+        gameService.setPlayerName(new PlayerName("name2"));
+        gameService.onGameUpdate(gameDto);
 
         verify(brainMock, never()).decide(anyBoolean(), any(), any());
         verify(gameClientMock, never()).play(any());

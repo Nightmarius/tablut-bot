@@ -2,7 +2,10 @@ package ch.zuehlke.challenge.bot.client;
 
 import ch.zuehlke.challenge.bot.service.ShutDownService;
 import ch.zuehlke.challenge.bot.util.ApplicationProperties;
-import ch.zuehlke.common.*;
+import ch.zuehlke.common.JoinRequest;
+import ch.zuehlke.common.JoinResponse;
+import ch.zuehlke.common.Move;
+import ch.zuehlke.common.PlayerName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -16,63 +19,34 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class GameClient {
 
-    private final RestTemplate hackathonRestTemplateClient;
+    private final RestTemplate restTemplateClient;
 
     private final ApplicationProperties applicationProperties;
 
     private final ShutDownService shutDownService;
 
 
-    public PlayerId join() {
+    public PlayerName join() {
         JoinRequest signUpRequest = new JoinRequest(new PlayerName(applicationProperties.getName()));
-        log.info("Joining game with request {}", signUpRequest);
+        log.info("Joining lobby with request {}", signUpRequest);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("token", applicationProperties.getToken());
         HttpEntity<JoinRequest> httpEntity = new HttpEntity<>(signUpRequest, headers);
 
         // Improve: Handle exceptions
-        ResponseEntity<JoinResponse> signUpResponse = hackathonRestTemplateClient
+        ResponseEntity<JoinResponse> signUpResponse = restTemplateClient
                 .postForEntity(applicationProperties.getBackendJoinUrl(),
                         httpEntity,
-                        JoinResponse.class,
-                        applicationProperties.getGameId()
+                        JoinResponse.class
                 );
         log.info("Received response: {}", signUpResponse);
         if (signUpResponse.getStatusCode().is2xxSuccessful() && signUpResponse.getBody() != null) {
-            PlayerId playerId = signUpResponse.getBody().playerId();
-            log.info("Joined game with PlayerId: {}", playerId);
-            return playerId;
+            PlayerName name = signUpResponse.getBody().name();
+            log.info("Joined lobby with PlayerName: {}", name);
+            return name;
         } else {
-            log.error("Could not join game. Will shutdown now...");
-            shutDownService.shutDown();
-            // Needed to return something even though exit(0) is called
-            return null;
-        }
-    }
-
-    public PlayerId joinTournament() {
-        TournamentJoinRequest joinRequest = new TournamentJoinRequest(new PlayerName(applicationProperties.getName()));
-        log.info("Joining tournament with request {}", joinRequest);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("token", applicationProperties.getToken());
-        HttpEntity<TournamentJoinRequest> httpEntity = new HttpEntity<>(joinRequest, headers);
-
-        // Improve: Handle exceptions
-        ResponseEntity<JoinResponse> signUpResponse = hackathonRestTemplateClient
-                .postForEntity(applicationProperties.getBackendTournamentJoinUrl(),
-                        httpEntity,
-                        JoinResponse.class,
-                        applicationProperties.getTournamentId()
-                );
-        log.info("Received response: {}", signUpResponse);
-        if (signUpResponse.getStatusCode().is2xxSuccessful() && signUpResponse.getBody() != null) {
-            var playerId = signUpResponse.getBody().playerId();
-            log.info("Joined game with PlayerId: {}", playerId);
-            return playerId;
-        } else {
-            log.error("Could not join game. Will shutdown now...");
+            log.error("Could not join lobby. Will shutdown now...");
             shutDownService.shutDown();
             // Needed to return something even though exit(0) is called
             return null;
@@ -89,7 +63,7 @@ public class GameClient {
         log.info("Sending play request with entity: {}", httpEntity);
 
         // Improve: Handle exceptions
-        ResponseEntity<Void> response = hackathonRestTemplateClient
+        ResponseEntity<Void> response = restTemplateClient
                 .postForEntity(applicationProperties.getBackendPlayUrl(),
                         httpEntity,
                         Void.class,

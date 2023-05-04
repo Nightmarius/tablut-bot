@@ -14,14 +14,14 @@ public class Tournament {
     public static final int MIN_PLAYERS = 2;
 
     private final TournamentId tournamentId;
-    private final List<Player> players = new ArrayList<>();
+    private final List<PlayerName> players = new ArrayList<>();
 
     private TournamentStatus status = TournamentStatus.NOT_STARTED;
 
     private final List<GameId> gameIds = new ArrayList<>();
     private List<Score> scores = new ArrayList<>();
 
-    public boolean addPlayer(Player player) {
+    public boolean addPlayer(PlayerName player) {
         if (players.size() >= MAX_PLAYERS) {
             return false;
         }
@@ -64,10 +64,10 @@ public class Tournament {
                 .filter(g -> g.getStatus() == GameStatus.FINISHED)
                 .toList();
 
-        var multiMap = new HashMap<PlayerId, List<Game>>();
+        var multiMap = new HashMap<PlayerName, List<Game>>();
         for (var game : finishedGames) {
             for (var player : game.getPlayers()) {
-                multiMap.computeIfAbsent(player.id(), k -> new ArrayList<>())
+                multiMap.computeIfAbsent(player, k -> new ArrayList<>())
                         .add(game);
             }
         }
@@ -78,11 +78,11 @@ public class Tournament {
                 .toList();
     }
 
-    private static int calculateScore(PlayerId playerId, List<Game> games) {
+    private static int calculateScore(PlayerName playerId, List<Game> games) {
         int score = 0;
 
         for (Game game : games) {
-            Optional<PlayerId> winner = game.getWinner();
+            Optional<PlayerName> winner = game.getWinner();
             if (winner.isEmpty()) {
                 score += 1;
             } else if (winner.get().equals(playerId)) {
@@ -93,7 +93,7 @@ public class Tournament {
         return score;
     }
 
-    public Optional<PlayerId> getWinner() {
+    public Optional<PlayerName> getWinner() {
         if (status != TournamentStatus.FINISHED || scores.isEmpty()) {
             return Optional.empty();
         }
@@ -102,7 +102,7 @@ public class Tournament {
             return Optional.empty();
         }
 
-        return Optional.of(scores.get(0).playerId());
+        return Optional.of(scores.get(0).playerName());
     }
 
     public List<Score> getScores() {
