@@ -1,12 +1,13 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
+import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.PlayerName;
 import ch.zuehlke.common.TournamentId;
-import ch.zuehlke.fullstack.hackathon.controller.TournamentJoinResult;
 import ch.zuehlke.fullstack.hackathon.controller.TournamentStartResult;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.Tournament;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TournamentService {
@@ -32,7 +34,7 @@ public class TournamentService {
         counter += 1;
         var tournament = new Tournament(new TournamentId(counter));
         tournaments.add(tournament);
-        lobbyService.getPlayers().forEach(p -> tournament.addPlayer(p));
+        lobbyService.getPlayers().forEach(tournament::addPlayer);
         return tournament;
     }
 
@@ -47,20 +49,6 @@ public class TournamentService {
                 .findFirst();
     }
 
-    public TournamentJoinResult join(int tournamentId, PlayerName name) {
-        Optional<Tournament> tournament = getTournament(tournamentId);
-        if (tournament.isEmpty()) {
-            return new TournamentJoinResult(null, TournamentJoinResult.TournamentJoinResultType.TOURNAMENT_NOT_FOUND);
-        }
-
-        boolean success = tournament.get().addPlayer(name);
-        if (!success) {
-            return new TournamentJoinResult(null, TournamentJoinResult.TournamentJoinResultType.TOURNAMENT_FULL);
-        }
-
-        return new TournamentJoinResult(name, TournamentJoinResult.TournamentJoinResultType.SUCCESS);
-    }
-
     public TournamentStartResult startTournament(int tournamentId) {
         Optional<Tournament> optionalTournament = getTournament(tournamentId);
         if (optionalTournament.isEmpty()) {
@@ -73,33 +61,33 @@ public class TournamentService {
         }
 
         tournament.startTournament();
-        generateRoundRobin(tournament.getPlayers());
+        generateRoundRobin(tournamentId, tournament.getPlayers());
 
         return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.SUCCESS);
     }
 
-    private void generateRoundRobin(List<PlayerName> players) {
+    private void generateRoundRobin(int tournamentId, List<PlayerName> players) {
         for (int i = 0; i < players.size(); i++) {
             for (int j = 0; j < players.size(); j++) {
                 if (i == j) continue;
 
+                log.info("Created game between " + players.get(i) + " and " + players.get(j));
                 Game game = gameService.createGame();
                 game.addPlayer(players.get(i));
                 game.addPlayer(players.get(j));
-                getCurrentTournament().ifPresent(t -> t.getGameIds().add(game.getGameId()));
+                getTournament(tournamentId).ifPresent(t -> t.getGameIds().add(game.getGameId()));
             }
         }
         Collections.shuffle(gameService.getGames());
     }
 
-    public Optional<Tournament> getCurrentTournament() {
-        if (tournaments.size() > 0) {
-            return Optional.of(tournaments.get(0));
-        }
-        return Optional.empty();
+    public void update(int gameId) {
+        int tournamentId = getTournamentId(gameId);
+        getTournament(tournamentId).ifPresent(t -> t.updateFromGames(gameService.getGames(t.getGameIds())));
     }
 
-    public void update() {
-        getCurrentTournament().ifPresent(t -> t.updateFromGames(gameService.getGames()));
+    public int getTournamentId(int gameId) {
+        Optional<Tournament> tournament = tournaments.stream().filter(t -> t.getGameIds().contains(new GameId(gameId))).findFirst();
+        return tournament.map(t -> t.getTournamentId().value()).orElse(0);
     }
 }
