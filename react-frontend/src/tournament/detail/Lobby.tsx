@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { PlayerName } from "../../shared/domain/model";
+import { useEffect, useState } from "react";
+import remoteService from "../../services/RemoteService";
 
 const Title = styled.h1`
     font-size: 3rem;
@@ -31,12 +33,50 @@ const PlayerChip = styled.div`
 `;
 
 export default function Lobby({ players }: Props) {
+    const [lobby, setLobby] = useState<PlayerName[]>([]);
+
+    useEffect(() => {
+        const fetchLobby = () => {
+            remoteService.get<PlayerName[]>("/api/lobby").then((response: PlayerName[]) => {
+                setLobby(response.filter((p1) => !players.find((p2) => p1.value == p2.value)));
+            });
+        };
+
+        // Initial fetch
+        fetchLobby();
+
+        // Polling
+        const intervalId = setInterval(() => {
+            fetchLobby();
+        }, 1000);
+
+        // Cleanup
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [players]);
+
+    const editPlayers = () => {
+        remoteService
+            //.post<PlayerName[]>("/tournament/" +  tournament.id + "/edit")
+            .post<PlayerName[]>("/tournament/" + 0 + "/edit")
+            .then((response: PlayerName[]) => {
+                setLobby(response);
+            });
+    };
+
     return (
         <>
-            <Title>Waiting for players...</Title>
-
+            <Title>Players in Tournament</Title>
             <PlayerContainer>
                 {players.map((player) => (
+                    <PlayerChip key={player.value}>{player.value}</PlayerChip>
+                ))}
+            </PlayerContainer>
+
+            <Title>Players in Lobby</Title>
+            <PlayerContainer>
+                {lobby.map((player) => (
                     <PlayerChip key={player.value}>{player.value}</PlayerChip>
                 ))}
             </PlayerContainer>
