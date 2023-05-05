@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { PlayerName } from "../../shared/domain/model";
 import { useEffect, useState } from "react";
 import remoteService from "../../services/RemoteService";
+import { useParams } from "react-router";
 
 const Title = styled.h1`
     font-size: 3rem;
@@ -32,13 +33,18 @@ const PlayerChip = styled.div`
     animation: pulsate 3s ease-in-out infinite;
 `;
 
+const StyledButton = styled.button`
+    margin-left: 10px;
+`;
+
 export default function Lobby({ players }: Props) {
+    const { tournamentId } = useParams();
     const [lobby, setLobby] = useState<PlayerName[]>([]);
 
     useEffect(() => {
         const fetchLobby = () => {
             remoteService.get<PlayerName[]>("/api/lobby").then((response: PlayerName[]) => {
-                setLobby(response.filter((p1) => !players.find((p2) => p1.value == p2.value)));
+                setLobby(response.filter((p1) => !players.find((p2) => p1.value === p2.value)));
             });
         };
 
@@ -56,13 +62,18 @@ export default function Lobby({ players }: Props) {
         };
     }, [players]);
 
-    const editPlayers = () => {
-        remoteService
-            //.post<PlayerName[]>("/tournament/" +  tournament.id + "/edit")
-            .post<PlayerName[]>("/tournament/" + 0 + "/edit")
-            .then((response: PlayerName[]) => {
-                setLobby(response);
-            });
+    const editPlayers = (players: PlayerName[]) => {
+        remoteService.post<PlayerName[]>("/admin/tournament/" + tournamentId + "/edit", players);
+    };
+
+    const addPlayer = (player: PlayerName) => {
+        players.push(player);
+        editPlayers(players);
+    };
+
+    const removePlayer = (player: PlayerName) => {
+        players.splice(players.indexOf(player), 1);
+        editPlayers(players);
     };
 
     return (
@@ -70,14 +81,20 @@ export default function Lobby({ players }: Props) {
             <Title>Players in Tournament</Title>
             <PlayerContainer>
                 {players.map((player) => (
-                    <PlayerChip key={player.value}>{player.value}</PlayerChip>
+                    <PlayerChip key={player.value}>
+                        {player.value}
+                        <StyledButton onClick={() => removePlayer(player)}>❌</StyledButton>
+                    </PlayerChip>
                 ))}
             </PlayerContainer>
 
             <Title>Players in Lobby</Title>
             <PlayerContainer>
                 {lobby.map((player) => (
-                    <PlayerChip key={player.value}>{player.value}</PlayerChip>
+                    <PlayerChip key={player.value}>
+                        {player.value}
+                        <StyledButton onClick={() => addPlayer(player)}>➕</StyledButton>
+                    </PlayerChip>
                 ))}
             </PlayerContainer>
         </>
