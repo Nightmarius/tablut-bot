@@ -61,17 +61,17 @@ public class GameService {
     public StartResult startGame(int gameId) {
         Optional<Game> optionalGame = getGame(gameId);
         if (optionalGame.isEmpty()) {
-            return new StartResult(StartResult.StartResultType.GAME_NOT_FOUND);
+            return StartResult.NOT_FOUND;
         }
 
         Game game = optionalGame.get();
         if (!game.canStartGame()) {
-            return new StartResult(StartResult.StartResultType.NOT_ENOUGH_PLAYERS);
+            return StartResult.NOT_ENOUGH_PLAYERS;
         }
 
         game.startGame();
 
-        return new StartResult(StartResult.StartResultType.SUCCESS);
+        return StartResult.SUCCESS;
     }
 
     public PlayResult play(Move move, GameId gameId) {
