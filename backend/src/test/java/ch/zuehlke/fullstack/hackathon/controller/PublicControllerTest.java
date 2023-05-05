@@ -48,13 +48,13 @@ class PublicControllerTest {
     void getGame_successfully() {
         GameId gameId = new GameId(42);
         Game game = new Game(gameId);
-        when(gameServiceMock.getGame(42)).thenReturn(Optional.of(game));
+        when(gameServiceMock.getGame(gameId)).thenReturn(Optional.of(game));
 
         ResponseEntity<GameDto> response = publicController.getGame(42);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(Objects.requireNonNull(response.getBody()).id()).isEqualTo(gameId);
-        verify(gameServiceMock, times(1)).getGame(42);
+        verify(gameServiceMock, times(1)).getGame(gameId);
     }
 
     @Test
@@ -72,12 +72,12 @@ class PublicControllerTest {
     void getTournament_successfully() {
         TournamentId tournamentId = new TournamentId(42);
         Tournament tournament = new Tournament(tournamentId);
-        when(tournamentServiceMock.getTournament(42)).thenReturn(Optional.of(tournament));
+        when(tournamentServiceMock.getTournament(tournamentId)).thenReturn(Optional.of(tournament));
 
         ResponseEntity<TournamentDto> response = publicController.getTournament(42);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(Objects.requireNonNull(response.getBody()).id()).isEqualTo(tournamentId);
-        verify(tournamentServiceMock, times(1)).getTournament(42);
+        verify(tournamentServiceMock, times(1)).getTournament(tournamentId);
     }
 }

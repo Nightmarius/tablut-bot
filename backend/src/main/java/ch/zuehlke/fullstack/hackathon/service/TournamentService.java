@@ -33,24 +33,24 @@ public class TournamentService {
     public Tournament createTournament() {
         // Improve: Find a better way to create game ids
         counter += 1;
-        var tournament = new Tournament(new TournamentId(counter));
+        Tournament tournament = new Tournament(new TournamentId(counter));
         tournaments.add(tournament);
         lobbyService.getPlayers().forEach(tournament::addPlayer);
         return tournament;
     }
 
 
-    public boolean deleteTournament(int tournamentId) {
-        return tournaments.removeIf(t -> t.getTournamentId().value() == tournamentId);
+    public boolean deleteTournament(TournamentId tournamentId) {
+        return tournaments.removeIf(t -> t.getTournamentId() == tournamentId);
     }
 
-    public Optional<Tournament> getTournament(int tournamentId) {
+    public Optional<Tournament> getTournament(TournamentId tournamentId) {
         return tournaments.stream()
-                .filter(t -> t.getTournamentId().value() == tournamentId)
+                .filter(t -> t.getTournamentId() == tournamentId)
                 .findFirst();
     }
 
-    public StartResult startTournament(int tournamentId) {
+    public StartResult startTournament(TournamentId tournamentId) {
         Optional<Tournament> optionalTournament = getTournament(tournamentId);
         if (optionalTournament.isEmpty()) {
             return StartResult.NOT_FOUND;
@@ -68,7 +68,7 @@ public class TournamentService {
     }
 
     public EditResult editPlayers(TournamentId tournamentId, List<PlayerName> playerNames) {
-        Optional<Tournament> tournament = getTournament(tournamentId.value());
+        Optional<Tournament> tournament = getTournament(tournamentId);
         if (tournament.isEmpty()) {
             return EditResult.NOT_FOUND;
         }
@@ -76,7 +76,7 @@ public class TournamentService {
         return EditResult.SUCCESS;
     }
 
-    private void generateRoundRobin(int tournamentId, List<PlayerName> players) {
+    private void generateRoundRobin(TournamentId tournamentId, List<PlayerName> players) {
         for (int i = 0; i < players.size(); i++) {
             for (int j = 0; j < players.size(); j++) {
                 if (i == j) continue;
@@ -91,13 +91,12 @@ public class TournamentService {
         Collections.shuffle(gameService.getGames());
     }
 
-    public void update(int gameId) {
-        int tournamentId = getTournamentId(gameId);
+    public void update(TournamentId tournamentId) {
         getTournament(tournamentId).ifPresent(t -> t.updateFromGames(gameService.getGames(t.getGameIds())));
     }
 
-    public int getTournamentId(int gameId) {
-        Optional<Tournament> tournament = tournaments.stream().filter(t -> t.getGameIds().contains(new GameId(gameId))).findFirst();
-        return tournament.map(t -> t.getTournamentId().value()).orElse(0);
+    public TournamentId getTournamentId(GameId gameId) {
+        Optional<Tournament> tournament = tournaments.stream().filter(t -> t.getGameIds().contains(gameId)).findFirst();
+        return tournament.map(Tournament::getTournamentId).orElse(null);
     }
 }

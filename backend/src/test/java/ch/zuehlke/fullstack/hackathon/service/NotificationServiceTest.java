@@ -18,6 +18,8 @@ class NotificationServiceTest {
     private LobbyService lobbyServiceMock;
     private GameService gameServiceMock;
     private TournamentService tournamentService;
+    private final GameId gameId = new GameId(42);
+    private final Game game = new Game(gameId);
 
     @BeforeEach
     void setUp() {
@@ -30,24 +32,21 @@ class NotificationServiceTest {
 
     @Test
     void notifyGameUpdate_withExistingGame_successfully() {
-        int gameIdValue = 1;
-        Game game = new Game(new GameId(gameIdValue));
-        when(gameServiceMock.getGame(gameIdValue)).thenReturn(Optional.of(game));
+        when(gameServiceMock.getGame(gameId)).thenReturn(Optional.of(game));
 
         notificationService.notifyGameUpdate(game.getGameId());
 
         verify(simpMessagingTemplateMock).convertAndSend(eq("/topic/game/"), any(GameDto.class));
-        verify(gameServiceMock).getGame(gameIdValue);
+        verify(gameServiceMock).getGame(gameId);
     }
 
     @Test
     void notifyGameUpdate_whenGameDoesNotExist_doesNotSendUpdate() {
-        int gameIdValue = 1;
-        when(gameServiceMock.getGame(gameIdValue)).thenReturn(Optional.empty());
+        when(gameServiceMock.getGame(gameId)).thenReturn(Optional.empty());
 
-        notificationService.notifyGameUpdate(new GameId(gameIdValue));
+        notificationService.notifyGameUpdate(gameId);
 
         verify(simpMessagingTemplateMock, never()).convertAndSend(anyString(), (Object) any());
-        verify(gameServiceMock).getGame(gameIdValue);
+        verify(gameServiceMock).getGame(gameId);
     }
 }

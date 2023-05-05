@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class AdminControllerTest {
@@ -98,7 +97,7 @@ public class AdminControllerTest {
 
     @Test
     void deleteGame_successfully() {
-        when(gameServiceMock.deleteGame(anyInt())).thenReturn(true);
+        when(gameServiceMock.deleteGame(any())).thenReturn(true);
 
         ResponseEntity<Void> response = adminController.deleteGame(gameId.value());
 
@@ -108,7 +107,7 @@ public class AdminControllerTest {
 
     @Test
     void deleteGame_whenGameDidNotExist_returns404() {
-        when(gameServiceMock.deleteGame(anyInt())).thenReturn(false);
+        when(gameServiceMock.deleteGame(any())).thenReturn(false);
 
         ResponseEntity<Void> response = adminController.deleteGame(gameId.value());
 
@@ -118,7 +117,7 @@ public class AdminControllerTest {
 
     @Test
     void startGame_successfully() {
-        when(gameServiceMock.startGame(anyInt())).thenReturn(new StartResult(StartResult.StartResultType.SUCCESS));
+        when(gameServiceMock.startGame(any())).thenReturn(new StartResult(StartResult.StartResultType.SUCCESS));
 
         ResponseEntity<Void> response = adminController.startGame(gameId.value());
 
@@ -129,7 +128,7 @@ public class AdminControllerTest {
 
     @Test
     void startGame_whenGameIsNotFound_returns404() {
-        when(gameServiceMock.startGame(anyInt())).thenReturn(new StartResult(StartResult.StartResultType.GAME_NOT_FOUND));
+        when(gameServiceMock.startGame(any())).thenReturn(new StartResult(StartResult.StartResultType.GAME_NOT_FOUND));
 
         ResponseEntity<Void> response = adminController.startGame(gameId.value());
 
@@ -141,7 +140,7 @@ public class AdminControllerTest {
 
     @Test
     void startGame_whenGameHasNotEnoughPlayers_returns400() {
-        when(gameServiceMock.startGame(anyInt())).thenReturn(new StartResult(StartResult.StartResultType.NOT_ENOUGH_PLAYERS));
+        when(gameServiceMock.startGame(any())).thenReturn(new StartResult(StartResult.StartResultType.NOT_ENOUGH_PLAYERS));
 
         ResponseEntity<Void> response = adminController.startGame(gameId.value());
 
