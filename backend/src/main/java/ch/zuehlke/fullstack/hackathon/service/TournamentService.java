@@ -41,12 +41,12 @@ public class TournamentService {
 
 
     public boolean deleteTournament(TournamentId tournamentId) {
-        return tournaments.removeIf(t -> t.getTournamentId() == tournamentId);
+        return tournaments.removeIf(t -> t.getTournamentId().equals(tournamentId));
     }
 
     public Optional<Tournament> getTournament(TournamentId tournamentId) {
         return tournaments.stream()
-                .filter(t -> t.getTournamentId() == tournamentId)
+                .filter(t -> t.getTournamentId().equals(tournamentId))
                 .findFirst();
     }
 

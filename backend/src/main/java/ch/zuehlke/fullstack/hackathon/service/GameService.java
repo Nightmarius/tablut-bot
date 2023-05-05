@@ -35,12 +35,12 @@ public class GameService {
 
 
     public boolean deleteGame(GameId gameId) {
-        return games.removeIf(game -> game.getGameId() == gameId);
+        return games.removeIf(game -> game.getGameId().equals(gameId));
     }
 
     public Optional<Game> getGame(GameId gameId) {
         return games.stream()
-                .filter(game -> game.getGameId() == gameId)
+                .filter(game -> game.getGameId().equals(gameId))
                 .findFirst();
     }
 
