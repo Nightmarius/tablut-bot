@@ -29,6 +29,11 @@ public class Tournament {
         return true;
     }
 
+    public void editPlayers(List<PlayerName> playerNames) {
+        players.clear();
+        players.addAll(playerNames);
+    }
+
     public boolean canStartTournament() {
         return players.size() >= MIN_PLAYERS &&
                 players.size() <= MAX_PLAYERS &&

@@ -87,10 +87,10 @@ public class AdminController {
     @PostMapping("/game/{gameId}/start")
     public ResponseEntity<Void> startGame(@PathVariable int gameId) {
         StartResult result = gameService.startGame(gameId);
-        if (result.resultType() == StartResult.StartResultType.GAME_NOT_FOUND) {
+        if (result == StartResult.NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
-        if (result.resultType() == StartResult.StartResultType.NOT_ENOUGH_PLAYERS) {
+        if (result == StartResult.NOT_ENOUGH_PLAYERS) {
             return ResponseEntity.badRequest().build();
         }
         notificationService.notifyGameUpdate(new GameId(gameId));
@@ -105,13 +105,28 @@ public class AdminController {
     @PostMapping("/tournament/{tournamentId}/start")
     public ResponseEntity<Void> startTournament(@PathVariable int tournamentId) {
         var result = tournamentService.startTournament(tournamentId);
-        if (result.resultType() == TournamentStartResult.TournamentStartResultType.TOURNAMENT_NOT_FOUND) {
+        if (result == StartResult.NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
-        if (result.resultType() == TournamentStartResult.TournamentStartResultType.NOT_ENOUGH_PLAYERS) {
+        if (result == StartResult.NOT_ENOUGH_PLAYERS) {
             return ResponseEntity.badRequest().build();
         }
         notificationService.notifyTournamentUpdate(new TournamentId(tournamentId));
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Edits participants of a tournament",
+            description = "Edits participants of a tournament")
+    @ApiResponse(responseCode = "200", description = "Successfully edited the tournaments participants")
+    @ApiResponse(responseCode = "404", description = "Tournament does not exist and can therefore not be edited")
+    @PostMapping("/tournament/{tournamentIdInt}/edit")
+    public ResponseEntity<Void> editTournament(@PathVariable int tournamentIdInt, @RequestBody List<PlayerName> playerNames) {
+        TournamentId tournamentId = new TournamentId(tournamentIdInt);
+        EditResult result = tournamentService.editPlayers(tournamentId, playerNames);
+        if (result == EditResult.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        }
+        notificationService.notifyTournamentUpdate(tournamentId);
         return ResponseEntity.ok().build();
     }
 

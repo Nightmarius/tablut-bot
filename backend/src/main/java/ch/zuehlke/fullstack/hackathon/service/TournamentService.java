@@ -3,7 +3,8 @@ package ch.zuehlke.fullstack.hackathon.service;
 import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.PlayerName;
 import ch.zuehlke.common.TournamentId;
-import ch.zuehlke.fullstack.hackathon.controller.TournamentStartResult;
+import ch.zuehlke.fullstack.hackathon.controller.EditResult;
+import ch.zuehlke.fullstack.hackathon.controller.StartResult;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.Tournament;
 import lombok.RequiredArgsConstructor;
@@ -49,21 +50,30 @@ public class TournamentService {
                 .findFirst();
     }
 
-    public TournamentStartResult startTournament(int tournamentId) {
+    public StartResult startTournament(int tournamentId) {
         Optional<Tournament> optionalTournament = getTournament(tournamentId);
         if (optionalTournament.isEmpty()) {
-            return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.TOURNAMENT_NOT_FOUND);
+            return StartResult.NOT_FOUND;
         }
 
         Tournament tournament = optionalTournament.get();
         if (!tournament.canStartTournament()) {
-            return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.NOT_ENOUGH_PLAYERS);
+            return StartResult.NOT_ENOUGH_PLAYERS;
         }
 
         tournament.startTournament();
         generateRoundRobin(tournamentId, tournament.getPlayers());
 
-        return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.SUCCESS);
+        return StartResult.SUCCESS;
+    }
+
+    public EditResult editPlayers(TournamentId tournamentId, List<PlayerName> playerNames) {
+        Optional<Tournament> tournament = getTournament(tournamentId.value());
+        if (tournament.isEmpty()) {
+            return EditResult.NOT_FOUND;
+        }
+        tournament.get().editPlayers(playerNames);
+        return EditResult.SUCCESS;
     }
 
     private void generateRoundRobin(int tournamentId, List<PlayerName> players) {
