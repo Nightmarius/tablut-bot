@@ -7,6 +7,7 @@ import ch.zuehlke.common.TournamentId;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.Tournament;
 import ch.zuehlke.fullstack.hackathon.service.GameService;
+import ch.zuehlke.fullstack.hackathon.service.LobbyService;
 import ch.zuehlke.fullstack.hackathon.service.TournamentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +24,16 @@ import static org.mockito.Mockito.*;
 class PublicControllerTest {
 
     private PublicController publicController;
+    private LobbyService lobbyServiceMock;
     private GameService gameServiceMock;
     private TournamentService tournamentServiceMock;
 
     @BeforeEach
     void setUp() {
+        lobbyServiceMock = mock(LobbyService.class);
         gameServiceMock = mock(GameService.class);
         tournamentServiceMock = mock(TournamentService.class);
-        publicController = new PublicController(gameServiceMock, tournamentServiceMock);
+        publicController = new PublicController(lobbyServiceMock, gameServiceMock, tournamentServiceMock);
     }
 
     @Test
