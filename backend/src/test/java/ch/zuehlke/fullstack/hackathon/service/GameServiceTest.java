@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GameServiceTest {
 
     private GameService gameService;
+    private GameId fakeGameId = new GameId(666);
 
     @BeforeEach
     void setUp() {
@@ -41,7 +42,7 @@ class GameServiceTest {
         Game game = gameService.createGame();
         assertThat(gameService.getGames()).hasSize(1);
 
-        boolean success = gameService.deleteGame(game.getGameId().value());
+        boolean success = gameService.deleteGame(game.getGameId());
 
         assertThat(gameService.getGames()).hasSize(0);
         assertThat(success).isTrue();
@@ -52,7 +53,7 @@ class GameServiceTest {
         gameService.createGame();
         assertThat(gameService.getGames()).hasSize(1);
 
-        boolean success = gameService.deleteGame(666);
+        boolean success = gameService.deleteGame(fakeGameId);
 
         assertThat(gameService.getGames()).hasSize(1);
         assertThat(success).isFalse();
@@ -62,7 +63,7 @@ class GameServiceTest {
     void joinGame_successfully() {
         Game game = gameService.createGame();
 
-        JoinResult joinResult = gameService.join(game.getGameId().value(), new PlayerName("playerName"));
+        JoinResult joinResult = gameService.join(game.getGameId(), new PlayerName("playerName"));
 
         assertThat(joinResult.resultType()).isEqualTo(JoinResult.JoinResultType.SUCCESS);
         assertThat(joinResult.name()).isNotNull();
@@ -72,9 +73,9 @@ class GameServiceTest {
     void joinGame_threeTimes_gameIsFull() {
         Game game = gameService.createGame();
 
-        gameService.join(game.getGameId().value(), new PlayerName("name1"));
-        gameService.join(game.getGameId().value(), new PlayerName("name2"));
-        JoinResult joinResult = gameService.join(game.getGameId().value(), new PlayerName("name3"));
+        gameService.join(game.getGameId(), new PlayerName("name1"));
+        gameService.join(game.getGameId(), new PlayerName("name2"));
+        JoinResult joinResult = gameService.join(game.getGameId(), new PlayerName("name3"));
 
         assertThat(joinResult.resultType()).isEqualTo(JoinResult.JoinResultType.GAME_FULL);
         assertThat(joinResult.name()).isNull();
@@ -82,7 +83,7 @@ class GameServiceTest {
 
     @Test
     void joinGame_nonExistingGame_gameIsNotFound() {
-        JoinResult joinResult = gameService.join(666, new PlayerName("playerName"));
+        JoinResult joinResult = gameService.join(fakeGameId, new PlayerName("playerName"));
 
         assertThat(joinResult.resultType()).isEqualTo(JoinResult.JoinResultType.GAME_NOT_FOUND);
         assertThat(joinResult.name()).isNull();
@@ -92,7 +93,7 @@ class GameServiceTest {
     void startGame_withZeroPlayers_notEnoughPlayers() {
         Game game = gameService.createGame();
 
-        StartResult startResult = gameService.startGame(game.getGameId().value());
+        StartResult startResult = gameService.startGame(game.getGameId());
 
         assertThat(startResult.resultType()).isEqualTo(StartResult.StartResultType.NOT_ENOUGH_PLAYERS);
         assertThat(game.getStatus()).isEqualTo(GameStatus.NOT_STARTED);
@@ -100,7 +101,7 @@ class GameServiceTest {
 
     @Test
     void startGame_nonExistingGame_gameIsNotFound() {
-        StartResult startResult = gameService.startGame(666);
+        StartResult startResult = gameService.startGame(fakeGameId);
 
         assertThat(startResult.resultType()).isEqualTo(StartResult.StartResultType.GAME_NOT_FOUND);
     }
@@ -108,11 +109,11 @@ class GameServiceTest {
     @Test
     void startGame_gameIsFull_successfully() {
         Game game = gameService.createGame();
-        gameService.join(game.getGameId().value(), new PlayerName("name1"));
-        gameService.join(game.getGameId().value(), new PlayerName("name2"));
+        gameService.join(game.getGameId(), new PlayerName("name1"));
+        gameService.join(game.getGameId(), new PlayerName("name2"));
 
 
-        StartResult startResult = gameService.startGame(game.getGameId().value());
+        StartResult startResult = gameService.startGame(game.getGameId());
 
         assertThat(startResult.resultType()).isEqualTo(StartResult.StartResultType.SUCCESS);
         assertThat(game.getStatus()).isEqualTo(GameStatus.IN_PROGRESS);
@@ -121,10 +122,10 @@ class GameServiceTest {
     @Test
     void playGame_playerOnePlays_successfully() {
         Game game = gameService.createGame();
-        JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
-        gameService.join(game.getGameId().value(), new PlayerName("name2"));
+        JoinResult joinResult1 = gameService.join(game.getGameId(), new PlayerName("name1"));
+        gameService.join(game.getGameId(), new PlayerName("name2"));
         PlayerName playerId1 = joinResult1.name();
-        gameService.startGame(game.getGameId().value());
+        gameService.startGame(game.getGameId());
         RequestId requestIdForPlayer1 = getRequestIdForPlayer(playerId1, game);
 
         Move move = new Move(playerId1, requestIdForPlayer1, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
@@ -136,10 +137,10 @@ class GameServiceTest {
     @Test
     void playGame_playerOnePlaysTwice_returnsInvalidAction() {
         Game game = gameService.createGame();
-        JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
-        gameService.join(game.getGameId().value(), new PlayerName("name2"));
+        JoinResult joinResult1 = gameService.join(game.getGameId(), new PlayerName("name1"));
+        gameService.join(game.getGameId(), new PlayerName("name2"));
         PlayerName playerId1 = joinResult1.name();
-        gameService.startGame(game.getGameId().value());
+        gameService.startGame(game.getGameId());
         RequestId requestIdForPlayer1 = getRequestIdForPlayer(playerId1, game);
 
         Move move = new Move(playerId1, requestIdForPlayer1, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
@@ -152,10 +153,10 @@ class GameServiceTest {
     @Test
     void playGame_withNonExistingGameId_returnsGameNotFound() {
         Game game = gameService.createGame();
-        JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
-        gameService.join(game.getGameId().value(), new PlayerName("name2"));
+        JoinResult joinResult1 = gameService.join(game.getGameId(), new PlayerName("name1"));
+        gameService.join(game.getGameId(), new PlayerName("name2"));
         PlayerName playerId1 = joinResult1.name();
-        gameService.startGame(game.getGameId().value());
+        gameService.startGame(game.getGameId());
         RequestId requestIdForPlayer1 = getRequestIdForPlayer(playerId1, game);
 
         Move move = new Move(playerId1, requestIdForPlayer1, game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
@@ -167,10 +168,10 @@ class GameServiceTest {
     @Test
     void playGame_withInvalidRequestId_returnsInvalidAction() {
         Game game = gameService.createGame();
-        JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
-        gameService.join(game.getGameId().value(), new PlayerName("name2"));
+        JoinResult joinResult1 = gameService.join(game.getGameId(), new PlayerName("name1"));
+        gameService.join(game.getGameId(), new PlayerName("name2"));
         PlayerName playerId1 = joinResult1.name();
-        gameService.startGame(game.getGameId().value());
+        gameService.startGame(game.getGameId());
 
         Move move = new Move(playerId1, new RequestId(), game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
         PlayResult playResult = gameService.play(move, game.getGameId());

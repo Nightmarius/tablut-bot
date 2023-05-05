@@ -47,12 +47,8 @@ public class Tournament {
         status = TournamentStatus.FINISHED;
     }
 
-    public void updateFromGames(List<Game> allGames) {
-        var gamesBelongingToTournament = allGames.stream()
-                .filter(g -> gameIds.stream().anyMatch(gameId -> gameId.equals(g.getGameId())))
-                .toList();
-
-        var allGamesFinished = gamesBelongingToTournament.stream()
+    public void updateFromGames(List<Game> games) {
+        var allGamesFinished = games.stream()
                 .map(Game::getStatus)
                 .allMatch(s -> s == GameStatus.FINISHED);
 
@@ -60,7 +56,7 @@ public class Tournament {
             finishTournament();
         }
 
-        var finishedGames = gamesBelongingToTournament.stream()
+        var finishedGames = games.stream()
                 .filter(g -> g.getStatus() == GameStatus.FINISHED)
                 .toList();
 

@@ -62,9 +62,9 @@ public class BotController {
             return ResponseEntity.badRequest().build();
         }
         notificationService.notifyGameUpdate(gameId);
-
-        tournamentService.update();
-        notificationService.notifyTournamentUpdate(new TournamentId(1));
+        TournamentId tournamentId = tournamentService.getTournamentId(gameId);
+        tournamentService.update(tournamentId);
+        notificationService.notifyTournamentUpdate(tournamentId);
 
         return ResponseEntity.ok().build();
     }

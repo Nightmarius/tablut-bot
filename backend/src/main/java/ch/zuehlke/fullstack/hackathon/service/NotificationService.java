@@ -23,14 +23,14 @@ public class NotificationService {
     }
 
     public void notifyGameUpdate(GameId gameId) {
-        gameService.getGame(gameId.value())
+        gameService.getGame(gameId)
                 .map(GameMapper::map)
                 .ifPresent(game -> template.convertAndSend("/topic/game/", game)
                 );
     }
 
     public void notifyTournamentUpdate(TournamentId tournamentId) {
-        tournamentService.getTournament(tournamentId.value())
+        tournamentService.getTournament(tournamentId)
                 .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .ifPresent(tournamentDto -> template.convertAndSend("/topic/tournament/" + tournamentId.value(), tournamentDto)
                 );

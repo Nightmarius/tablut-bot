@@ -34,17 +34,17 @@ public class GameService {
     }
 
 
-    public boolean deleteGame(int gameId) {
-        return games.removeIf(game -> game.getGameId().value() == gameId);
+    public boolean deleteGame(GameId gameId) {
+        return games.removeIf(game -> game.getGameId() == gameId);
     }
 
-    public Optional<Game> getGame(int gameId) {
+    public Optional<Game> getGame(GameId gameId) {
         return games.stream()
-                .filter(game -> game.getGameId().value() == gameId)
+                .filter(game -> game.getGameId() == gameId)
                 .findFirst();
     }
 
-    public JoinResult join(int gameId, PlayerName name) {
+    public JoinResult join(GameId gameId, PlayerName name) {
         Optional<Game> game = getGame(gameId);
         if (game.isEmpty()) {
             return new JoinResult(null, JoinResultType.GAME_NOT_FOUND);
@@ -58,7 +58,7 @@ public class GameService {
         return new JoinResult(name, JoinResultType.SUCCESS);
     }
 
-    public StartResult startGame(int gameId) {
+    public StartResult startGame(GameId gameId) {
         Optional<Game> optionalGame = getGame(gameId);
         if (optionalGame.isEmpty()) {
             return new StartResult(StartResult.StartResultType.GAME_NOT_FOUND);
@@ -75,7 +75,7 @@ public class GameService {
     }
 
     public PlayResult play(Move move, GameId gameId) {
-        Optional<Game> optionalGame = getGame(gameId.value());
+        Optional<Game> optionalGame = getGame(gameId);
         if (optionalGame.isEmpty()) {
             return PlayResult.GAME_NOT_FOUND;
         }
@@ -93,7 +93,7 @@ public class GameService {
     public List<Game> getGames(List<GameId> gameIds) {
         List<Game> games = new ArrayList<>();
         for (GameId gameId : gameIds) {
-            Optional<Game> game = getGame(gameId.value());
+            Optional<Game> game = getGame(gameId);
             game.ifPresent(games::add);
         }
         return games;

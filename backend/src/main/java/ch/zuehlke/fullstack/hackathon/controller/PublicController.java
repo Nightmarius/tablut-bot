@@ -3,6 +3,7 @@ package ch.zuehlke.fullstack.hackathon.controller;
 import ch.zuehlke.common.GameDto;
 import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.TournamentDto;
+import ch.zuehlke.common.TournamentId;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.GameMapper;
 import ch.zuehlke.fullstack.hackathon.model.TournamentMapper;
@@ -48,7 +49,7 @@ public class PublicController {
     @ApiResponse(responseCode = "404", description = "Could not find the game with the given id")
     @GetMapping("/game/{gameId}")
     public ResponseEntity<GameDto> getGame(@PathVariable int gameId) {
-        Optional<Game> game = gameService.getGame(gameId);
+        Optional<Game> game = gameService.getGame(new GameId(gameId));
         return game.map(GameMapper::map)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -72,7 +73,7 @@ public class PublicController {
     @ApiResponse(responseCode = "404", description = "Did not find the tournament")
     @GetMapping("/tournament/{tournamentId}")
     public ResponseEntity<TournamentDto> getTournament(@PathVariable int tournamentId) {
-        return tournamentService.getTournament(tournamentId)
+        return tournamentService.getTournament(new TournamentId(tournamentId))
                 .map(tournament -> TournamentMapper.map(tournament, gameService.getGames(tournament.getGameIds())))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
