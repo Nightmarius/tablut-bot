@@ -16,11 +16,10 @@ import static org.mockito.Mockito.*;
 class GameClientTest {
 
     private GameClient gameClient;
-
     private RestTemplate restTemplateMock;
     private ApplicationProperties applicationPropertiesMock;
-
     private ShutDownService shutDownServiceMock;
+    private final PlayerName playerName = new PlayerName("name");
 
     @BeforeEach
     void setUp() {
@@ -35,21 +34,20 @@ class GameClientTest {
 
     @Test
     void join_successfully() {
-        when(applicationPropertiesMock.getBackendJoinUrl()).thenReturn("/game/{gameId}/join");
+        when(applicationPropertiesMock.getBackendJoinUrl()).thenReturn("/lobby/join");
 
-        PlayerId expectedPlayerId = new PlayerId();
-        ResponseEntity<JoinResponse> response = ResponseEntity.ok(new JoinResponse(expectedPlayerId));
+        ResponseEntity<JoinResponse> response = ResponseEntity.ok(new JoinResponse(playerName));
         when(restTemplateMock.postForEntity(any(), any(), eq(JoinResponse.class), anyInt())).thenReturn(response);
 
-        PlayerId actualPlayerId = gameClient.join();
+        PlayerName actualPlayerName = gameClient.join();
 
-        assertThat(actualPlayerId).isEqualTo(expectedPlayerId);
+        assertThat(actualPlayerName).isEqualTo(playerName);
         JoinRequest expectedRequest = new JoinRequest(new PlayerName("name"));
-
+        
         HttpHeaders headers = new HttpHeaders();
         headers.set("token", "1111");
         HttpEntity<JoinRequest> httpEntity = new HttpEntity<>(expectedRequest, headers);
-        verify(restTemplateMock, times(1)).postForEntity("/game/{gameId}/join", httpEntity, JoinResponse.class, 1);
+        verify(restTemplateMock, times(1)).postForEntity("/lobby/join", httpEntity, JoinResponse.class, 1);
     }
 
     @Test
@@ -57,7 +55,7 @@ class GameClientTest {
         when(applicationPropertiesMock.getBackendPlayUrl()).thenReturn("/game/{gameId}/play");
         when(restTemplateMock.postForEntity(any(), any(), eq(Void.class), anyInt())).thenReturn(ResponseEntity.ok(null));
 
-        Move move = new Move(new PlayerId(), new RequestId(), new GameId(1), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
+        Move move = new Move(playerName, new RequestId(), new GameId(1), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
         gameClient.play(move);
 
         HttpHeaders headers = new HttpHeaders();

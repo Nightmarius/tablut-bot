@@ -2,7 +2,7 @@ package ch.zuehlke.challenge.bot.client;
 
 import ch.zuehlke.challenge.bot.service.GameService;
 import ch.zuehlke.challenge.bot.util.ApplicationProperties;
-import ch.zuehlke.common.GameUpdate;
+import ch.zuehlke.common.GameDto;
 import jakarta.annotation.PreDestroy;
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.WebSocketContainer;
@@ -86,14 +86,14 @@ public class StompClient implements StompSessionHandler {
 
     @Override
     public Type getPayloadType(StompHeaders headers) {
-        return GameUpdate.class;
+        return GameDto.class;
     }
 
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
         log.info("Got a new message {}", payload);
-        GameUpdate gameUpdate = (GameUpdate) payload;
-        gameService.onGameUpdate(gameUpdate);
+        GameDto game = (GameDto) payload;
+        gameService.onGameUpdate(game);
     }
 
     @PreDestroy

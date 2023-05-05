@@ -3,14 +3,14 @@ import TablutBoard from "./board/TablutBoard";
 import styled from "styled-components";
 import { useGamePolling } from "../shared/hooks/GameStatePollingHook";
 import PlayerDisplay from "./PlayerDisplay";
-import { Player } from "../shared/domain/model";
+import { PlayerName } from "../shared/domain/model";
 import LoadingPage from "../shared/ui/loading/LoadingPage";
 import GameStatusSection from "./GameStatusSection";
 import MoveList from "./MoveList";
 
 export interface PlayerRoles {
-    attacker: Player | null;
-    defender: Player | null;
+    attacker: PlayerName | null;
+    defender: PlayerName | null;
 }
 
 const BoardContainer = styled.div`

@@ -1,14 +1,9 @@
 export interface GameDto {
     id: GameId;
-    players: Player[];
+    players: PlayerName[];
     status: GameStatus;
     state: GameState;
-    winner?: PlayerId;
-}
-
-export interface Player {
-    id: PlayerId;
-    name: PlayerName;
+    winner?: PlayerName;
 }
 
 export interface PlayerName {
@@ -19,7 +14,7 @@ export interface GameId {
     value: number;
 }
 
-export interface PlayerId {
+export interface PlayerName {
     value: string;
 }
 
@@ -30,7 +25,7 @@ export interface GameState {
 }
 
 export interface PlayRequest {
-    playerId: PlayerId;
+    playerName: PlayerName;
     gameId: GameId;
     attacker: boolean;
     board: Board;
@@ -43,7 +38,7 @@ export interface RequestId {
 }
 
 export interface Move {
-    playerId: PlayerId;
+    playerName: PlayerName;
     requestId: RequestId;
     action: GameAction;
 }
@@ -82,10 +77,10 @@ export interface Position {
 
 export interface TournamentDto {
     id: TournamentId;
-    players: Player[];
+    players: PlayerName[];
     status: TournamentStatus;
     state: TournamentState;
-    winner?: PlayerId;
+    winner?: PlayerName;
     scores: Score[];
 }
 
@@ -95,7 +90,7 @@ export interface TournamentState {
 }
 
 export interface Score {
-    playerId: PlayerId;
+    playerName: PlayerName;
     score: number;
 }
 

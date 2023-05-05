@@ -116,7 +116,7 @@ public class AdminController {
     }
 
     @ApiResponse(responseCode = "200", description = "Bot successfully generated")
-    @ApiResponse(responseCode = "400", description = "Bot name invalid")
+    @ApiResponse(responseCode = "400", description = "Bot playerName invalid")
     @PostMapping("/bot/generate")
     public ResponseEntity<Void> generate(@RequestBody PlayerName name) {
         if (name == null || Objects.equals(name.value(), "") || name.value() == null || botService.getBot(name).orElse(null) != null)

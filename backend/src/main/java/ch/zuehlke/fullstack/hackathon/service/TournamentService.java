@@ -1,7 +1,5 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
-import ch.zuehlke.common.Player;
-import ch.zuehlke.common.PlayerId;
 import ch.zuehlke.common.PlayerName;
 import ch.zuehlke.common.TournamentId;
 import ch.zuehlke.fullstack.hackathon.controller.TournamentJoinResult;
@@ -19,6 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TournamentService {
+    private final LobbyService lobbyService;
     private final GameService gameService;
     // Improve: Instead of storing this in-memory, store it in a database
     private final List<Tournament> tournaments = new ArrayList<>();
@@ -33,6 +32,7 @@ public class TournamentService {
         counter += 1;
         var tournament = new Tournament(new TournamentId(counter));
         tournaments.add(tournament);
+        lobbyService.getPlayers().forEach(p -> tournament.addPlayer(p));
         return tournament;
     }
 
@@ -52,14 +52,13 @@ public class TournamentService {
         if (tournament.isEmpty()) {
             return new TournamentJoinResult(null, TournamentJoinResult.TournamentJoinResultType.TOURNAMENT_NOT_FOUND);
         }
-        Player newPlayer = new Player(new PlayerId(), name);
 
-        boolean success = tournament.get().addPlayer(newPlayer);
+        boolean success = tournament.get().addPlayer(name);
         if (!success) {
             return new TournamentJoinResult(null, TournamentJoinResult.TournamentJoinResultType.TOURNAMENT_FULL);
         }
 
-        return new TournamentJoinResult(newPlayer.id(), TournamentJoinResult.TournamentJoinResultType.SUCCESS);
+        return new TournamentJoinResult(name, TournamentJoinResult.TournamentJoinResultType.SUCCESS);
     }
 
     public TournamentStartResult startTournament(int tournamentId) {
@@ -79,7 +78,7 @@ public class TournamentService {
         return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.SUCCESS);
     }
 
-    private void generateRoundRobin(List<Player> players) {
+    private void generateRoundRobin(List<PlayerName> players) {
         for (int i = 0; i < players.size(); i++) {
             for (int j = 0; j < players.size(); j++) {
                 if (i == j) continue;

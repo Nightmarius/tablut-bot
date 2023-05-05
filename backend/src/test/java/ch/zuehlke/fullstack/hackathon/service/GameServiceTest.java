@@ -62,10 +62,10 @@ class GameServiceTest {
     void joinGame_successfully() {
         Game game = gameService.createGame();
 
-        JoinResult joinResult = gameService.join(game.getGameId().value(), new PlayerName("name"));
+        JoinResult joinResult = gameService.join(game.getGameId().value(), new PlayerName("playerName"));
 
         assertThat(joinResult.resultType()).isEqualTo(JoinResult.JoinResultType.SUCCESS);
-        assertThat(joinResult.playerId()).isNotNull();
+        assertThat(joinResult.name()).isNotNull();
     }
 
     @Test
@@ -77,15 +77,15 @@ class GameServiceTest {
         JoinResult joinResult = gameService.join(game.getGameId().value(), new PlayerName("name3"));
 
         assertThat(joinResult.resultType()).isEqualTo(JoinResult.JoinResultType.GAME_FULL);
-        assertThat(joinResult.playerId()).isNull();
+        assertThat(joinResult.name()).isNull();
     }
 
     @Test
     void joinGame_nonExistingGame_gameIsNotFound() {
-        JoinResult joinResult = gameService.join(666, new PlayerName("name"));
+        JoinResult joinResult = gameService.join(666, new PlayerName("playerName"));
 
         assertThat(joinResult.resultType()).isEqualTo(JoinResult.JoinResultType.GAME_NOT_FOUND);
-        assertThat(joinResult.playerId()).isNull();
+        assertThat(joinResult.name()).isNull();
     }
 
     @Test
@@ -123,7 +123,7 @@ class GameServiceTest {
         Game game = gameService.createGame();
         JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
         gameService.join(game.getGameId().value(), new PlayerName("name2"));
-        PlayerId playerId1 = joinResult1.playerId();
+        PlayerName playerId1 = joinResult1.name();
         gameService.startGame(game.getGameId().value());
         RequestId requestIdForPlayer1 = getRequestIdForPlayer(playerId1, game);
 
@@ -138,7 +138,7 @@ class GameServiceTest {
         Game game = gameService.createGame();
         JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
         gameService.join(game.getGameId().value(), new PlayerName("name2"));
-        PlayerId playerId1 = joinResult1.playerId();
+        PlayerName playerId1 = joinResult1.name();
         gameService.startGame(game.getGameId().value());
         RequestId requestIdForPlayer1 = getRequestIdForPlayer(playerId1, game);
 
@@ -154,7 +154,7 @@ class GameServiceTest {
         Game game = gameService.createGame();
         JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
         gameService.join(game.getGameId().value(), new PlayerName("name2"));
-        PlayerId playerId1 = joinResult1.playerId();
+        PlayerName playerId1 = joinResult1.name();
         gameService.startGame(game.getGameId().value());
         RequestId requestIdForPlayer1 = getRequestIdForPlayer(playerId1, game);
 
@@ -169,7 +169,7 @@ class GameServiceTest {
         Game game = gameService.createGame();
         JoinResult joinResult1 = gameService.join(game.getGameId().value(), new PlayerName("name1"));
         gameService.join(game.getGameId().value(), new PlayerName("name2"));
-        PlayerId playerId1 = joinResult1.playerId();
+        PlayerName playerId1 = joinResult1.name();
         gameService.startGame(game.getGameId().value());
 
         Move move = new Move(playerId1, new RequestId(), game.getGameId(), new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
@@ -178,9 +178,9 @@ class GameServiceTest {
         assertThat(playResult).isEqualTo(PlayResult.INVALID_ACTION);
     }
 
-    private RequestId getRequestIdForPlayer(PlayerId playerId, Game game) {
+    private RequestId getRequestIdForPlayer(PlayerName playerId, Game game) {
         return game.getState().currentRequests().stream()
-                .filter(request -> request.playerId().equals(playerId))
+                .filter(request -> request.playerName().equals(playerId))
                 .findFirst()
                 .map(PlayRequest::requestId)
                 .orElse(new RequestId());

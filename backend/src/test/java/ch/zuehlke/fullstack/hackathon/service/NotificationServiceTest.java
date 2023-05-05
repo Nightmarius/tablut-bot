@@ -1,7 +1,7 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
+import ch.zuehlke.common.GameDto;
 import ch.zuehlke.common.GameId;
-import ch.zuehlke.common.GameUpdate;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,15 +15,17 @@ class NotificationServiceTest {
 
     private NotificationService notificationService;
     private SimpMessagingTemplate simpMessagingTemplateMock;
+    private LobbyService lobbyServiceMock;
     private GameService gameServiceMock;
     private TournamentService tournamentService;
 
     @BeforeEach
     void setUp() {
         this.simpMessagingTemplateMock = mock(SimpMessagingTemplate.class);
+        this.lobbyServiceMock = mock(LobbyService.class);
         this.gameServiceMock = mock(GameService.class);
         this.tournamentService = mock(TournamentService.class);
-        this.notificationService = new NotificationService(simpMessagingTemplateMock, gameServiceMock, tournamentService);
+        this.notificationService = new NotificationService(simpMessagingTemplateMock, lobbyServiceMock, gameServiceMock, tournamentService);
     }
 
     @Test
@@ -34,7 +36,7 @@ class NotificationServiceTest {
 
         notificationService.notifyGameUpdate(game.getGameId());
 
-        verify(simpMessagingTemplateMock).convertAndSend(eq("/topic/game/"), any(GameUpdate.class));
+        verify(simpMessagingTemplateMock).convertAndSend(eq("/topic/game/"), any(GameDto.class));
         verify(gameServiceMock).getGame(gameIdValue);
     }
 

@@ -18,7 +18,7 @@ public class Game {
     public static final int MIN_PLAYERS = 2;
 
     private final GameId gameId;
-    private final List<Player> players = new ArrayList<>();
+    private final List<PlayerName> players = new ArrayList<>();
 
     private GameStatus status = GameStatus.NOT_STARTED;
 
@@ -28,7 +28,7 @@ public class Game {
     // moves is not exposed to the GameDto to avoid cheating
     private List<Move> currentMoves;
 
-    public boolean addPlayer(Player player) {
+    public boolean addPlayer(PlayerName player) {
         if (players.size() >= MAX_PLAYERS) {
             return false;
         }
@@ -54,10 +54,10 @@ public class Game {
     private void startRound() {
         currentMoves = new ArrayList<>();
         var attacker = internalGameState.attackersTurn();
-        var playerId = players.get(attacker ? 0 : 1).id();
+        var playerName = players.get(attacker ? 0 : 1);
         var possibleActions = internalGameState.getPossibleActions();
 
-        state.currentRequests().add(new PlayRequest(playerId, gameId, attacker, internalGameState.board(), possibleActions));
+        state.currentRequests().add(new PlayRequest(playerName, gameId, attacker, internalGameState.board(), possibleActions));
     }
 
     public void finishGame() {
@@ -73,7 +73,7 @@ public class Game {
     public boolean isMoveAllowed(Move move) {
         return status == GameStatus.IN_PROGRESS &&
                 state.currentRequests().stream()
-                        .anyMatch(request -> request.playerId().equals(move.playerId())
+                        .anyMatch(request -> request.playerName().equals(move.name())
                                 && request.requestId().equals(move.requestId())
                                 && request.possibleActions().stream().anyMatch(action -> action.equals(move.action())
                         ));
@@ -85,7 +85,7 @@ public class Game {
             return;
         }
 
-        state.currentRequests().removeIf(request -> request.playerId().equals(move.playerId()));
+        state.currentRequests().removeIf(request -> request.playerName().equals(move.name()));
         currentMoves.add(move);
 
         if (state.currentRequests().isEmpty()) {
@@ -106,11 +106,11 @@ public class Game {
         }
     }
 
-    public Optional<PlayerId> getWinner() {
+    public Optional<PlayerName> getWinner() {
         if (status != GameStatus.FINISHED || state.moves().isEmpty() || internalGameState.isDraw()) {
             return Optional.empty();
         }
-        return Optional.ofNullable(state.moves().get(state.moves().size() - 1).playerId());
+        return Optional.ofNullable(state.moves().get(state.moves().size() - 1).name());
     }
 
     public void printBoard() {

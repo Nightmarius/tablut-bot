@@ -77,8 +77,11 @@ export function AdminPage() {
 
     return (
         <>
+            <Title>Games</Title>
             <button onClick={handleCreateGame}>New Game</button>
             <GameList gameIds={gameIds} />
+            <Title>Tournaments</Title>
+            <StyledButton>Create Tournament</StyledButton>
             <Title>Access Tokens</Title>
             {bots.map((bot) => (
                 <StyledRow>

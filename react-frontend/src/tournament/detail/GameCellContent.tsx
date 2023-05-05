@@ -1,4 +1,4 @@
-import { GameDto, GameStatus, Player } from "../../shared/domain/model";
+import { GameDto, GameStatus, PlayerName } from "../../shared/domain/model";
 import styled from "styled-components";
 import Chip, { ChipStyle } from "../../shared/ui/chip/Chip";
 import { getPlayerForNextTurn, getWinner } from "../../shared/domain/helper";
@@ -44,7 +44,7 @@ export default function GameCellContent({ game }: Props) {
     const playerForNextTurn = getPlayerForNextTurn(game);
     const winner = getWinner(game);
 
-    const getChipStyleForPlayer = (player: Player): ChipStyle => {
+    const getChipStyleForPlayer = (player: PlayerName): ChipStyle => {
         return player === player1 ? ChipStyle.BLACK : ChipStyle.WHITE;
     };
 
@@ -72,7 +72,7 @@ export default function GameCellContent({ game }: Props) {
                                     {" "}
                                     Next turn:
                                     <Chip style={getChipStyleForPlayer(playerForNextTurn)}>
-                                        {playerForNextTurn.name.value}
+                                        {playerForNextTurn.value}
                                     </Chip>
                                 </div>
                             )}
@@ -86,7 +86,7 @@ export default function GameCellContent({ game }: Props) {
                                 <div>
                                     {" "}
                                     Winner:
-                                    <Chip style={getChipStyleForPlayer(winner)}>{winner.name.value}</Chip>
+                                    <Chip style={getChipStyleForPlayer(winner)}>{winner.value}</Chip>
                                 </div>
                             ) : (
                                 <div>Draw</div>

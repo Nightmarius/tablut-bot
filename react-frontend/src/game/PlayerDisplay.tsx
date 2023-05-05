@@ -27,9 +27,9 @@ export default function PlayerDisplay({ players }: Props) {
 export const RegisteredPlayers = ({ participants }: { participants: PlayerRoles }) => {
     return (
         <ChipContainer>
-            <Chip style={ChipStyle.BLACK}>{participants.attacker?.name.value || "Attacker"}</Chip>
+            <Chip style={ChipStyle.BLACK}>{participants.attacker?.value || "Attacker"}</Chip>
             <div>versus</div>
-            <Chip style={ChipStyle.WHITE}>{participants.defender?.name.value || "Attacker"}</Chip>
+            <Chip style={ChipStyle.WHITE}>{participants.defender?.value || "Attacker"}</Chip>
         </ChipContainer>
     );
 };
