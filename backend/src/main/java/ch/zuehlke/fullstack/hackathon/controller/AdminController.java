@@ -59,7 +59,7 @@ public class AdminController {
     @ApiResponse(responseCode = "404", description = "Game did not exist and can therefore not be deleted")
     @DeleteMapping("/game/{gameId}")
     public ResponseEntity<Void> deleteGame(@PathVariable int gameId) {
-        boolean success = gameService.deleteGame(gameId);
+        boolean success = gameService.deleteGame(new GameId(gameId));
         if (!success) {
             return ResponseEntity.notFound().build();
         }
@@ -72,7 +72,7 @@ public class AdminController {
     @ApiResponse(responseCode = "404", description = "Tournament did not exist and can therefore not be deleted")
     @DeleteMapping("/tournament/{tournamentId}")
     public ResponseEntity<Void> deleteTournament(@PathVariable int tournamentId) {
-        boolean success = tournamentService.deleteTournament(tournamentId);
+        boolean success = tournamentService.deleteTournament(new TournamentId(tournamentId));
         if (!success) {
             return ResponseEntity.notFound().build();
         }
@@ -86,7 +86,7 @@ public class AdminController {
     @ApiResponse(responseCode = "404", description = "Game did not exist and can therefore not be started")
     @PostMapping("/game/{gameId}/start")
     public ResponseEntity<Void> startGame(@PathVariable int gameId) {
-        StartResult result = gameService.startGame(gameId);
+        StartResult result = gameService.startGame(new GameId(gameId));
         if (result.resultType() == StartResult.StartResultType.GAME_NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
@@ -104,7 +104,7 @@ public class AdminController {
     @ApiResponse(responseCode = "404", description = "Tournament did not exist and can therefore not be started")
     @PostMapping("/tournament/{tournamentId}/start")
     public ResponseEntity<Void> startTournament(@PathVariable int tournamentId) {
-        var result = tournamentService.startTournament(tournamentId);
+        var result = tournamentService.startTournament(new TournamentId(tournamentId));
         if (result.resultType() == TournamentStartResult.TournamentStartResultType.TOURNAMENT_NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
