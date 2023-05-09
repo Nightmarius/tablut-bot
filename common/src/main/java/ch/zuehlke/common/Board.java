@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import java.beans.Transient;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,9 +70,7 @@ public record Board(Field[][] fields) {
     public List<Field> getAllFieldsAsList() {
         var fieldsList = new ArrayList<Field>();
         for (int y = 0; y < SIZE; y++) {
-            for (int x = 0; x < SIZE; x++) {
-                fieldsList.add(fields[y][x]);
-            }
+            fieldsList.addAll(Arrays.asList(fields[y]).subList(0, SIZE));
         }
         return fieldsList;
     }

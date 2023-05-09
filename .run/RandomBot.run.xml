@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Andre" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="andre" />
+  <configuration default="false" name="RandomBot" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="randombot" />
     <module name="Zühlke_Coding_Challenge.bot.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.challenge.bot.BotApplication" />
     <method v="2">

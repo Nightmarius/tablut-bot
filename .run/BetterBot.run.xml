@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Benjamin" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="benjamin" />
+  <configuration default="false" name="BetterBot" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="betterbot" />
     <module name="Zühlke_Coding_Challenge.bot.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.challenge.bot.BotApplication" />
     <method v="2">
