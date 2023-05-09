@@ -11,8 +11,8 @@ import java.util.Random;
 import java.util.Set;
 
 @Component
-@Profile({"bestbot", "prodbot2", "andre", "andres"})
-public class BestBrain implements Brain {
+@Profile({"betterbot"})
+public class BetterBot implements Bot {
 
     public GameAction decide(boolean attacker, Board board, Set<GameAction> possibleActions) {
         thinkForALongTime();

@@ -1,6 +1,6 @@
 package ch.zuehlke.challenge.bot.service;
 
-import ch.zuehlke.challenge.bot.brain.Brain;
+import ch.zuehlke.challenge.bot.brain.Bot;
 import ch.zuehlke.challenge.bot.client.GameClient;
 import ch.zuehlke.common.*;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Slf4j
 public class GameService {
 
-    private final Brain brain;
+    private final Bot bot;
 
     @Getter
     @Setter
@@ -52,7 +52,7 @@ public class GameService {
         log.info("Processing request: {}", playRequest);
         alreadyProcessedRequestIds.add(playRequest.requestId());
 
-        GameAction decision = brain.decide(playRequest.attacker(), playRequest.board(), playRequest.possibleActions());
+        GameAction decision = bot.decide(playRequest.attacker(), playRequest.board(), playRequest.possibleActions());
 
         Move move = new Move(playerName, playRequest.requestId(), playRequest.gameId(), decision);
         gameClient.play(move);
