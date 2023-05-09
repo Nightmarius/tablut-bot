@@ -11,10 +11,7 @@ public class ApplicationProperties {
     private String name;
     private String token;
     private boolean tournamentBot;
-    private Integer tournamentId;
-    private Integer gameId;
     private String backendRootUri;
-    private String backendTournamentJoinUrl;
     private String backendJoinUrl;
     private String backendPlayUrl;
     private String webSocketUri;
