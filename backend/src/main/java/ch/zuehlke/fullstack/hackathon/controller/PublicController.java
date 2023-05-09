@@ -1,9 +1,6 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
-import ch.zuehlke.common.GameDto;
-import ch.zuehlke.common.GameId;
-import ch.zuehlke.common.TournamentDto;
-import ch.zuehlke.common.TournamentId;
+import ch.zuehlke.common.*;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.GameMapper;
 import ch.zuehlke.fullstack.hackathon.model.TournamentMapper;
@@ -30,6 +27,15 @@ public class PublicController {
 
     private final GameService gameService;
     private final TournamentService tournamentService;
+
+    @Operation(summary = "Returns a list of all players",
+            description = "Returns a list of all players in the lobby")
+    @ApiResponse(responseCode = "200", description = "Successfully returned the list of players")
+    @GetMapping("/players")
+    public ResponseEntity<List<PlayerName>> getPlayers() {
+        List<PlayerName> playerNames = tournamentService.getPlayers();
+        return ResponseEntity.ok(playerNames);
+    }
 
     @Operation(summary = "Returns the list of game ids",
             description = "Returns all game ids, whether they are in progress or not")

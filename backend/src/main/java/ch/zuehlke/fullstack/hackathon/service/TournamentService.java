@@ -3,7 +3,9 @@ package ch.zuehlke.fullstack.hackathon.service;
 import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.PlayerName;
 import ch.zuehlke.common.TournamentId;
-import ch.zuehlke.fullstack.hackathon.controller.TournamentStartResult;
+import ch.zuehlke.fullstack.hackathon.controller.EditResult;
+import ch.zuehlke.fullstack.hackathon.controller.JoinResult;
+import ch.zuehlke.fullstack.hackathon.controller.StartResult;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.Tournament;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,20 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TournamentService {
-    private final LobbyService lobbyService;
     private final GameService gameService;
     // Improve: Instead of storing this in-memory, store it in a database
     private final List<Tournament> tournaments = new ArrayList<>();
     private static int counter = 0;
+    private final List<PlayerName> players = new ArrayList<>();
+
+    public List<PlayerName> getPlayers() {
+        return players;
+    }
+
+    public JoinResult join(PlayerName name) {
+        players.add(name);
+        return new JoinResult(name, JoinResult.JoinResultType.SUCCESS);
+    }
 
     public List<Tournament> getTournaments() {
         return tournaments;
@@ -34,36 +45,45 @@ public class TournamentService {
         counter += 1;
         Tournament tournament = new Tournament(new TournamentId(counter));
         tournaments.add(tournament);
-        lobbyService.getPlayers().forEach(tournament::addPlayer);
+        getPlayers().forEach(tournament::addPlayer);
         return tournament;
     }
 
 
     public boolean deleteTournament(TournamentId tournamentId) {
-        return tournaments.removeIf(t -> t.getTournamentId() == tournamentId);
+        return tournaments.removeIf(t -> t.getTournamentId().equals(tournamentId));
     }
 
     public Optional<Tournament> getTournament(TournamentId tournamentId) {
         return tournaments.stream()
-                .filter(t -> t.getTournamentId() == tournamentId)
+                .filter(t -> t.getTournamentId().equals(tournamentId))
                 .findFirst();
     }
 
-    public TournamentStartResult startTournament(TournamentId tournamentId) {
+    public StartResult startTournament(TournamentId tournamentId) {
         Optional<Tournament> optionalTournament = getTournament(tournamentId);
         if (optionalTournament.isEmpty()) {
-            return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.TOURNAMENT_NOT_FOUND);
+            return StartResult.NOT_FOUND;
         }
 
         Tournament tournament = optionalTournament.get();
         if (!tournament.canStartTournament()) {
-            return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.NOT_ENOUGH_PLAYERS);
+            return StartResult.NOT_ENOUGH_PLAYERS;
         }
 
         tournament.startTournament();
         generateRoundRobin(tournamentId, tournament.getPlayers());
 
-        return new TournamentStartResult(TournamentStartResult.TournamentStartResultType.SUCCESS);
+        return StartResult.SUCCESS;
+    }
+
+    public EditResult editPlayers(TournamentId tournamentId, List<PlayerName> playerNames) {
+        Optional<Tournament> tournament = getTournament(tournamentId);
+        if (tournament.isEmpty()) {
+            return EditResult.NOT_FOUND;
+        }
+        tournament.get().editPlayers(playerNames);
+        return EditResult.SUCCESS;
     }
 
     private void generateRoundRobin(TournamentId tournamentId, List<PlayerName> players) {

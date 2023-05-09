@@ -1,7 +1,6 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
-public enum StartResult {
+public enum EditResult {
     SUCCESS,
-    NOT_ENOUGH_PLAYERS,
     NOT_FOUND
 }

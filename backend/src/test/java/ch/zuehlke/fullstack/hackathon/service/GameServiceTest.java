@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GameServiceTest {
 
     private GameService gameService;
-    private GameId fakeGameId = new GameId(666);
+    private final GameId fakeGameId = new GameId(666);
 
     @BeforeEach
     void setUp() {
@@ -95,7 +95,7 @@ class GameServiceTest {
 
         StartResult startResult = gameService.startGame(game.getGameId());
 
-        assertThat(startResult.resultType()).isEqualTo(StartResult.StartResultType.NOT_ENOUGH_PLAYERS);
+        assertThat(startResult).isEqualTo(StartResult.NOT_ENOUGH_PLAYERS);
         assertThat(game.getStatus()).isEqualTo(GameStatus.NOT_STARTED);
     }
 
@@ -103,7 +103,7 @@ class GameServiceTest {
     void startGame_nonExistingGame_gameIsNotFound() {
         StartResult startResult = gameService.startGame(fakeGameId);
 
-        assertThat(startResult.resultType()).isEqualTo(StartResult.StartResultType.GAME_NOT_FOUND);
+        assertThat(startResult).isEqualTo(StartResult.NOT_FOUND);
     }
 
     @Test
@@ -115,7 +115,7 @@ class GameServiceTest {
 
         StartResult startResult = gameService.startGame(game.getGameId());
 
-        assertThat(startResult.resultType()).isEqualTo(StartResult.StartResultType.SUCCESS);
+        assertThat(startResult).isEqualTo(StartResult.SUCCESS);
         assertThat(game.getStatus()).isEqualTo(GameStatus.IN_PROGRESS);
     }
 

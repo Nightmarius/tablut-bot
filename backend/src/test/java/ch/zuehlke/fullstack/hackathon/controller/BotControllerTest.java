@@ -1,7 +1,10 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
 import ch.zuehlke.common.*;
-import ch.zuehlke.fullstack.hackathon.service.*;
+import ch.zuehlke.fullstack.hackathon.service.BotAuthenticationService;
+import ch.zuehlke.fullstack.hackathon.service.GameService;
+import ch.zuehlke.fullstack.hackathon.service.NotificationService;
+import ch.zuehlke.fullstack.hackathon.service.TournamentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,7 +20,6 @@ public class BotControllerTest {
 
     private BotController botController;
     private BotAuthenticationService botAuthServiceMock;
-    private LobbyService lobbyServiceMock;
     private GameService gameServiceMock;
     private TournamentService tournamentServiceMock;
     private NotificationService notificationServiceMock;
@@ -30,11 +32,10 @@ public class BotControllerTest {
     @BeforeEach
     void setUp() {
         botAuthServiceMock = mock(BotAuthenticationService.class);
-        lobbyServiceMock = mock(LobbyService.class);
         gameServiceMock = mock(GameService.class);
         tournamentServiceMock = mock(TournamentService.class);
         notificationServiceMock = mock(NotificationService.class);
-        botController = new BotController(botAuthServiceMock, lobbyServiceMock, gameServiceMock, tournamentServiceMock, notificationServiceMock);
+        botController = new BotController(botAuthServiceMock, gameServiceMock, tournamentServiceMock, notificationServiceMock);
         BotDto bestBotDto = new BotDto(bestBot, bestToken);
         when(botAuthServiceMock.authenticate(any())).thenReturn(AuthenticationResult.DENIED);
         when(botAuthServiceMock.authenticate(bestBotDto)).thenReturn(AuthenticationResult.SUCCESS);
@@ -43,7 +44,7 @@ public class BotControllerTest {
     @Test
     void join_successfully() {
         JoinResult joinResult = new JoinResult(bestBot, JoinResult.JoinResultType.SUCCESS);
-        when(lobbyServiceMock.join(any())).thenReturn(joinResult);
+        when(tournamentServiceMock.join(any())).thenReturn(joinResult);
 
         PlayerName playerName = bestBot;
         JoinRequest joinRequest = new JoinRequest(playerName);
@@ -51,7 +52,7 @@ public class BotControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody()).isEqualTo(new JoinResponse(joinResult.name()));
-        verify(lobbyServiceMock, times(1)).join(playerName);
+        verify(tournamentServiceMock, times(1)).join(playerName);
         verify(notificationServiceMock, times(1)).notifyLobbyUpdate();
     }
 

@@ -117,7 +117,7 @@ public class AdminControllerTest {
 
     @Test
     void startGame_successfully() {
-        when(gameServiceMock.startGame(any())).thenReturn(new StartResult(StartResult.StartResultType.SUCCESS));
+        when(gameServiceMock.startGame(any())).thenReturn(StartResult.SUCCESS);
 
         ResponseEntity<Void> response = adminController.startGame(gameId.value());
 
@@ -128,7 +128,7 @@ public class AdminControllerTest {
 
     @Test
     void startGame_whenGameIsNotFound_returns404() {
-        when(gameServiceMock.startGame(any())).thenReturn(new StartResult(StartResult.StartResultType.GAME_NOT_FOUND));
+        when(gameServiceMock.startGame(any())).thenReturn(StartResult.NOT_FOUND);
 
         ResponseEntity<Void> response = adminController.startGame(gameId.value());
 
@@ -140,7 +140,7 @@ public class AdminControllerTest {
 
     @Test
     void startGame_whenGameHasNotEnoughPlayers_returns400() {
-        when(gameServiceMock.startGame(any())).thenReturn(new StartResult(StartResult.StartResultType.NOT_ENOUGH_PLAYERS));
+        when(gameServiceMock.startGame(any())).thenReturn(StartResult.NOT_ENOUGH_PLAYERS);
 
         ResponseEntity<Void> response = adminController.startGame(gameId.value());
 
