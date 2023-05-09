@@ -1,15 +1,10 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
-import ch.zuehlke.common.GameDto;
-import ch.zuehlke.common.GameId;
-import ch.zuehlke.common.PlayerName;
-import ch.zuehlke.common.TournamentDto;
-import ch.zuehlke.common.TournamentId;
+import ch.zuehlke.common.*;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.GameMapper;
 import ch.zuehlke.fullstack.hackathon.model.TournamentMapper;
 import ch.zuehlke.fullstack.hackathon.service.GameService;
-import ch.zuehlke.fullstack.hackathon.service.LobbyService;
 import ch.zuehlke.fullstack.hackathon.service.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,16 +25,15 @@ public class PublicController {
 
     // Improve: Create ExceptionInterceptor for custom exceptions in the backend
 
-    private final LobbyService lobbyService;
     private final GameService gameService;
     private final TournamentService tournamentService;
 
     @Operation(summary = "Returns a list of all players",
             description = "Returns a list of all players in the lobby")
     @ApiResponse(responseCode = "200", description = "Successfully returned the list of players")
-    @GetMapping("/lobby")
-    public ResponseEntity<List<PlayerName>> getLobby() {
-        List<PlayerName> playerNames = lobbyService.getPlayers();
+    @GetMapping("/players")
+    public ResponseEntity<List<PlayerName>> getPlayers() {
+        List<PlayerName> playerNames = tournamentService.getPlayers();
         return ResponseEntity.ok(playerNames);
     }
 

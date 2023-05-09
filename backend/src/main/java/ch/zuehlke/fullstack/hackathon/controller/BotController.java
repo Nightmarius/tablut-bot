@@ -1,7 +1,10 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
 import ch.zuehlke.common.*;
-import ch.zuehlke.fullstack.hackathon.service.*;
+import ch.zuehlke.fullstack.hackathon.service.BotAuthenticationService;
+import ch.zuehlke.fullstack.hackathon.service.GameService;
+import ch.zuehlke.fullstack.hackathon.service.NotificationService;
+import ch.zuehlke.fullstack.hackathon.service.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class BotController {
 
     private final BotAuthenticationService botAuthService;
-    private final LobbyService lobbyService;
     private final GameService gameService;
     private final TournamentService tournamentService;
     private final NotificationService notificationService;
@@ -33,7 +35,7 @@ public class BotController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        JoinResult joinResult = lobbyService.join(joinRequest.name());
+        JoinResult joinResult = tournamentService.join(joinRequest.name());
 
         notificationService.notifyLobbyUpdate();
         return ResponseEntity.ok(new JoinResponse(joinResult.name()));

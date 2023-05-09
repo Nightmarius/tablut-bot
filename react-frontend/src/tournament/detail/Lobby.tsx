@@ -35,16 +35,17 @@ const PlayerChip = styled.div`
 
 const StyledButton = styled.button`
     margin-left: 10px;
+    cursor: pointer;
 `;
 
 export default function Lobby({ players }: Props) {
     const { tournamentId } = useParams();
-    const [lobby, setLobby] = useState<PlayerName[]>([]);
+    const [restPlayers, setRestPlayers] = useState<PlayerName[]>([]);
 
     useEffect(() => {
         const fetchLobby = () => {
-            remoteService.get<PlayerName[]>("/api/lobby").then((response: PlayerName[]) => {
-                setLobby(response.filter((p1) => !players.find((p2) => p1.value === p2.value)));
+            remoteService.get<PlayerName[]>("/api/players").then((response: PlayerName[]) => {
+                setRestPlayers(response.filter((p1) => !players.find((p2) => p1.value === p2.value)));
             });
         };
 
@@ -90,7 +91,7 @@ export default function Lobby({ players }: Props) {
 
             <Title>Players in Lobby</Title>
             <PlayerContainer>
-                {lobby.map((player) => (
+                {restPlayers.map((player) => (
                     <PlayerChip key={player.value}>
                         {player.value}
                         <StyledButton onClick={() => addPlayer(player)}>➕</StyledButton>

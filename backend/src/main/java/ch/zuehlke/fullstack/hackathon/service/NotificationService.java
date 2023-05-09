@@ -13,13 +13,11 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
     private final SimpMessagingTemplate template;
-
-    private final LobbyService lobbyService;
     private final GameService gameService;
     private final TournamentService tournamentService;
 
     public void notifyLobbyUpdate() {
-        template.convertAndSend("/topic/lobby/", lobbyService.getPlayers());
+        template.convertAndSend("/topic/players/", tournamentService.getPlayers());
     }
 
     public void notifyGameUpdate(GameId gameId) {

@@ -4,6 +4,7 @@ import ch.zuehlke.common.GameId;
 import ch.zuehlke.common.PlayerName;
 import ch.zuehlke.common.TournamentId;
 import ch.zuehlke.fullstack.hackathon.controller.EditResult;
+import ch.zuehlke.fullstack.hackathon.controller.JoinResult;
 import ch.zuehlke.fullstack.hackathon.controller.StartResult;
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.model.Tournament;
@@ -20,11 +21,20 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TournamentService {
-    private final LobbyService lobbyService;
     private final GameService gameService;
     // Improve: Instead of storing this in-memory, store it in a database
     private final List<Tournament> tournaments = new ArrayList<>();
     private static int counter = 0;
+    private final List<PlayerName> players = new ArrayList<>();
+
+    public List<PlayerName> getPlayers() {
+        return players;
+    }
+
+    public JoinResult join(PlayerName name) {
+        players.add(name);
+        return new JoinResult(name, JoinResult.JoinResultType.SUCCESS);
+    }
 
     public List<Tournament> getTournaments() {
         return tournaments;
@@ -35,7 +45,7 @@ public class TournamentService {
         counter += 1;
         Tournament tournament = new Tournament(new TournamentId(counter));
         tournaments.add(tournament);
-        lobbyService.getPlayers().forEach(tournament::addPlayer);
+        getPlayers().forEach(tournament::addPlayer);
         return tournament;
     }
 
