@@ -53,15 +53,15 @@ public class StompClient implements StompSessionHandler {
         }
     }
 
-    private void subscribe(Integer gameId) {
-        log.info("Subscribing to id: {}", gameId);
+    private void subscribe() {
+        log.info("Subscribing to game update");
         this.subscription = stompSession.subscribe("/topic/game/", this);
     }
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         log.info("Connection to STOMP server established");
-        subscribe(applicationProperties.getGameId());
+        subscribe();
     }
 
     @Override

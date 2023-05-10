@@ -33,7 +33,6 @@ public class GameClient {
         headers.set("token", applicationProperties.getToken());
         HttpEntity<JoinRequest> httpEntity = new HttpEntity<>(signUpRequest, headers);
 
-        // Improve: Handle exceptions
         ResponseEntity<JoinResponse> signUpResponse = restTemplateClient
                 .postForEntity(applicationProperties.getBackendJoinUrl(),
                         httpEntity,
@@ -48,7 +47,6 @@ public class GameClient {
         } else {
             log.error("Could not join lobby. Will shutdown now...");
             shutDownService.shutDown();
-            // Needed to return something even though exit(0) is called
             return null;
         }
     }
@@ -62,7 +60,6 @@ public class GameClient {
 
         log.info("Sending play request with entity: {}", httpEntity);
 
-        // Improve: Handle exceptions
         ResponseEntity<Void> response = restTemplateClient
                 .postForEntity(applicationProperties.getBackendPlayUrl(),
                         httpEntity,
