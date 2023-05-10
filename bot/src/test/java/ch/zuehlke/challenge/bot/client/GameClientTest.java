@@ -27,7 +27,6 @@ class GameClientTest {
         applicationPropertiesMock = mock(ApplicationProperties.class);
         shutDownServiceMock = mock(ShutDownService.class);
         gameClient = new GameClient(restTemplateMock, applicationPropertiesMock, shutDownServiceMock);
-        when(applicationPropertiesMock.getGameId()).thenReturn(1);
         when(applicationPropertiesMock.getName()).thenReturn("name");
         when(applicationPropertiesMock.getToken()).thenReturn("1111");
     }
