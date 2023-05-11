@@ -42,10 +42,10 @@ public class GameService {
             return;
         }
 
-        gameDto.state().currentRequests().stream()
-                .filter(request -> !alreadyProcessedRequestIds.contains(request.requestId()))
-                .filter(request -> request.playerName().equals(playerName))
-                .forEach(this::processRequest);
+        if (gameDto.state().playRequest() != null
+                && gameDto.state().playRequest().playerName().equals(playerName)
+                && !alreadyProcessedRequestIds.contains(gameDto.state().playRequest().requestId()))
+            processRequest(gameDto.state().playRequest());
     }
 
     private void processRequest(PlayRequest playRequest) {

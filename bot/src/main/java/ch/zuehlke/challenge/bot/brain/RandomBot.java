@@ -23,7 +23,7 @@ public class RandomBot implements Bot {
 
     private static void think() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         } catch (InterruptedException ignored) {
             // ignore
         }

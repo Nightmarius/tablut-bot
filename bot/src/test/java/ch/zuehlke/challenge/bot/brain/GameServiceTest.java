@@ -38,8 +38,7 @@ class GameServiceTest {
     @Test
     void onGameUpdate_withImportantUpdate_playsMove() {
         var board = Board.createInitialBoard();
-        GameState state = new GameState(Set.of(new PlayRequest(playerName, new GameId(1), true, board, Set.of())), List.of());
-        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
+        GameState state = new GameState(new PlayRequest(playerName, new GameId(1), true, board, Set.of()), List.of());        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
         when(botMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
         gameService.setPlayerName(playerName);
@@ -51,7 +50,7 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenGameIsNotStarted_doesNotPlayMove() {
-        GameState state = new GameState(Set.of(), List.of());
+        GameState state = new GameState(null, List.of());
         GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.NOT_STARTED, state, null);
         when(botMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
@@ -64,7 +63,7 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenGameIsFinished_doesNotPlayMove() {
-        GameState state = new GameState(Set.of(), List.of());
+        GameState state = new GameState(null, List.of());
         GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.FINISHED, state, null);
         when(botMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
@@ -78,7 +77,7 @@ class GameServiceTest {
     @Test
     void onGameUpdate_whenCalledTwice_onlyPlaysOneMove() {
         var board = Board.createInitialBoard();
-        GameState state = new GameState(Set.of(new PlayRequest(playerName, new GameId(1), true, board, Set.of())), List.of());
+        GameState state = new GameState(new PlayRequest(playerName, new GameId(1), true, board, Set.of()), List.of());
         GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
         when(botMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 
@@ -92,7 +91,7 @@ class GameServiceTest {
 
     @Test
     void onGameUpdate_whenItsForADifferentPlayer_doesNotPlayMove() {
-        GameState state = new GameState(Set.of(new PlayRequest(playerName, new GameId(1), true, Board.createInitialBoard(), Set.of())), List.of());
+        GameState state = new GameState(new PlayRequest(playerName, new GameId(1), true, Board.createInitialBoard(), Set.of()), List.of());
         GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.IN_PROGRESS, state, null);
         when(botMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
 

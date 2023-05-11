@@ -38,6 +38,6 @@ Swagger: https://zuehlke-coding-challenge.herokuapp.com/swagger-ui/index.html
 2. Your bot should then subscribe to the websocket `/topic/game/`, there the server will send the `GameDto` object:
 ![GameDto.png](doc/GameDto.png)
 3. Your bot should then check if the game is running by looking at the `status` enum
-4. Next it needs to check the `state` which contains a list of `PlayRequest` in `currentRequests`
-5. If the PlayRequest contains your `playerName` your bot should send his `Move` to `https://zuehlke-coding-challenge.herokuapp.com/api/game/{gameId}/play`
+4. Next it needs to check the `state` which contains the current `PlayRequest`
+5. If the PlayRequest contains your `playerName` your bot should send its `Move` to `https://zuehlke-coding-challenge.herokuapp.com/api/game/{gameId}/play`
    To decide which move to make you can use the information provided in the PlayRequest.
