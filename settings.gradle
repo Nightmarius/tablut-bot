@@ -1,6 +1,4 @@
 rootProject.name = 'Zühlke Coding Challenge'
-include 'backend'
-include 'react-frontend'
 include 'bot'
 include 'common'
 

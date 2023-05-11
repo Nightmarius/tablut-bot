@@ -13,7 +13,6 @@ If your setup already has some of the required tools installed, please adjust ac
 
 - Lombok (usually already installed)
 - Spring (usually already installed)
-- Prettier
 
 ## How to run
 
