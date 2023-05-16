@@ -5,7 +5,7 @@
 If your setup already has some of the required tools installed, please adjust accordingly.
 
 1. Install a new version of IntelliJ
-2. Clone the master branch with `git clone https://bitbucket.zuehlke.com/scm/ztopcha/zuehlke-challenge-2023.git`
+2. Clone the master branch with `git clone https://github.com/Nightmarius/tablut-bot.git`
 3. Open the project with IntelliJ and let gradle build the project
 4. If prompted, install java (17.0.5)
 
@@ -34,9 +34,8 @@ Swagger: https://zuehlke-coding-challenge.herokuapp.com/swagger-ui/index.html
 1. First your bot should join the lobby by sending a `JoinRequest` to `https://zuehlke-coding-challenge.herokuapp.com/api/lobby/join`
    The admin will then create a tournament which will determine the games your bot will be assigned to.
    When these games are created the server will publish updates on the game topic.
-2. Your bot should then subscribe to the websocket `/topic/game/`, there the server will send the `GameDto` object:
-![GameDto.png](doc/GameDto.png)
-3. Your bot should then check if the game is running by looking at the `status` enum
+2. Your bot should then subscribe to the websocket `/topic/game/`, there the server will send the `GameDto` object.
+3. Your bot should then check if the game is running by looking at the `status` enum.
 4. Next it needs to check the `state` which contains the current `PlayRequest`
 5. If the PlayRequest contains your `playerName` your bot should send its `Move` to `https://zuehlke-coding-challenge.herokuapp.com/api/game/{gameId}/play`
    To decide which move to make you can use the information provided in the PlayRequest.
