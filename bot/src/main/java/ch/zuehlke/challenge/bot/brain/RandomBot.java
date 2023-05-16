@@ -15,17 +15,8 @@ import java.util.Set;
 public class RandomBot implements Bot {
 
     public GameAction decide(boolean attacker, Board board, Set<GameAction> possibleActions) {
-        think();
         List<GameAction> list = new ArrayList<>(possibleActions);
         int randIdx = new Random().nextInt(list.size());
         return list.get(randIdx);
-    }
-
-    private static void think() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
-            // ignore
-        }
     }
 }

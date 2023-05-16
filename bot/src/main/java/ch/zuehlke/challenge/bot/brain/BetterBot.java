@@ -15,8 +15,6 @@ import java.util.Set;
 public class BetterBot implements Bot {
 
     public GameAction decide(boolean attacker, Board board, Set<GameAction> possibleActions) {
-        thinkForALongTime();
-
         if (attacker) {
             return attack(board, possibleActions);
         } else {
@@ -40,13 +38,5 @@ public class BetterBot implements Bot {
         List<GameAction> list = new ArrayList<>(possibleActions);
         int randIdx = new Random().nextInt(list.size());
         return list.get(randIdx);
-    }
-
-    private static void thinkForALongTime() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
-            // ignore
-        }
     }
 }
