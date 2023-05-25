@@ -55,7 +55,7 @@ public class StompClient implements StompSessionHandler {
 
     private void subscribe() {
         log.info("Subscribing to game update");
-        this.subscription = stompSession.subscribe("/topic/game/", this);
+        this.subscription = stompSession.subscribe("/topic/game", this);
     }
 
     @Override
