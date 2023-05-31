@@ -1,5 +1,7 @@
 package ch.zuehlke.common;
 
+import java.beans.Transient;
+
 public enum FieldState {
     EMPTY, ATTACKER, DEFENDER, KING;
 
@@ -10,6 +12,7 @@ public enum FieldState {
         return (this == DEFENDER || this == KING) && other == ATTACKER;
     }
 
+    @Transient
     public String getSymbol() {
         return switch (this) {
             case EMPTY -> " ";

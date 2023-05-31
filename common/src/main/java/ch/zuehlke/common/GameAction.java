@@ -3,9 +3,6 @@ package ch.zuehlke.common;
 import java.util.Optional;
 
 public record GameAction(Coordinates from, Coordinates to) {
-    public GameAction(int fromX, int fromY, int toX, int toY) {
-        this(new Coordinates(fromX, fromY), new Coordinates(toX, toY));
-    }
 
     public boolean movesNextToTheKing(Board board) {
         Optional<Coordinates> kingPosition = board.getKingPosition();

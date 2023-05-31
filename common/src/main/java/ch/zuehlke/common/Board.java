@@ -13,15 +13,18 @@ public record Board(Field[][] fields) {
 
     public static int SIZE = 9;
 
-    public static Board createInitialBoard() {
+    public static Board createEmptyBoard() {
         var fields = new Field[SIZE][SIZE];
 
-        for (int y = 0; y < SIZE; y++) {
-            for (int x = 0; x < SIZE; x++) {
-                fields[y][x] = new Field(new Coordinates(x, y), FieldState.EMPTY);
-            }
+        for (Coordinates coordinates: Coordinates.getAllCoordinates()) {
+            fields[coordinates.y()][coordinates.x()] = new Field(coordinates, FieldState.EMPTY);
         }
-        var board = new Board(fields);
+
+        return new Board(fields);
+    }
+
+    public static Board createInitialBoard() {
+        Board board = createEmptyBoard();
 
         board.updateField(new Field(new Coordinates(3, 0), FieldState.ATTACKER));
         board.updateField(new Field(new Coordinates(4, 0), FieldState.ATTACKER));
@@ -62,11 +65,6 @@ public record Board(Field[][] fields) {
     }
 
     @Transient
-    public Field getFieldForCoordinate(Coordinates coordinates) {
-        return fields[coordinates.y()][coordinates.x()];
-    }
-
-    @Transient
     public List<Field> getAllFieldsAsList() {
         var fieldsList = new ArrayList<Field>();
         for (int y = 0; y < SIZE; y++) {
@@ -75,17 +73,11 @@ public record Board(Field[][] fields) {
         return fieldsList;
     }
 
+    @Transient
     public Optional<Coordinates> getKingPosition() {
         return getAllFieldsAsList().stream()
             .filter(field -> field.state() == FieldState.KING)
             .findFirst()
             .map(Field::coordinates);
-    }
-
-    public void movePiece(Coordinates from, Coordinates to) {
-        Field fromField = getFieldForCoordinate(from);
-
-        updateField(new Field(to, fromField.state()));
-        updateField(new Field(from, FieldState.EMPTY));
     }
 }

@@ -2,8 +2,12 @@ package ch.zuehlke.challenge.bot.client;
 
 import ch.zuehlke.challenge.bot.service.GameService;
 import ch.zuehlke.challenge.bot.util.ApplicationProperties;
+import ch.zuehlke.common.GameDto;
+import ch.zuehlke.common.GameId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
@@ -15,8 +19,6 @@ class StompClientTest {
 
     private GameService gameServiceMock;
 
-    // Improve: Write more tests, probably split up StompClient to make it easier to test
-
     @BeforeEach
     void setUp() {
         applicationPropertiesMock = mock(ApplicationProperties.class);
@@ -25,7 +27,15 @@ class StompClientTest {
     }
 
     @Test
-    void handleFrame_updatesGame_successfully() {
+    void handleFrame_withNewGameDto_updatesGameSuccessfully() {
+        GameDto gameDto = new GameDto(new GameId(1), new ArrayList<>(), null, null, null);
+        stompClient.handleFrame(null, gameDto);
+
+        verify(gameServiceMock, times(1)).onGameUpdate(gameDto);
+    }
+
+    @Test
+    void handleFrame_withNullValue_updatesGameSuccessfully() {
         stompClient.handleFrame(null, null);
 
         verify(gameServiceMock, times(1)).onGameUpdate(null);

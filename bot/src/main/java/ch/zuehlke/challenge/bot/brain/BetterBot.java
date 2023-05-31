@@ -15,6 +15,7 @@ import java.util.Set;
 public class BetterBot implements Bot {
 
     public GameAction decide(boolean attacker, Board board, Set<GameAction> possibleActions) {
+         // Here is where you can start coding your bot.
         if (attacker) {
             return attack(board, possibleActions);
         } else {
@@ -35,8 +36,8 @@ public class BetterBot implements Bot {
     }
 
     private GameAction getRandomAction(Set<GameAction> possibleActions) {
-        List<GameAction> list = new ArrayList<>(possibleActions);
-        int randIdx = new Random().nextInt(list.size());
-        return list.get(randIdx);
+        List<GameAction> gameActions = new ArrayList<>(possibleActions);
+        int randomIndex = new Random().nextInt(gameActions.size());
+        return gameActions.get(randomIndex);
     }
 }
