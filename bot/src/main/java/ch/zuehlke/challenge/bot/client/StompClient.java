@@ -38,30 +38,34 @@ public class StompClient implements StompSessionHandler {
 
     @EventListener(value = ApplicationReadyEvent.class)
     public void connect() {
-        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-        container.setDefaultMaxTextMessageBufferSize(1024 * 1024 * 100);
-        container.setDefaultMaxBinaryMessageBufferSize(1024 * 1024 * 100);
-        WebSocketClient client = new StandardWebSocketClient(container);
-        WebSocketStompClient stompClient = new WebSocketStompClient(client);
-        stompClient.setInboundMessageSizeLimit(1024 * 1024 * 100);
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+        WebSocketStompClient stompClient = getWebSocketStompClient();
         try {
             String socketUrl = applicationProperties.getWebSocketUri();
             stompSession = stompClient.connectAsync(socketUrl, this).get();
         } catch (Exception e) {
-            log.error("Connection failed.", e); // Improve: error handling.
+            log.error("Connection failed.", e);
         }
     }
 
-    private void subscribe() {
-        log.info("Subscribing to game update");
-        this.subscription = stompSession.subscribe("/topic/game", this);
+    private static WebSocketStompClient getWebSocketStompClient() {
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        int bufferSize = 1024 * 1024 * 100; // set it to a very large value
+
+        container.setDefaultMaxTextMessageBufferSize(bufferSize);
+        container.setDefaultMaxBinaryMessageBufferSize(bufferSize);
+
+        WebSocketClient client = new StandardWebSocketClient(container);
+        WebSocketStompClient stompClient = new WebSocketStompClient(client);
+        stompClient.setInboundMessageSizeLimit(bufferSize);
+        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        return stompClient;
     }
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-        log.info("Connection to STOMP server established");
-        subscribe();
+        log.info("Connection to STOMP server established. Subscribing to game updates...");
+        this.subscription = stompSession.subscribe("/topic/game", this);
     }
 
     @Override

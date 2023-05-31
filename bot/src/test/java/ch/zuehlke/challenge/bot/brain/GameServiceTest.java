@@ -75,6 +75,19 @@ class GameServiceTest {
     }
 
     @Test
+    void onGameUpdate_whenGameIsDeleted_doesNotPlayMove() {
+        GameState state = new GameState(null, List.of());
+        GameDto gameDto = new GameDto(new GameId(1), List.of(), GameStatus.DELETED, state, null);
+        when(botMock.decide(anyBoolean(), any(), any())).thenReturn(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
+
+        gameService.setPlayerName(playerName);
+        gameService.onGameUpdate(gameDto);
+
+        verify(botMock, never()).decide(anyBoolean(), any(), any());
+        verify(gameClientMock, never()).play(any());
+    }
+
+    @Test
     void onGameUpdate_whenCalledTwice_onlyPlaysOneMove() {
         var board = Board.createInitialBoard();
         GameState state = new GameState(new PlayRequest(playerName, new GameId(1), true, board, Set.of()), List.of());

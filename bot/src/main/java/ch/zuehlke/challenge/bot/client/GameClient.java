@@ -12,7 +12,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -29,23 +33,19 @@ public class GameClient {
         JoinRequest signUpRequest = new JoinRequest(new PlayerName(applicationProperties.getName()));
         log.info("Joining lobby with request {}", signUpRequest);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("token", applicationProperties.getToken());
-        HttpEntity<JoinRequest> httpEntity = new HttpEntity<>(signUpRequest, headers);
+        try {
+            ResponseEntity<JoinResponse> signUpResponse = restTemplateClient
+                    .postForEntity(applicationProperties.getBackendJoinUrl(),
+                            new HttpEntity<>(signUpRequest),
+                            JoinResponse.class,
+                            1
+                    );
 
-        ResponseEntity<JoinResponse> signUpResponse = restTemplateClient
-                .postForEntity(applicationProperties.getBackendJoinUrl(),
-                        httpEntity,
-                        JoinResponse.class,
-                        1
-                );
-        log.info("Received response: {}", signUpResponse);
-        if (signUpResponse.getStatusCode().is2xxSuccessful() && signUpResponse.getBody() != null) {
-            PlayerName name = signUpResponse.getBody().name();
+            PlayerName name = Objects.requireNonNull(signUpResponse.getBody()).name();
             log.info("Joined lobby with PlayerName: {}", name);
             return name;
-        } else {
-            log.error("Could not join lobby. Will shutdown now...");
+        } catch (RestClientException | NullPointerException e) {
+            log.error("Could not join lobby. Will shutdown now...\nError: {}", e.getMessage());
             shutDownService.shutDown();
             return null;
         }
@@ -54,23 +54,17 @@ public class GameClient {
     public void play(Move move) {
         log.info("Playing move: {}", move);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("token", applicationProperties.getToken());
-        HttpEntity<Move> httpEntity = new HttpEntity<>(move, headers);
+        try {
+            ResponseEntity<Void> response = restTemplateClient
+                    .postForEntity(applicationProperties.getBackendPlayUrl(),
+                            new HttpEntity<>(move),
+                            Void.class,
+                            move.gameId().value()
+                    );
 
-        log.info("Sending play request with entity: {}", httpEntity);
-
-        ResponseEntity<Void> response = restTemplateClient
-                .postForEntity(applicationProperties.getBackendPlayUrl(),
-                        httpEntity,
-                        Void.class,
-                        move.gameId().value()
-                );
-        log.info("Received response: {}", response);
-        if (response.getStatusCode().is2xxSuccessful()) {
             log.info("Successfully played a move!");
-        } else {
-            log.error("Could not play game! Will shutdown now...");
+        } catch (RestClientException e) {
+            log.error("Could not play move. Will shutdown now...\nError: {}", e.getMessage());
             shutDownService.shutDown();
         }
     }

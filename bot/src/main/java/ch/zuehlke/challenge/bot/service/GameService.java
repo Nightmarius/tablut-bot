@@ -27,7 +27,6 @@ public class GameService {
 
     private final GameClient gameClient;
 
-    // Improve: find a better way to keep track of already processed requests
     private final Set<RequestId> alreadyProcessedRequestIds = new HashSet<>();
 
     @EventListener(ApplicationReadyEvent.class)
@@ -36,16 +35,16 @@ public class GameService {
     }
 
     public void onGameUpdate(GameDto gameDto) {
-        // Improve: use this to get updates from the bots
-        if (gameDto.status() == GameStatus.NOT_STARTED) {
-            log.info("Not taking any action, game is not started yet...");
-            return;
-        }
-
-        if (gameDto.state().playRequest() != null
-                && gameDto.state().playRequest().playerName().equals(playerName)
-                && !alreadyProcessedRequestIds.contains(gameDto.state().playRequest().requestId()))
+        if (isRelevantUpdate(gameDto)) {
             processRequest(gameDto.state().playRequest());
+        }
+    }
+
+    private boolean isRelevantUpdate(GameDto gameDto) {
+        return gameDto.status() == GameStatus.IN_PROGRESS &&
+                gameDto.state().playRequest() != null
+                && gameDto.state().playRequest().playerName().equals(playerName)
+                && !alreadyProcessedRequestIds.contains(gameDto.state().playRequest().requestId());
     }
 
     private void processRequest(PlayRequest playRequest) {
