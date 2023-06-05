@@ -14,9 +14,9 @@ import java.util.Set;
 @Profile({"betterbot"})
 public class BetterBot implements Bot {
 
-    public GameAction decide(boolean attacker, Board board, Set<GameAction> possibleActions) {
+    public GameAction decide(boolean isAttackersTurn, Board board, Set<GameAction> possibleActions) {
          // Here is where you can start coding your bot.
-        if (attacker) {
+        if (isAttackersTurn) {
             return attack(board, possibleActions);
         } else {
             return defend(board, possibleActions);

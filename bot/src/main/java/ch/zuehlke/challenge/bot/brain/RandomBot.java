@@ -14,7 +14,7 @@ import java.util.Set;
 @Profile({"randombot"})
 public class RandomBot implements Bot {
 
-    public GameAction decide(boolean attacker, Board board, Set<GameAction> possibleActions) {
+    public GameAction decide(boolean isAttackersTurn, Board board, Set<GameAction> possibleActions) {
         List<GameAction> gameActions = new ArrayList<>(possibleActions);
         int randomIndex = new Random().nextInt(gameActions.size());
         return gameActions.get(randomIndex);

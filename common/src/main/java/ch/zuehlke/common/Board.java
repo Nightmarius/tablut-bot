@@ -60,8 +60,20 @@ public record Board(Field[][] fields) {
         return board;
     }
 
+    @Transient
+    public Field getFieldForCoordinate(Coordinates coordinates) {
+        return fields[coordinates.y()][coordinates.x()];
+    }
+
     public void updateField(Field field) {
         fields[field.coordinates().y()][field.coordinates().x()] = field;
+    }
+
+    public void movePiece(Coordinates from, Coordinates to) {
+        Field fromField = getFieldForCoordinate(from);
+
+        updateField(new Field(to, fromField.state()));
+        updateField(new Field(from, FieldState.EMPTY));
     }
 
     @Transient

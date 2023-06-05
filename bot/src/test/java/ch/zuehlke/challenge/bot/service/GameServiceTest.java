@@ -1,7 +1,7 @@
-package ch.zuehlke.challenge.bot.brain;
+package ch.zuehlke.challenge.bot.service;
 
+import ch.zuehlke.challenge.bot.brain.Bot;
 import ch.zuehlke.challenge.bot.client.GameClient;
-import ch.zuehlke.challenge.bot.service.GameService;
 import ch.zuehlke.common.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
