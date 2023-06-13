@@ -1,5 +1,6 @@
 package ch.zuehlke.common;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -7,19 +8,22 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InternalGameStateTest {
+public class GameStateTest {
+
+    private GameState gameState;
+
+    @BeforeEach
+    void setUp() {
+        gameState = new GameState();
+    }
 
     @Test
     void initialGame_FirstMove_PossibleMoveForBlack() {
-        var gameState = new InternalGameState();
-
         assertThat(gameState.getPossibleActions()).contains(new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
     }
 
     @Test
     void initialGame_FirstMove_NoMoveWithDefenders() {
-        var gameState = new InternalGameState();
-
         Set<Coordinates> coordinatesDefender = Set.of(
                 new Coordinates(4, 2),
                 new Coordinates(4, 3),
@@ -38,7 +42,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleMoves_ForLeftAttackerAtStart() {
-        var gameState = new InternalGameState();
         Set<Coordinates> expectedGameActions = Set.of(
                 new Coordinates(0, 0),
                 new Coordinates(0, 1),
@@ -57,7 +60,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleMoves_ForTopAttackerAtStart() {
-        var gameState = new InternalGameState();
         Set<Coordinates> expectedGameActions = Set.of();
 
         assertThat(gameState.getPossibleActions().stream()
@@ -68,7 +70,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleMoves_ForRightAttackerAtStart() {
-        var gameState = new InternalGameState();
         Set<Coordinates> expectedGameActions = Set.of(
                 new Coordinates(5, 5),
                 new Coordinates(6, 5),
@@ -86,7 +87,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleMoves_ForBottomAttackerAtStart() {
-        var gameState = new InternalGameState();
         Set<Coordinates> expectedGameActions = Set.of(
                 new Coordinates(0, 7),
                 new Coordinates(1, 7),
@@ -106,14 +106,13 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleActions_kingCanMoveOutOfTheCastle() {
-        var gameState = new InternalGameState();
 
         // remove two pieces to the left of the king
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(2, 4), FieldState.EMPTY));
 
         // make a move with attacker so that defender is playing next
-        gameState.playAction(new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
+        gameState.moves().add(new Move(null, null, null, null));
 
         var expectedDestinations = Set.of(
                 new Coordinates(3, 4),
@@ -128,14 +127,12 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleActions_kingCanMoveIntoTheCastle() {
-        var gameState = new InternalGameState();
-
         // Move king one field to the left (replacing the defender there)
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.KING));
 
         // make a move with attacker so that defender is playing next
-        gameState.playAction(new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
+        gameState.moves().add(new Move(null, null, null, null));
 
         assertThat(gameState.getPossibleActions().stream()
                 .filter(a -> a.from().equals(new Coordinates(3, 4)))
@@ -145,8 +142,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleActions_kingCanMoveThroughTheCastle() {
-        var gameState = new InternalGameState();
-
         // Move king one field to the left (replacing the defender there)
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.KING));
@@ -155,7 +150,7 @@ public class InternalGameStateTest {
         gameState.board().updateField(new Field(new Coordinates(5, 4), FieldState.EMPTY));
 
         // make a move with attacker so that defender is playing next
-        gameState.playAction(new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
+        gameState.moves().add(new Move(null, null, null, null));
 
         assertThat(gameState.getPossibleActions().stream()
                 .filter(a -> a.from().equals(new Coordinates(3, 4)))
@@ -165,8 +160,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleActions_attackersCanNotMoveIntoTheCastle() {
-        var gameState = new InternalGameState();
-
         // Remove the middle row of the defenders
         gameState.board().updateField(new Field(new Coordinates(2, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.EMPTY));
@@ -182,8 +175,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleActions_attackersCanNotMoveThroughTheCastle() {
-        var gameState = new InternalGameState();
-
         // Remove the middle row of the defenders
         gameState.board().updateField(new Field(new Coordinates(2, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.EMPTY));
@@ -199,8 +190,6 @@ public class InternalGameStateTest {
 
     @Test
     void getPossibleActions_defendersCanNotMoveIntoTheCastle() {
-        var gameState = new InternalGameState();
-
         // Remove the middle row of the defenders
         gameState.board().updateField(new Field(new Coordinates(2, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.EMPTY));
@@ -219,12 +208,10 @@ public class InternalGameStateTest {
 
     @Test
     void isDraw() {
-        var gameState = new InternalGameState();
-
         assertThat(gameState.isDraw()).isFalse();
 
         for (int i = 0; i < 210; i++) {
-            gameState.playAction(new GameAction(new Coordinates(0, 0), new Coordinates(0, 0)));
+            gameState.moves().add(new Move(null, null, null, null));
         }
 
         assertThat(gameState.isDraw()).isTrue();
@@ -232,8 +219,6 @@ public class InternalGameStateTest {
 
     @Test
     void hasAttackerWon() {
-        var gameState = new InternalGameState();
-
         assertThat(gameState.hasAttackerWon()).isFalse();
 
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
@@ -243,8 +228,6 @@ public class InternalGameStateTest {
 
     @Test
     void hasDefenderWon() {
-        var gameState = new InternalGameState();
-
         assertThat(gameState.hasDefenderWon()).isFalse();
 
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
@@ -255,8 +238,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCaptures_toTheLeft() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.DEFENDER));
 
@@ -271,7 +252,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCaptures_toTheRight() {
-        var gameState = new InternalGameState();
         gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.DEFENDER));
         gameState.board().updateField(new Field(new Coordinates(2, 0), FieldState.ATTACKER));
         gameState.playAction(new GameAction(new Coordinates(0, 3), new Coordinates(0, 0)));
@@ -281,7 +261,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCaptures_toTheTop() {
-        var gameState = new InternalGameState();
         gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(0, 1), FieldState.DEFENDER));
         gameState.playAction(new GameAction(new Coordinates(0, 3), new Coordinates(0, 2)));
@@ -291,7 +270,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCaptures_toTheBottom() {
-        var gameState = new InternalGameState();
         gameState.board().updateField(new Field(new Coordinates(0, 1), FieldState.DEFENDER));
         gameState.board().updateField(new Field(new Coordinates(0, 2), FieldState.ATTACKER));
         gameState.playAction(new GameAction(new Coordinates(3, 0), new Coordinates(0, 0)));
@@ -301,8 +279,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCaptures_toTheLeftAndRight() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.DEFENDER));
         gameState.board().updateField(new Field(new Coordinates(2, 3), FieldState.ATTACKER));
@@ -319,8 +295,6 @@ public class InternalGameStateTest {
 
     @Test
     void defenderCaptures_toTheLeft() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.DEFENDER));
         gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.ATTACKER));
 
@@ -335,8 +309,6 @@ public class InternalGameStateTest {
 
     @Test
     void defenderCapturesFeaturingKing_toTheLeft() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.KING));
         gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.ATTACKER));
 
@@ -351,8 +323,6 @@ public class InternalGameStateTest {
 
     @Test
     void defenderCapturesWithKing_toTheLeft() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(0, 0), FieldState.DEFENDER));
         gameState.board().updateField(new Field(new Coordinates(1, 0), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(2, 3), FieldState.KING));
@@ -368,8 +338,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCapturesWithCastleField() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 3), FieldState.KING));
         gameState.board().updateField(new Field(new Coordinates(6, 4), FieldState.EMPTY));
@@ -386,8 +354,6 @@ public class InternalGameStateTest {
 
     @Test
     void defenderCapturesWithCastleField() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(3, 3), FieldState.KING));
         gameState.board().updateField(new Field(new Coordinates(6, 4), FieldState.EMPTY));
@@ -405,8 +371,6 @@ public class InternalGameStateTest {
 
     @Test
     void defenderCapturesWithKingInCastleField() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(6, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(5, 4), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(6, 3), FieldState.DEFENDER));
@@ -422,8 +386,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCapturesKingInCastle() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(4, 3), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(4, 5), FieldState.ATTACKER));
@@ -441,8 +403,6 @@ public class InternalGameStateTest {
 
     @Test
     void attackerCapturesKingAdjacentToCastle() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(5, 4), FieldState.KING));
         gameState.board().updateField(new Field(new Coordinates(5, 3), FieldState.ATTACKER));
@@ -460,8 +420,6 @@ public class InternalGameStateTest {
 
     @Test
     void kingInCastleSurvivesTwoAttackers() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(3, 4), FieldState.ATTACKER));
         gameState.board().updateField(new Field(new Coordinates(5, 4), FieldState.EMPTY));
 
@@ -477,8 +435,6 @@ public class InternalGameStateTest {
 
     @Test
     void kingAdjacentToCastleSurvivesTwoAttackers() {
-        var gameState = new InternalGameState();
-
         gameState.board().updateField(new Field(new Coordinates(5, 4), FieldState.KING));
         gameState.board().updateField(new Field(new Coordinates(4, 4), FieldState.EMPTY));
         gameState.board().updateField(new Field(new Coordinates(5, 3), FieldState.ATTACKER));
