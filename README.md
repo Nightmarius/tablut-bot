@@ -55,4 +55,19 @@ Here are some of the requirements your bot needs to fulfill:
 - Your bot will have to follow the API contracts defined in https://challenge.zuehlke.com/swagger-ui/index.html
   - You can ignore the admin controller section. This is only used during the event to organize the tournament
 
+## FAQ
+
+### How long does a game last?
+Each bot gets a thinking time of two minutes per game. If you use more, you will loose the game. If the game lasts for more than 200 moves it will be declared a draw.
+
+### Am I allowed to use external tools/applications?
+Yes, we encourage you to be creative. Just follow the rules of the game and don't abuse the endpoints.
+
+### Will I have to bring my machine to the event?
+Yes, please bring a laptop where you can run the code. You don't need to send us your code beforehand.
+
+### What kind of tournament mode are we playing?
+This will be announced at the event. Expect to play any and every opponent possible.
+
+
 
