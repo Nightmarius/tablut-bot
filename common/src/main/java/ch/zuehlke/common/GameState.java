@@ -2,19 +2,25 @@ package ch.zuehlke.common;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
-public record GameState(PlayRequest playRequest, List<Move> moves, Board board) {
+public record GameState(PlayRequest playRequest, List<Move> moves, Board board, TimeControl timeControl) {
 
     public GameState() {
-        this(null, new ArrayList<>(), Board.createInitialBoard());
+        this(null, new ArrayList<>(), Board.createInitialBoard(), new TimeControl());
     }
 
     public GameState(PlayRequest playRequest, List<Move> moves) {
-        this(playRequest, moves, Board.createInitialBoard());
+        this(playRequest, moves, Board.createInitialBoard(), new TimeControl());
+        moves.forEach(m -> playAction(m.action()));
     }
 
     public boolean attackersTurn() {
@@ -23,6 +29,15 @@ public record GameState(PlayRequest playRequest, List<Move> moves, Board board) 
 
     public boolean defendersTurn() {
         return !attackersTurn();
+    }
+
+    // this method is used by the backend, probably no use during the implementation of the bot
+    public TimeControl subtractTime() {
+        if (attackersTurn()) {
+            return timeControl.subtractTimeForAttacker();
+        } else {
+            return timeControl.subtractTimeForDefender();
+        }
     }
 
 
@@ -116,16 +131,22 @@ public record GameState(PlayRequest playRequest, List<Move> moves, Board board) 
                 });
     }
 
+    @Transient
     public boolean isGameFinished() {
         return hasDefenderWon() || isDraw() || hasAttackerWon();
     }
 
+    @Transient
     public boolean isDraw() {
         return moves.size() >= 200;
     }
 
+    @Transient
     public boolean hasDefenderWon() {
         if (attackersTurn() && getPossibleActions().isEmpty()) {
+            return true;
+        }
+        if (timeControl.hasAttackerNoTimeLeft()) {
             return true;
         }
         return board.getAllFieldsAsList().stream()
@@ -134,8 +155,12 @@ public record GameState(PlayRequest playRequest, List<Move> moves, Board board) 
                 .anyMatch(Coordinates::isBorder);
     }
 
+    @Transient
     public boolean hasAttackerWon() {
         if (defendersTurn() && getPossibleActions().isEmpty()) {
+            return true;
+        }
+        if (timeControl.hasDefenderNoTimeLeft()) {
             return true;
         }
         return board.getAllFieldsAsList().stream()
@@ -145,6 +170,7 @@ public record GameState(PlayRequest playRequest, List<Move> moves, Board board) 
 
     }
 
+    // this is not used anywhere, but it is useful for debugging
     public void printBoard() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\nMove ");

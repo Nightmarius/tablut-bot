@@ -3,6 +3,8 @@ package ch.zuehlke.challenge.bot.client;
 import ch.zuehlke.challenge.bot.service.GameService;
 import ch.zuehlke.challenge.bot.util.ApplicationProperties;
 import ch.zuehlke.common.GameDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PreDestroy;
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.WebSocketContainer;
@@ -57,9 +59,16 @@ public class StompClient implements StompSessionHandler {
         WebSocketClient client = new StandardWebSocketClient(container);
         WebSocketStompClient stompClient = new WebSocketStompClient(client);
         stompClient.setInboundMessageSizeLimit(bufferSize);
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+        stompClient.setMessageConverter(getMappingJackson2MessageConverter());
 
         return stompClient;
+    }
+
+    // create a converter which is able to deserialize java.time classes
+    private static MappingJackson2MessageConverter getMappingJackson2MessageConverter() {
+        MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
+        messageConverter.setObjectMapper(new ObjectMapper().registerModule(new JavaTimeModule()));
+        return messageConverter;
     }
 
     @Override
