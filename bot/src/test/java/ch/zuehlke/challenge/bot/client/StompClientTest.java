@@ -28,7 +28,7 @@ class StompClientTest {
 
     @Test
     void handleFrame_withNewGameDto_updatesGameSuccessfully() {
-        GameDto gameDto = new GameDto(new GameId(1), new ArrayList<>(), null, null, null);
+        GameDto gameDto = new GameDto(new GameId("1"), new ArrayList<>(), null, null, null);
         stompClient.handleFrame(null, gameDto);
 
         verify(gameServiceMock, times(1)).onGameUpdate(gameDto);
