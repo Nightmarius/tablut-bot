@@ -12,6 +12,13 @@ public enum FieldState {
         return (this == DEFENDER || this == KING) && other == ATTACKER;
     }
 
+    public boolean isFriendly(FieldState other) {
+        if (this == ATTACKER && (other == ATTACKER)) {
+            return true;
+        }
+        return (this == DEFENDER || this == KING) && (other == KING || other == DEFENDER);
+    }
+
     @Transient
     public String getSymbol() {
         return switch (this) {
