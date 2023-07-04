@@ -52,6 +52,7 @@ Here are some of the requirements your bot needs to fulfill:
 - A bot needs to be able to play multiple games at once
 - The bot needs to send the token in the header for every play request
 - Make sure you follow the flow of events as described above
+- The bot should send a hearbeat every second so that we can track failing bots during the event
 - Your bot will have to follow the API contracts defined in https://challenge.zuehlke.com/swagger-ui/index.html
   - You can ignore the admin controller section. This is only used during the event to organize the tournament
 

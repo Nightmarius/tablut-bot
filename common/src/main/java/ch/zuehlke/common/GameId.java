@@ -1,4 +1,4 @@
 package ch.zuehlke.common;
 
-public record GameId(int value) {
+public record GameId(String value) {
 }
