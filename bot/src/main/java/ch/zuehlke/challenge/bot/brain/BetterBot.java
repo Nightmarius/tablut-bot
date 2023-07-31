@@ -2,6 +2,7 @@ package ch.zuehlke.challenge.bot.brain;
 
 import ch.zuehlke.common.Board;
 import ch.zuehlke.common.GameAction;
+import ch.zuehlke.common.Move;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 @Profile({"betterbot"})
 public class BetterBot implements Bot {
 
-    public GameAction decide(boolean isAttackersTurn, Board board, Set<GameAction> possibleActions) {
+    public GameAction decide(boolean isAttackersTurn, Board board, Set<GameAction> possibleActions, List<Move> moves) {
          // Here is where you can start coding your bot.
         if (isAttackersTurn) {
             return attack(board, possibleActions);

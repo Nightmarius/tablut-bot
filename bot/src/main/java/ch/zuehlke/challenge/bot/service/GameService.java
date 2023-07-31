@@ -12,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -36,7 +37,10 @@ public class GameService {
 
     public void onGameUpdate(GameDto gameDto) {
         if (isRelevantUpdate(gameDto)) {
-            processRequest(gameDto.state().playRequest());
+            processRequest(
+                    gameDto.state().playRequest(),
+                    gameDto.state().moves()
+            );
         }
     }
 
@@ -47,11 +51,16 @@ public class GameService {
                 && !alreadyProcessedRequestIds.contains(gameDto.state().playRequest().requestId());
     }
 
-    private void processRequest(PlayRequest playRequest) {
+    private void processRequest(PlayRequest playRequest, List<Move> moves) {
         log.info("Processing request: {}", playRequest);
         alreadyProcessedRequestIds.add(playRequest.requestId());
 
-        GameAction decision = bot.decide(playRequest.attacker(), playRequest.board(), playRequest.possibleActions());
+        GameAction decision = bot.decide(
+                playRequest.attacker(),
+                playRequest.board(),
+                playRequest.possibleActions(),
+                moves
+        );
 
         Move move = new Move(playerName, playRequest.requestId(), playRequest.gameId(), decision);
         gameClient.play(move);
