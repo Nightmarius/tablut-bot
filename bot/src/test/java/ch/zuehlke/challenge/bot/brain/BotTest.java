@@ -21,7 +21,12 @@ class BotTest {
         gameState.printBoard();
         while (!gameState.isGameFinished()) {
 
-            GameAction action = betterBot.decide(gameState.attackersTurn(), gameState.board(), gameState.getPossibleActions());
+            GameAction action = betterBot.decide(
+                    gameState.attackersTurn(),
+                    gameState.board(),
+                    gameState.getPossibleActions(),
+                    gameState.moves()
+            );
             gameState.playAction(action);
             gameState.printBoard();
         }
@@ -40,9 +45,9 @@ class BotTest {
 
             GameAction action;
             if (gameState.attackersTurn()) {
-                action = betterBot.decide(true, gameState.board(), gameState.getPossibleActions());
+                action = betterBot.decide(true, gameState.board(), gameState.getPossibleActions(), gameState.moves());
             } else {
-                action = randomBot.decide(false, gameState.board(), gameState.getPossibleActions());
+                action = randomBot.decide(false, gameState.board(), gameState.getPossibleActions(), gameState.moves());
             }
 
             gameState.playAction(action);
